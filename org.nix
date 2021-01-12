@@ -97,6 +97,7 @@ in
         tunnels_json_path = ./json/tunnels.json;
         pub_keys_path     = ./keys;
         secretsDirectory  = "/opt/.secrets/";
+        secrets_src_directory = ./secrets/generated;
       };
 
       maintenance.config_repos.org = mkForce {
