@@ -116,6 +116,10 @@ in
           inherit public_key;
           addresses  = [ "sshrelay2.ocb.msf.org" "15.188.17.148"  ];
         };
+        sshrelay-za-1 = {
+          inherit public_key;
+          addresses  = [ "sshrelay-za-1.ocb.msf.org" "13.245.67.199"  ];
+        };
       };
 
       users.users = {
