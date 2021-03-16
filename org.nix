@@ -100,9 +100,12 @@ in
         secrets_src_directory = ./secrets/generated;
       };
 
-      services.traefik.acme = {
-        dns_provider = "azure";
-        email_address = "ramses.denorre@gmail.com";
+      services.traefik = {
+        pilot_token = "d553f62e-ced5-40e5-ab7f-20f0efc87e5f";
+        acme = {
+          dns_provider = "azure";
+          email_address = "ramses.denorre@gmail.com";
+        };
       };
 
       maintenance.config_repos.org = mkForce {
