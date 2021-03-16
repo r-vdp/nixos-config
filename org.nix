@@ -100,7 +100,10 @@ in
         secrets_src_directory = ./secrets/generated;
       };
 
-      services.traefik.acme.dns_provider = "azure";
+      services.traefik.acme = {
+        dns_provider = "azure";
+        email_address = "ramses.denorre@gmail.com";
+      };
 
       maintenance.config_repos.org = mkForce {
         branch = "main";
