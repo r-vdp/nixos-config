@@ -100,6 +100,8 @@ in
         secrets_src_directory = ./secrets/generated;
       };
 
+      services.traefik.acme.dns_provider = "azure";
+
       maintenance.config_repos.org = mkForce {
         branch = "main";
         url = "git@github.com:R-VdP/nixos-config.git";
