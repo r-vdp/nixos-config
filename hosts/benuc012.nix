@@ -6,13 +6,12 @@ let
   bridge_interface = "br0";
   lan1_interface = "enp1s0";
   lan2_interface = "enp2s0";
-  local_ip = "10.0.7.252";
-  upstream_gateway = "10.0.7.254";
+  #local_ip = "10.0.7.252";
+  #upstream_gateway = "10.0.7.254";
   nameservers = [ "9.9.9.9" "149.112.112.112" ];
 in
 
 {
-
   time.timeZone = "Europe/Brussels";
 
   settings = {
@@ -21,6 +20,10 @@ in
     reverse_tunnel.enable = true;
     crypto.encrypted_opt.enable = true;
     docker.enable = true;
+    services = {
+      traefik.enable = true;
+      #nomad.enable   = true;
+    };
   };
 
   networking = {
@@ -48,7 +51,7 @@ in
         }
 
         # Accept incoming DHCPv4 traffic
-        append_rule4 "nixos-fw --protocol udp --dport 67:68 --jump nixos-fw-accept"
+        #append_rule4 "nixos-fw --protocol udp --dport 67:68 --jump nixos-fw-accept"
 
         # Forward all outgoing traffic on the bridge belonging to existing connections
         append_rule  "FORWARD --out-interface ${bridge_interface} --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT"
@@ -64,13 +67,14 @@ in
     };
     useDHCP = mkForce false;
     bridges.${bridge_interface}.interfaces = [ lan1_interface lan2_interface ];
-    interfaces.${bridge_interface}.ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
-    defaultGateway = { address = upstream_gateway; interface = bridge_interface; };
+    interfaces.${bridge_interface}.useDHCP = true;
+    #interfaces.${bridge_interface}.ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
+    #defaultGateway = { address = upstream_gateway; interface = bridge_interface; };
     inherit nameservers;
   };
 
   services.dhcpd4 = {
-    enable = true;
+    enable = false;
     interfaces = [ bridge_interface ];
     extraConfig = ''
       option subnet-mask 255.255.252.0;
