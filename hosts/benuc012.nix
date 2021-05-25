@@ -14,11 +14,14 @@ in
 {
   time.timeZone = "Europe/Brussels";
 
+  system.autoUpgrade.rebootWindow = mkForce { lower = "10:00"; upper = "21:00"; };
+
   settings = {
     network.host_name = "benuc012";
     boot.mode = "uefi";
     reverse_tunnel.enable = true;
     crypto.encrypted_opt.enable = true;
+    maintenance.nixos_upgrade.startAt = [ "Fri 18:00" ];
     docker.enable = true;
     services = {
       traefik.enable = true;
