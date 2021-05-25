@@ -96,14 +96,16 @@ in
         users_json_path   = ./json/users.json;
         tunnels_json_path = ./json/tunnels.json;
         pub_keys_path     = ./keys;
-        secretsDirectory  = "/opt/.secrets/";
-        secrets_src_directory = ./secrets/generated;
+        secrets = {
+          dest_directory  = "/run/.secrets/";
+          src_directory = ./secrets/generated;
+        };
       };
 
       services.traefik = {
         pilot_token = "d553f62e-ced5-40e5-ab7f-20f0efc87e5f";
         acme = {
-          dns_provider = "azure";
+          dns_provider = "route53";
           email_address = "ramses.denorre@gmail.com";
         };
       };
