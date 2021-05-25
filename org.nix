@@ -98,6 +98,7 @@ in
         pub_keys_path     = ./keys;
         secrets = {
           dest_directory  = "/run/.secrets/";
+          old_dest_directories = [ "/opt/.secrets" ];
           src_directory = ./secrets/generated;
         };
       };
