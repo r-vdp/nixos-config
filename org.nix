@@ -87,11 +87,7 @@ in
   config = {
     settings = {
       system = {
-        nix_channel = let
-          host_name = config.settings.network.host_name;
-        in mkDefault (if (elem host_name cfg.early_upgrade_hosts)
-                      then cfg.upgrade_url
-                      else cfg.stable_url);
+        nix_channel = cfg.upgrade_url;
 
         users_json_path   = ./json/users.json;
         tunnels_json_path = ./json/tunnels.json;
