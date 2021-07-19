@@ -89,11 +89,11 @@ in
       system = {
         nix_channel = cfg.upgrade_url;
 
-        users_json_path   = ./json/users.json;
-        tunnels_json_path = ./json/tunnels.json;
-        pub_keys_path     = ./keys;
+        users_json_path       = ./json/users.json;
+        tunnels_json_dir_path = ./json/tunnels.json;
+        pub_keys_path         = ./keys;
         secrets = {
-          dest_directory  = "/run/.secrets/";
+          dest_directory = "/run/.secrets/";
           old_dest_directories = [ "/opt/.secrets" ];
           src_directory = ./secrets/generated;
         };
