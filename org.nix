@@ -90,7 +90,7 @@ in
         nix_channel = cfg.upgrade_url;
 
         users_json_path       = ./json/users.json;
-        tunnels_json_dir_path = ./json/tunnels.json;
+        tunnels_json_dir_path = ./json/tunnels.d;
         pub_keys_path         = ./keys;
         secrets = {
           dest_directory = "/run/.secrets/";
