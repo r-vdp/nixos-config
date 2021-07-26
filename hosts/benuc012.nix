@@ -20,7 +20,19 @@ in
     network.host_name = "benuc012";
     boot.mode = "uefi";
     reverse_tunnel.enable = true;
-    crypto.encrypted_opt.enable = true;
+    crypto = {
+      encrypted_opt.enable = true;
+      mounts = let
+        ext_disk_wd = "ext_disk_wd";
+      in {
+        ${ext_disk_wd} = {
+          enable = true;
+          device = "/dev/disk/by-partlabel/${ext_disk_wd}";
+          mount_point   = "/run/${ext_disk_wd}";
+          mount_options = "acl,noatime,nosuid,nodev";
+        };
+      };
+    };
     maintenance.nixos_upgrade.startAt = [ "Fri 18:00" ];
     docker.enable = true;
     services = {
