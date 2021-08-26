@@ -129,11 +129,6 @@ in
         };
       };
 
-      maintenance.config_repos.org = mkForce {
-        branch = "main";
-        url = "git@github.com:R-VdP/nixos-config.git";
-      };
-
       reverse_tunnel.relay_servers = let
         public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDsn2Dvtzm6jJyL9SJY6D1/lRwhFeWR5bQtSSQv6bZYf";
       in {
