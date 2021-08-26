@@ -89,6 +89,17 @@ in
       system = {
         nix_channel = cfg.upgrade_url;
 
+        org = {
+          # This value has an impact on global environment variables,
+          # be sure that you know what you are doing before changing it!!
+          env_var_prefix = "NIXOS";
+          github_org     = "MSF-OCB";
+          iso = {
+            menu_label = "NixOS rescue system";
+            file_label = "nixos-rescue";
+          };
+        };
+
         users_json_path       = ./json/users.json;
         tunnels_json_dir_path = ./json/tunnels.d;
         pub_keys_path         = ./keys;
@@ -104,6 +115,17 @@ in
         acme = {
           dns_provider = "route53";
           email_address = "ramses.denorre@gmail.com";
+        };
+      };
+
+      maintenance.config_repos = {
+        main = {
+          branch = "master";
+          url = sys_cfg.org.repo_to_url "NixOS";
+        };
+        org = {
+          branch = "main";
+          url = "https://github.com/R-VdP/nixos-config";
         };
       };
 
