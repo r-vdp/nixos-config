@@ -7,7 +7,8 @@ with (import ../msf_lib.nix).msf_lib.user_roles;
 with (user_lib config);
 
 let
-  cfg = config.settings.org;
+  cfg     = config.settings.org;
+  sys_cfg = config.settings.system;
 in
 
 {
