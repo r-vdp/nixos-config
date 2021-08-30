@@ -126,7 +126,7 @@ in
         };
         org = {
           branch = "main";
-          url = "https://github.com/R-VdP/nixos-config";
+          url = ''git@github.com:R-VdP/nixos-config.git'';
         };
       };
 
