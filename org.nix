@@ -102,8 +102,8 @@ in
         };
 
         users_json_path       = ./json/users.json;
+        keys_json_path        = ./json/keys.json;
         tunnels_json_dir_path = ./json/tunnels.d;
-        pub_keys_path         = ./keys;
         secrets = {
           dest_directory = "/run/.secrets/";
           old_dest_directories = [ "/opt/.secrets" ];
