@@ -1,14 +1,26 @@
 { config, lib, ... }:
 
 with lib;
-with (import ../msf_lib.nix).msf_lib.user_roles;
-# user_lib is a function in user_roles which needs to be evaluated
-# with the current config to obtain a set of functions to be imported
-with (user_lib config);
 
 let
   cfg     = config.settings.org;
   sys_cfg = config.settings.system;
+
+  globalAdmin = user_perms.admin // { enable = true; };
+
+  user_perms = let
+
+    # Admin users have shell access and belong to the wheel group
+    admin = {
+      enable      = mkDefault false;
+      sshAllowed  = true;
+      hasShell    = true;
+      canTunnel   = true;
+      extraGroups = [ "wheel" "docker" ];
+    };
+  in {
+    inherit admin;
+  };
 in
 
 {
@@ -147,8 +159,11 @@ in
         };
       };
 
-      users.users = {
-        ramses = globalAdmin;
+      users = {
+        available_permission_profiles = user_perms;
+        users = {
+          ramses = globalAdmin;
+        };
       };
     };
     users.users = {
