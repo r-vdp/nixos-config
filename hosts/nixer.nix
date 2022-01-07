@@ -89,20 +89,33 @@ in
     inherit nameservers;
   };
 
-  services.dhcpd4 = {
-    enable = false;
-    interfaces = [ bridge_interface ];
-    extraConfig = ''
-      option subnet-mask 255.255.252.0;
-      option routers ${upstream_gateway};
-      option domain-name-servers ${concatStringsSep ", " nameservers};
-      min-lease-time ${toString (2 * 60 * 60)};
-      default-lease-time ${toString (4 * 60 * 60)};
-      max-lease-time ${toString (4 * 60 * 60)};
-      subnet 10.0.4.0 netmask 255.255.252.0 {
-        range 10.0.4.1 10.0.6.254;
-      }
-    '';
+  services = {
+    ddclient = {
+      enable = true;
+      username = "none";
+      passwordFile = config.settings.system.secrets.dest_directory + "/dynv6_token";
+      use = ''web, web=https://ifconfig.io/ip'';
+      server = "dynv6.com";
+      protocol = "dyndns2";
+      ipv6 = true;
+      domains = [ "ramses.dynv6.net" ];
+    };
+
+    dhcpd4 = {
+      enable = false;
+      interfaces = [ bridge_interface ];
+      extraConfig = ''
+        option subnet-mask 255.255.252.0;
+        option routers ${upstream_gateway};
+        option domain-name-servers ${concatStringsSep ", " nameservers};
+        min-lease-time ${toString (2 * 60 * 60)};
+        default-lease-time ${toString (4 * 60 * 60)};
+        max-lease-time ${toString (4 * 60 * 60)};
+        subnet 10.0.4.0 netmask 255.255.252.0 {
+          range 10.0.4.1 10.0.6.254;
+        }
+      '';
+    };
   };
 }
 
