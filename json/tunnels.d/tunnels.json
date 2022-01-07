@@ -9,11 +9,11 @@
         "remote_forward_port": 0,
         "public_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDEVwfvXZUNKq94KmcjQ9YKSAubG0hL/iw3CWFFoWe0m"
       },
-      "benuc002": {
+      "nixer2": {
         "remote_forward_port": 6002,
         "public_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA3YY2F1iOlm/7w9dSXzHU6ZbOuUx9oMwpfi5xFm6jrz"
       },
-      "benuc012": {
+      "nixer": {
         "remote_forward_port": 6012,
         "public_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEY+a/keYuVeQcp6ckhFGbh1I+w9idqcz6uJWc65bz1/"
       }

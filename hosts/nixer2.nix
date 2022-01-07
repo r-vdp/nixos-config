@@ -12,7 +12,7 @@
   time.timeZone = "Europe/Brussels";
 
   settings = {
-    network.host_name = "benuc002";
+    network.host_name = "nixer2";
     boot.mode = "uefi";
     reverse_tunnel.enable = true;
     crypto.encrypted_opt.enable = true;

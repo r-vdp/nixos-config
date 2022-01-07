@@ -17,7 +17,7 @@ in
   system.autoUpgrade.rebootWindow = mkForce { lower = "10:00"; upper = "21:00"; };
 
   settings = {
-    network.host_name = "benuc012";
+    network.host_name = "nixer";
     boot.mode = "uefi";
     reverse_tunnel.enable = true;
     crypto = {
