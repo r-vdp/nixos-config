@@ -8,7 +8,12 @@ let
   lan2_interface = "enp2s0";
   #local_ip = "10.0.7.252";
   #upstream_gateway = "10.0.7.254";
-  nameservers = [ "9.9.9.9" "149.112.112.112" ];
+  nameservers = [
+    "2620:fe::fe"
+    "2620:fe::9"
+    "9.9.9.9"
+    "149.112.112.112"
+  ];
 in
 
 {
@@ -90,6 +95,10 @@ in
   };
 
   services = {
+    openssh = {
+      ports = [ 22 2443 ];
+    };
+
     ddclient = {
       enable = true;
       username = "none";
