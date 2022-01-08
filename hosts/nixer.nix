@@ -19,6 +19,8 @@ in
 {
   time.timeZone = "Europe/Brussels";
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   system.autoUpgrade.rebootWindow = mkForce { lower = "10:00"; upper = "21:00"; };
 
   settings = {
