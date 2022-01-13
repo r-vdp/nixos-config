@@ -22,7 +22,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Only safe on single-user machines
-  programs.ssh.startAgent = true;
+  programs.ssh.startAgent = mkForce true;
 
   system.autoUpgrade.rebootWindow = mkForce { lower = "10:00"; upper = "21:00"; };
 
