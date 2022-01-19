@@ -29,6 +29,9 @@ in
   settings = {
     network.host_name = "nixer";
     boot.mode = "uefi";
+    system = {
+      github_private_key = "/home/ramses/.ssh/id_ec";
+    };
     reverse_tunnel.enable = true;
     crypto = {
       encrypted_opt.enable = true;
@@ -53,6 +56,7 @@ in
   };
 
   networking = {
+    useNetworkd = true;
     firewall = {
       extraCommands = ''
         function append_rule() {
@@ -93,8 +97,11 @@ in
     };
     useDHCP = mkForce false;
     bridges.${bridge_interface}.interfaces = [ lan1_interface lan2_interface ];
-    interfaces.${bridge_interface}.useDHCP = true;
-    #interfaces.${bridge_interface}.ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
+    interfaces.${bridge_interface} = {
+      useDHCP = true;
+      tempAddress = "default";
+      #ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
+    };
     #defaultGateway = { address = upstream_gateway; interface = bridge_interface; };
     inherit nameservers;
   };
