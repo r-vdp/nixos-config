@@ -29,9 +29,6 @@ in
   settings = {
     network.host_name = "nixer";
     boot.mode = "uefi";
-    system = {
-      github_private_key = "/home/ramses/.ssh/id_ec";
-    };
     reverse_tunnel.enable = true;
     crypto = {
       encrypted_opt.enable = true;
