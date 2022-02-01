@@ -108,6 +108,10 @@ in
       ports = [ 22 2443 ];
     };
 
+    avahi = {
+      interfaces = [ bridge_interface ];
+    };
+
     ddclient = {
       enable = true;
       username = "none";
