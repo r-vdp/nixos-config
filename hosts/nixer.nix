@@ -9,10 +9,10 @@ let
   #local_ip = "10.0.7.252";
   #upstream_gateway = "10.0.7.254";
   nameservers = [
-    "2620:fe::fe"
-    "2620:fe::9"
-    "9.9.9.9"
-    "149.112.112.112"
+    "2620:fe::fe#dns.quad9.net"
+    "2620:fe::9#dns.quad9.net"
+#    "9.9.9.9#dns.quad9.net"
+#    "149.112.112.112#dns.quad9.net"
   ];
 in
 
@@ -48,7 +48,6 @@ in
     docker.enable = true;
     services = {
       traefik.enable = true;
-      #nomad.enable   = true;
     };
   };
 
@@ -93,17 +92,61 @@ in
       '';
     };
     useDHCP = mkForce false;
-    bridges.${bridge_interface}.interfaces = [ lan1_interface lan2_interface ];
-    interfaces.${bridge_interface} = {
-      useDHCP = true;
-      tempAddress = "default";
-      #ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
+#    bridges.${bridge_interface}.interfaces = [ lan1_interface lan2_interface ];
+#    interfaces.${bridge_interface} = {
+#      useDHCP = true;
+#      tempAddress = "default";
+#      #ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
+#    };
+#    #defaultGateway = { address = upstream_gateway; interface = bridge_interface; };
+#    inherit nameservers;
+  };
+
+  systemd.network = {
+    enable = true;
+
+    netdevs.${bridge_interface} = {
+      enable = true;
+      matchConfig = { Name = bridge_interface; };
+      netdevConfig = {
+        Name = bridge_interface;
+        Kind = "bridge";
+      };
     };
-    #defaultGateway = { address = upstream_gateway; interface = bridge_interface; };
-    inherit nameservers;
+
+    networks = {
+      ${lan1_interface} = {
+        enable = true;
+        matchConfig = { Name = lan1_interface; };
+        bridge = [ bridge_interface ];
+      };
+      ${lan2_interface} = {
+        enable = true;
+        matchConfig = { Name = lan2_interface; };
+        bridge = [ bridge_interface ];
+      };
+      ${bridge_interface} = {
+        enable = true;
+        matchConfig = { Name = bridge_interface; };
+        DHCP = "yes";
+        dhcpV6Config       = { UseDNS = false; };
+        ipv6AcceptRAConfig = { UseDNS = false; };
+        dhcpV4Config       = { UseDNS = false; };
+        networkConfig      = { IPv6PrivacyExtensions = "kernel"; };
+      };
+    };
   };
 
   services = {
+
+    resolved = {
+      domains = [ "~." ];
+      extraConfig = ''
+        DNS=${concatStringsSep " " nameservers}
+        DNSOverTLS=true
+      '';
+    };
+
     openssh = {
       ports = [ 22 2443 ];
     };
@@ -116,7 +159,7 @@ in
       enable = true;
       username = "none";
       passwordFile = config.settings.system.secrets.dest_directory + "/dynv6_token";
-      use = ''web, web=https://ifconfig.io/ip'';
+      use = ''web, web=https://api6.ipify.org'';
       server = "dynv6.com";
       protocol = "dyndns2";
       ipv6 = true;
