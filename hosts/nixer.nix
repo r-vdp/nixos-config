@@ -144,6 +144,7 @@ in
   services = {
 
     resolved = {
+      enable = true;
       domains = [ "~." ];
       extraConfig = ''
         DNS=${concatStringsSep " " nameservers}
