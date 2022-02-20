@@ -52,7 +52,7 @@ in
   };
 
   networking = {
-    useNetworkd = true;
+    useNetworkd = false;
     firewall = {
       extraCommands = ''
         function append_rule() {
@@ -92,14 +92,14 @@ in
       '';
     };
     useDHCP = mkForce false;
-#    bridges.${bridge_interface}.interfaces = [ lan1_interface lan2_interface ];
-#    interfaces.${bridge_interface} = {
-#      useDHCP = true;
-#      tempAddress = "default";
+    bridges.${bridge_interface}.interfaces = [ lan1_interface lan2_interface ];
+    interfaces.${bridge_interface} = {
+      useDHCP = true;
+      tempAddress = "default";
 #      #ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
-#    };
+    };
 #    #defaultGateway = { address = upstream_gateway; interface = bridge_interface; };
-#    inherit nameservers;
+    inherit nameservers;
   };
 
   boot.kernel.sysctl = {
@@ -108,7 +108,7 @@ in
   };
 
   systemd.network = {
-    enable = true;
+    enable = false;
 
     netdevs.${bridge_interface} = {
       enable = true;
