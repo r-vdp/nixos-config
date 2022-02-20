@@ -103,8 +103,8 @@ in
   };
 
   boot.kernel.sysctl = {
-    "net.ipv6.conf.all.use_tempaddr" = 2;
-    "net.ipv6.conf.${bridge_interface}.use_tempaddr" = 2;
+    "net.ipv6.conf.all.use_tempaddr" = "2";
+    "net.ipv6.conf.${bridge_interface}.use_tempaddr" = "2";
   };
 
   systemd.network = {
