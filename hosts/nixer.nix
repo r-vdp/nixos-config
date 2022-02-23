@@ -146,6 +146,7 @@ in
     resolved = {
       enable = true;
       domains = [ "~." ];
+      dnssec = false;
       extraConfig = ''
         DNS=${concatStringsSep " " nameservers}
         DNSOverTLS=true
