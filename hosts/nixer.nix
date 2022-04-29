@@ -17,6 +17,11 @@ let
 in
 
 {
+  config.environment.systemPackages = with pkgs; [
+    stack
+    ghc
+  ];
+
   time.timeZone = "Europe/Brussels";
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
