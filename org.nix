@@ -118,7 +118,6 @@ in
         tunnels_json_dir_path = ./json/tunnels.d;
         secrets = {
           dest_directory = "/run/.secrets/";
-          old_dest_directories = [ "/opt/.secrets" ];
           src_directory = ./secrets/generated;
         };
       };
@@ -126,7 +125,7 @@ in
       services.traefik = {
         pilot_token = "d553f62e-ced5-40e5-ab7f-20f0efc87e5f";
         acme = {
-          dns_provider = "route53";
+          dns_provider  = "route53";
           email_address = "ramses.denorre@gmail.com";
         };
       };
@@ -167,20 +166,6 @@ in
       };
     };
     users.users = {
-      # Only user with a password, but not usable via SSH.
-      # To be used for console access in case of emergencies.
-      local-admin = {
-        isNormalUser = true;
-        extraGroups  = [ "wheel" ];
-        openssh.authorizedKeys.keyFiles = mkForce [];
-        # nix-shell --packages python3 \
-        #           --command "python3 -c 'import crypt,getpass; \
-        #                                  print(crypt.crypt(getpass.getpass(), \
-        #                                                    crypt.mksalt(crypt.METHOD_SHA512)))'"
-        hashedPassword = mkDefault
-          ''$6$VB1Kj0dbHNuvRl24$9YAgZYFHyk6Mr1xseoZGVmVjBr/FeYQ/VQZCNT7ulvyotzxlGhPTAANtA3J3BUEr4lzDf08IxN2C80vi7/CHv0'';
-      };
-
       # Lock the root user
       root = {
         hashedPassword = mkForce "!";
