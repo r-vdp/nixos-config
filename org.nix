@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -98,6 +98,9 @@ in
   };
 
   config = {
+
+    nix.package = pkgs.nix_2_7;
+
     settings = {
       system = {
         nix_channel = cfg.upgrade_url;
