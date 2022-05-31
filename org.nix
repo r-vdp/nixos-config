@@ -98,12 +98,9 @@ in
   };
 
   config = {
-
-    nix.package = pkgs.nix_2_7;
-
     settings = {
       system = {
-        nix_channel = cfg.upgrade_url;
+        nix_channel = "https://nixos.org/channels/nixos-unstable";
 
         org = {
           # This value has an impact on global environment variables,
