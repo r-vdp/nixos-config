@@ -34,19 +34,6 @@ in
 
         colorscheme jellybeans
 
-        " Change the colours for CoC messages
-        "func! s:my_colors_setup() abort
-        "  highlight CocFloating     ctermbg=black " For background color
-        "  highlight CocErrorFloat   ctermfg=white " For text color
-        "  highlight CocWarningFloat ctermfg=white
-        "  highlight CocInfoFloat    ctermfg=white
-        "  highlight CocHintFloat    ctermfg=white
-        "endfunc
-
-        "augroup colorscheme_coc_setup | au!
-        "  au VimEnter * call s:my_colors_setup()
-        "augroup END
-
         set encoding=utf-8
         set scrolloff=3
         set backspace=indent,eol,start
@@ -69,20 +56,18 @@ in
         set shiftwidth=2            " width for autoindents
         "set autoindent              " indent a new line the same amount as the line just typed
 
-        autocmd BufWritePre * :%s/\s\+$//e  " remove trailing whitespace
+        " remove trailing whitespace
+        autocmd BufWritePre * :%s/\s\+$//e
 
-        set number                  " add line numbers
         set ruler
         set cursorline
-        set showcmd
-        set showmode
         set number relativenumber
-
         set laststatus=2
+        set cc=80                   " set an 80 column border for good coding style
+        set cmdheight=2             " height of the command window on the bottom
 
         set wildmenu
         set wildmode=list:longest   " get bash-like tab completions
-        set cc=80                   " set an 80 column border for good coding style
 
         filetype plugin indent on   " allow auto-indenting depending on file type
         syntax on                   " syntax highlighting
@@ -91,12 +76,9 @@ in
 
         set ttyfast                 " Speed up scrolling in Vim
 
-        " set spell                 " enable spell check (may need to download language package)
-        " set noswapfile            " disable creating swap file
         silent !mkdir ~/.cache/vim > /dev/null 2>&1
         set backupdir=~/.cache/vim " Directory to store backup files.
 
-        set cmdheight=2
         set updatetime=150
 
         autocmd BufReadPost *
@@ -131,50 +113,24 @@ in
         "let g:airline_symbols.paste = '∥'
         let g:airline_symbols.whitespace = 'Ξ'
 
-        " Open files in tabs
+        " Open files in new tabs
         let NERDTreeCustomOpenArgs={'file':{'where': 't'}}
 
         " Keybindings
+        let mapleader = ","
 
-        map <F1> :NERDTreeToggle<CR>
-
-        "inoremap <silent><expr> <TAB>
-        "      \ pumvisible() ? "\<C-n>" :
-        "      \ CheckBackspace() ? "\<TAB>" :
-        "      \ coc#refresh()
-        "inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-        "function! CheckBackspace() abort
-        "  let col = col('.') - 1
-        "  return !col || getline('.')[col - 1]  =~# '\s'
-        "endfunction
-
-        "" Use <c-space> to trigger completion.
-        "inoremap <silent><expr> <c-space> coc#refresh()
-        "inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
-
-        "autocmd CursorHold * silent call CocActionAsync('highlight')
-        "autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-        "" Use `[g` and `]g` to navigate diagnostics
-        "" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-        ""nmap <silent> [g <Plug>(coc-diagnostic-prev)
-        ""nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-        "map <Leader>ggd <Plug>(coc-definition)
-        "map <Leader>ggi <Plug>(coc-implementation)
-        "map <Leader>ggt <Plug>(coc-type-definition)
-        "" Documentation
-        "map <Leader>gh :call CocActionAsync('doHover')<cr>
-        "map <Leader>gn <Plug>(coc-diagnostic-next)
-        "map <Leader>gp <Plug>(coc-diagnostic-prev)
-        "map <Leader>gr <Plug>(coc-references)
-
-        "map <Leader>qf <Plug>(coc-fix-current)
-
-        "map <Leader>al <Plug>(coc-codeaction-line)
-        "map <Leader>ac <Plug>(coc-codeaction-cursor)
-        "map <Leader>ao <Plug>(coc-codelens-action)
+        " F1 opens NERDTree
+        nnoremap <F1> :NERDTreeToggle<CR>
+        " Use double-<space> to save the file
+        nnoremap <space><space> :w<cr>
+        " Remap jj to Esc.
+        inoremap jj <Esc>
+        " Remove search highlighting
+        nnoremap <leader><space> :noh<cr>
+        " Tab jumps to matching bracket
+        nnoremap <tab> %
+        " Tab jumps to matching bracket
+        vnoremap <tab> %
 
         luafile ${../nvim.lua}
       '';
@@ -192,25 +148,13 @@ in
           nvim-lspconfig
           nvim-cmp
           cmp-nvim-lsp
-          #(pkgs.vimUtils.buildVimPluginFrom2Nix {
-          #   pname = "coc.nvim";
-          #   version = "2022-05-21";
-          #   src = pkgs.fetchFromGitHub {
-          #     owner = "neoclide";
-          #     repo = "coc.nvim";
-          #     rev = "791c9f673b882768486450e73d8bda10e391401d";
-          #     sha256 = "sha256-MobgwhFQ1Ld7pFknsurSFAsN5v+vGbEFojTAYD/kI9c=";
-          #   };
-          #   meta.homepage = "https://github.com/neoclide/coc.nvim/";
-          # }
-          #)
         ];
         opt = [];
       };
     };
-    withRuby = false;
+    withRuby    = false;
     withPython3 = false;
-    withNodeJs = false;
+    withNodeJs  = false;
   };
 
   time.timeZone = "Europe/Brussels";
