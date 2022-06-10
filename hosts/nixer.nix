@@ -192,7 +192,7 @@ in
   };
 
   networking = {
-    useNetworkd = false;
+    useNetworkd = true;
     firewall = {
       extraCommands = ''
         function append_rule() {
@@ -231,7 +231,7 @@ in
         ip46tables --policy FORWARD DROP
       '';
     };
-    useDHCP = mkForce false;
+    useDHCP = true;
     bridges.${bridge_interface}.interfaces = [ lan1_interface lan2_interface ];
     interfaces.${bridge_interface} = {
       useDHCP = true;
@@ -248,7 +248,7 @@ in
   };
 
   systemd.network = {
-    enable = false;
+    enable = true;
 
     netdevs.${bridge_interface} = {
       enable = true;
