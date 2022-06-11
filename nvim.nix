@@ -66,6 +66,14 @@
           \   exe "normal! g`\"" |
           \ endif
 
+        " Suggestion from :checkhealth
+        let g:loaded_perl_provider = 0
+
+        " https://essais.co/better-folding-in-neovim/
+        set foldmethod=indent
+        set nofoldenable
+        set foldlevel=99
+
         " Airline
         let g:airline_theme = 'bubblegum'
         let g:airline_powerline_fonts = 1

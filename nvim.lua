@@ -35,18 +35,24 @@ local on_attach = function(client, bufnr)
   local opt_rm   = {noremap = false, silent = true}
   local opt_norm = {noremap = true, silent = true}
 
-  buf_keymap('n', 'K',   ':lua vim.lsp.buf.hover()<CR>',              opt_rm)
-  buf_keymap('n', 'ga',  ':lua vim.lsp.buf.code_action()<CR>',        opt_norm)
-  buf_keymap('n', 'gd',  ':lua vim.lsp.buf.definition()<CR>',         opt_norm)
-  buf_keymap('n', 'gD',  ':lua vim.lsp.buf.type_definition()<CR>',    opt_norm)
-  buf_keymap('n', 'gi',  ':lua vim.lsp.buf.implementation()<CR>',     opt_norm)
-  buf_keymap('n', 'g[',  ':lua vim.diagnostic.goto_prev()<CR>',   opt_norm)
-  buf_keymap('n', 'g]',  ':lua vim.diagnostic.goto_next()<CR>',   opt_norm)
-  buf_keymap('n', 'gl',  ':lua vim.diagnostic.setloclist()<CR>', opt_norm)
-  buf_keymap('n', 'gr',  ':lua vim.lsp.buf.references()<CR>',         opt_norm)
-  buf_keymap('n', 'gR',  ':lua vim.lsp.buf.rename()<CR>',             opt_norm)
+  buf_keymap('n', 'K',   ':lua vim.lsp.buf.hover()<CR>',           opt_rm)
+  buf_keymap('n', 'ga',  ':lua vim.lsp.buf.code_action()<CR>',     opt_norm)
+  buf_keymap('n', 'gL',  ':lua vim.lsp.codelens.run()<CR>',        opt_norm)
+  buf_keymap('n', 'gd',  ':lua vim.lsp.buf.definition()<CR>',      opt_norm)
+  buf_keymap('n', 'gD',  ':lua vim.lsp.buf.type_definition()<CR>', opt_norm)
+  buf_keymap('n', 'gi',  ':lua vim.lsp.buf.implementation()<CR>',  opt_norm)
+  buf_keymap('n', 'g[',  ':lua vim.diagnostic.goto_prev()<CR>',    opt_norm)
+  buf_keymap('n', 'g]',  ':lua vim.diagnostic.goto_next()<CR>',    opt_norm)
+  buf_keymap('n', 'gl',  ':lua vim.diagnostic.setloclist()<CR>',   opt_norm)
+  buf_keymap('n', 'gr',  ':lua vim.lsp.buf.references()<CR>',      opt_norm)
+  buf_keymap('n', 'gR',  ':lua vim.lsp.buf.rename()<CR>',          opt_norm)
   buf_keymap('n', '<leader>fs', ':lua vim.lsp.buf.workspace_symbol()<CR>', opt_norm)
   buf_keymap('n', '<leader>e', ':lua vim.diagnostic.open_float()<CR>', opt_norm)
+
+  -- automatically refresh codelenses, which can then be run with gl
+  vim.api.nvim_command [[
+    autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
+  ]]
 
   -- Mappings
   -- vim.api.nvim_buf_set_keymap(0, 'n', 'gd',
