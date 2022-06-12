@@ -16,7 +16,8 @@
         set backspace=indent,eol,start
 
         set list
-        set listchars=tab:▸\ ,eol:¬,trail:·
+        "set listchars=tab:▸\ ,eol:¬,trail:·
+        set listchars=tab:▸\ ,trail:·
 
         set termguicolors
 
