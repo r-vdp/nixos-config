@@ -20,12 +20,12 @@ in
   imports = [ ../nvim.nix ];
 
   environment.systemPackages = with pkgs; [
-    stack
-    ghc
-    haskellPackages.haskell-language-server
+    (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
+      stack
+    ]))
+    haskell-language-server
     nixos-option
   ];
-
 
   time.timeZone = "Europe/Brussels";
 
