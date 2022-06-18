@@ -44,7 +44,7 @@
         set number relativenumber
         set laststatus=2
         set cc=80                   " set an 80 column border for good coding style
-        set cmdheight=2             " height of the command window on the bottom
+        set cmdheight=1             " height of the command window on the bottom
 
         set wildmenu
         set wildmode=list:longest   " get bash-like tab completions
@@ -122,8 +122,8 @@
         nnoremap gb :buffers<CR>:buffer<Space>
 
         " Move between buffers in normal mode
-        nnoremap <C-PageUp>   :bprevious<CR>
-        nnoremap <C-PageDown> :bnext<CR>
+        nnoremap <C-PageDown>   :bprevious<CR>
+        nnoremap <C-PageUp> :bnext<CR>
 
         " Keep the cursor centered in normal mode
         nnoremap <down> jzz
@@ -147,6 +147,9 @@
           nvim-lspconfig
           nvim-cmp
           cmp-nvim-lsp
+          cmp-buffer
+          vim-vsnip
+          cmp-vsnip
         ];
         opt = [];
       };
