@@ -1,8 +1,14 @@
 { lib, config, pkgs, ...}:
 
 {
+  # Disable the default neovim config
+  settings.vim.enable = false;
+
   programs.neovim = {
     enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
     configure = {
       customRC = ''
         set nocompatible            " disable compatibility to old-time vi
