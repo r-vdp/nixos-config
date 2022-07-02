@@ -24,6 +24,10 @@ in
       stack
     ]))
     haskell-language-server
+    elmPackages.elm
+    elmPackages.elm-language-server
+    elmPackages.elm-format
+    elm2nix
     nixos-option
   ];
 

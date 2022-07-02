@@ -144,6 +144,7 @@
           (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
           vim-nix
           haskell-vim
+          elm-vim
           dracula-vim
           vim-airline
           vim-airline-themes

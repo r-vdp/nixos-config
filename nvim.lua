@@ -46,6 +46,7 @@ local on_attach = function(client, bufnr)
   buf_keymap('n', 'gl',  ':lua vim.diagnostic.setloclist()<CR>',   opt_norm)
   buf_keymap('n', 'gr',  ':lua vim.lsp.buf.references()<CR>',      opt_norm)
   buf_keymap('n', 'gR',  ':lua vim.lsp.buf.rename()<CR>',          opt_norm)
+  buf_keymap('n', 'gF',  ':lua vim.lsp.buf.formatting_sync()<CR>', opt_norm)
   buf_keymap('n', '<leader>fs', ':lua vim.lsp.buf.workspace_symbol()<CR>', opt_norm)
   buf_keymap('n', '<leader>e', ':lua vim.diagnostic.open_float()<CR>', opt_norm)
 
@@ -60,8 +61,9 @@ local on_attach = function(client, bufnr)
   -- vim.api.nvim_buf_set_keymap(0, 'i', '<C-s>',
   --   '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 
-  -- autoformat only for haskell
-  if vim.api.nvim_buf_get_option(0, 'filetype') == 'haskell' then
+  -- autoformat only for selected languages
+  local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
+  if filetype == 'haskell' then
     vim.api.nvim_command[[
       autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
   end
@@ -81,7 +83,7 @@ nvim_lsp.hls.setup({
   }
 })
 
-local servers = {"hls"}
+local servers = {"hls", "elmls"}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
     on_attach = on_attach,
