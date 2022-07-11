@@ -50,10 +50,6 @@ local on_attach = function(client, bufnr)
   buf_keymap('n', '<leader>fs', ':lua vim.lsp.buf.workspace_symbol()<CR>', opt_norm)
   buf_keymap('n', '<leader>e', ':lua vim.diagnostic.open_float()<CR>', opt_norm)
 
-  -- automatically refresh codelenses, which can then be run with gl
-  vim.api.nvim_command [[
-    autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-  ]]
 
   -- Mappings
   -- vim.api.nvim_buf_set_keymap(0, 'n', 'gd',
@@ -66,6 +62,10 @@ local on_attach = function(client, bufnr)
   if filetype == 'haskell' then
     vim.api.nvim_command[[
       autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+    -- automatically refresh codelenses, which can then be run with gl
+    vim.api.nvim_command [[
+      autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
+    ]]
   end
 end
 
