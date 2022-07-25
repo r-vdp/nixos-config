@@ -177,13 +177,14 @@ in
 
     ddclient = {
       enable = true;
-      username = "none";
-      passwordFile = config.settings.system.secrets.dest_directory + "/dynv6_token";
+      username = "VoEF8e1gHa1FpVWT";
+      passwordFile = config.settings.system.secrets.dest_directory + "/sshv6_token";
       use = ''web, web=https://api6.ipify.org'';
-      server = "dynv6.com";
+      server = "domains.google.com";
       protocol = "dyndns2";
+      ssl = true;
       ipv6 = true;
-      domains = [ "ramses.dynv6.net" ];
+      domains = [ "sshv6.engyandramses.xyz" ];
     };
 
     dhcpd4 = {
