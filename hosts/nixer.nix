@@ -27,6 +27,7 @@ in
     elmPackages.elm
     elmPackages.elm-language-server
     elmPackages.elm-format
+    elmPackages.elm-review
     elm2nix
     nixos-option
   ];
@@ -59,9 +60,9 @@ in
       };
     };
     maintenance.nixos_upgrade.startAt = [ "Fri 18:00" ];
-    docker.enable = true;
+    docker.enable = false;
     services = {
-      traefik.enable = true;
+      traefik.enable = false;
     };
   };
 
