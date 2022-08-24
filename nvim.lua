@@ -59,9 +59,11 @@ local on_attach = function(client, bufnr)
 
   -- autoformat only for selected languages
   local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
+
+  vim.api.nvim_command[[
+    autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+
   if filetype == 'haskell' then
-    vim.api.nvim_command[[
-      autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
     -- automatically refresh codelenses, which can then be run with gl
     vim.api.nvim_command [[
       autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
