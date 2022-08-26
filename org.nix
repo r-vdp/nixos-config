@@ -18,9 +18,7 @@ let
         extraGroups = [ "wheel" "docker" ];
       };
     in
-    {
-      inherit admin;
-    };
+    { inherit admin; };
 in
 {
   config = {
