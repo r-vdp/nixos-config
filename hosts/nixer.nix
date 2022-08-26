@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ...}:
+{ lib, config, pkgs, ... }:
 
 with lib;
 
@@ -11,8 +11,8 @@ let
   nameservers = [
     "2620:fe::fe#dns.quad9.net"
     "2620:fe::9#dns.quad9.net"
-#    "9.9.9.9#dns.quad9.net"
-#    "149.112.112.112#dns.quad9.net"
+    #    "9.9.9.9#dns.quad9.net"
+    #    "149.112.112.112#dns.quad9.net"
   ];
 in
 
@@ -47,17 +47,19 @@ in
     reverse_tunnel.enable = true;
     crypto = {
       encrypted_opt.enable = true;
-      mounts = let
-        ext_disk_wd = "ext_disk_wd";
-      in {
-        ${ext_disk_wd} = {
-          enable = true;
-          device = "/dev/disk/by-partlabel/${ext_disk_wd}";
-          device_units = [ "dev-disk-by\\x2dpartlabel-ext_disk_wd.device" ];
-          mount_point   = "/run/${ext_disk_wd}";
-          mount_options = "acl,noatime,nosuid,nodev";
+      mounts =
+        let
+          ext_disk_wd = "ext_disk_wd";
+        in
+        {
+          ${ext_disk_wd} = {
+            enable = true;
+            device = "/dev/disk/by-partlabel/${ext_disk_wd}";
+            device_units = [ "dev-disk-by\\x2dpartlabel-ext_disk_wd.device" ];
+            mount_point = "/run/${ext_disk_wd}";
+            mount_options = "acl,noatime,nosuid,nodev";
+          };
         };
-      };
     };
     maintenance.nixos_upgrade.startAt = [ "Fri 18:00" ];
     docker.enable = false;
@@ -111,9 +113,9 @@ in
     interfaces.${bridge_interface} = {
       useDHCP = true;
       tempAddress = "default";
-#      #ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
+      #      #ipv4.addresses = [ { address = local_ip; prefixLength = 22; } ];
     };
-#    #defaultGateway = { address = upstream_gateway; interface = bridge_interface; };
+    #    #defaultGateway = { address = upstream_gateway; interface = bridge_interface; };
     inherit nameservers;
   };
 
@@ -148,10 +150,10 @@ in
         enable = true;
         matchConfig = { Name = bridge_interface; };
         DHCP = "yes";
-        dhcpV6Config       = { UseDNS = false; };
+        dhcpV6Config = { UseDNS = false; };
         ipv6AcceptRAConfig = { UseDNS = false; };
-        dhcpV4Config       = { UseDNS = false; };
-        networkConfig      = { IPv6PrivacyExtensions = "kernel"; };
+        dhcpV4Config = { UseDNS = false; };
+        networkConfig = { IPv6PrivacyExtensions = "kernel"; };
       };
     };
   };
