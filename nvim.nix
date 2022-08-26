@@ -1,8 +1,12 @@
-{ lib, config, pkgs, ...}:
+{ pkgs, ... }:
 
 {
   # Disable the default neovim config
   settings.vim.enable = false;
+
+  environment.systemPackages = with pkgs; [
+    rnix-lsp
+  ];
 
   programs.neovim = {
     enable = true;
@@ -158,12 +162,12 @@
           vim-vsnip
           cmp-vsnip
         ];
-        opt = [];
+        opt = [ ];
       };
     };
-    withRuby    = false;
+    withRuby = false;
     withPython3 = false;
-    withNodeJs  = false;
+    withNodeJs = false;
   };
 }
 

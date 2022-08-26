@@ -75,26 +75,26 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
-nvim_lsp.hls.setup({
-  on_attach = on_attach,
-  settings = {
-    haskell = {
-      hlintOn = true,
-      formattingProvider = "ormolu"
-    }
-  }
-})
-
-local servers = {"hls", "elmls"}
+local servers = {"hls", "elmls", "rnix"}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
     on_attach = on_attach,
     capabilities = capabilities,
-    flags = {debounce_text_changes = 150}
+    flags = {debounce_text_changes = 150},
+    settings = {
+      haskell = {
+        hlintOn = true,
+        formattingProvider = "ormolu"
+      },
+      elmLS = {
+        elmReviewDiagnostics = "warning",
+        disableElmLSDiagnostics = false
+      }
+    }
   })
 end
 
-local cmp = require'cmp'
+local cmp = require('cmp')
 
 cmp.setup({
   snippet = {
