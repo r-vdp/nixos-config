@@ -88,6 +88,9 @@ in
         };
       };
     };
+    services = {
+      fwupd.enable = true;
+    };
     users.users = {
       # Lock the root user
       root = {

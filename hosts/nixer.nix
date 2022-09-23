@@ -159,7 +159,6 @@ in
   };
 
   services = {
-
     resolved = {
       enable = true;
       domains = [ "~." ];
