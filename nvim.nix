@@ -6,6 +6,7 @@
 
   environment.systemPackages = with pkgs; [
     rnix-lsp
+    nodePackages.yaml-language-server
   ];
 
   programs.neovim = {
@@ -167,7 +168,7 @@
     };
     withRuby = false;
     withPython3 = false;
-    withNodeJs = false;
+    withNodeJs = true;
   };
 }
 
