@@ -19,6 +19,8 @@ in
 {
   imports = [ ../nvim.nix ];
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   environment.systemPackages = with pkgs; [
     (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
       stack
@@ -30,6 +32,7 @@ in
     elmPackages.elm-review
     elm2nix
     nixos-option
+    ocb_python_scripts
   ];
 
   time.timeZone = "Europe/Brussels";
@@ -39,11 +42,31 @@ in
   # Only safe on single-user machines
   programs.ssh.startAgent = mkForce true;
 
-  system.autoUpgrade.rebootWindow = mkForce { lower = "10:00"; upper = "21:00"; };
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:R-VdP/nixos-config";
+    dates = "Fri 18:00";
+    allowReboot = true;
+    rebootWindow = mkForce { lower = "10:00"; upper = "21:00"; };
+  };
+
+  systemd.services.nixos-upgrade = {
+    environment = {
+      GIT_SSH_COMMAND = concatStringsSep " " [
+        "${pkgs.openssh}/bin/ssh"
+        "-F /etc/ssh/ssh_config"
+        "-i ${config.settings.system.secrets.dest_directory}/nixos-config-deploy-key"
+        "-o IdentitiesOnly=yes"
+        "-o StrictHostKeyChecking=yes"
+      ];
+    };
+  };
 
   settings = {
     network.host_name = "nixer";
     boot.mode = "uefi";
+    # We will use flakes instead of channels.
+    maintenance.enable = false;
     reverse_tunnel.enable = true;
     crypto = {
       encrypted_opt.enable = true;
@@ -61,7 +84,6 @@ in
           };
         };
     };
-    maintenance.nixos_upgrade.startAt = [ "Fri 18:00" ];
     docker.enable = false;
     services = {
       traefik.enable = false;
