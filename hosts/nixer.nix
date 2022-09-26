@@ -44,23 +44,47 @@ in
 
   system.autoUpgrade = {
     enable = true;
-    flake = "github:R-VdP/nixos-config";
+    flake = "git+ssh://github.com/R-VdP/nixos-config";
+    flags = [
+      # We pull a remote repo into the nix store,
+      # so we cannot write the lock file.
+      "--no-write-lock-file"
+      # TODO: fix. Can we avoid needing to load the key from outside?
+      #            How would we bootstrap the decryption of the secrets then?
+      # We need to load the server's key from the filesystem, which is impure.
+      "--impure"
+    ];
     dates = "Fri 18:00";
     allowReboot = true;
     rebootWindow = mkForce { lower = "10:00"; upper = "21:00"; };
   };
 
-  systemd.services.nixos-upgrade = {
-    environment = {
-      GIT_SSH_COMMAND = concatStringsSep " " [
-        "${pkgs.openssh}/bin/ssh"
-        "-F /etc/ssh/ssh_config"
-        "-i ${config.settings.system.secrets.dest_directory}/nixos-config-deploy-key"
-        "-o IdentitiesOnly=yes"
-        "-o StrictHostKeyChecking=yes"
-      ];
+  systemd.services.nixos-upgrade =
+    let
+      runtimeDir = "nixos-upgrade";
+      github_key_path = "/run/${runtimeDir}/key";
+    in
+    {
+      serviceConfig = {
+        RuntimeDirectoryMode = "0700";
+        RuntimeDirectory = runtimeDir;
+      };
+      preStart = ''
+        install \
+          --mode=0600 \
+          "${config.settings.system.secrets.dest_directory}/nixos-config-deploy-key" \
+          "${github_key_path}"
+      '';
+      environment = {
+        GIT_SSH_COMMAND = concatStringsSep " " [
+          "${pkgs.openssh}/bin/ssh"
+          "-F /etc/ssh/ssh_config"
+          "-i ${github_key_path}"
+          "-o IdentitiesOnly=yes"
+          "-o StrictHostKeyChecking=yes"
+        ];
+      };
     };
-  };
 
   settings = {
     network.host_name = "nixer";
