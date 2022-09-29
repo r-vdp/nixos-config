@@ -63,7 +63,7 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_command[[
     autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
 
-  if filetype ~= 'elm' then
+  if filetype == 'haskell' then
     -- automatically refresh codelenses, which can then be run with gl
     vim.api.nvim_command [[
       autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
