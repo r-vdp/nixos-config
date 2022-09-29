@@ -63,7 +63,7 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_command[[
     autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
 
-  if filetype == 'haskell' then
+  if filetype ~= 'elm' then
     -- automatically refresh codelenses, which can then be run with gl
     vim.api.nvim_command [[
       autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
@@ -75,7 +75,7 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
-local servers = {"hls", "elmls", "rnix", "yamlls"}
+local servers = {"hls", "elmls", "rnix", "yamlls", "pylsp"}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
     on_attach = on_attach,
@@ -99,6 +99,19 @@ for _, lsp in ipairs(servers) do
         },
         validate = true,
         completion = true
+      },
+      pylsp = {
+        plugins = {
+          pylsp_mypy = {
+            enable = true
+          },
+          pycodestyle = {
+            -- W503: deprecated in favour of W504
+            -- E111, E114: requiring 4 spaces indentation
+            ignore = {'W503', 'E111', 'E114'},
+            maxLineLength = 100
+          }
+        }
       }
     }
   })

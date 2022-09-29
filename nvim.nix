@@ -9,6 +9,14 @@
     nodePackages.yaml-language-server
   ];
 
+  settings.packages.python_package =
+    pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
+      python-lsp-server
+      pylsp-mypy
+      mypy
+      pyflakes
+    ]);
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
