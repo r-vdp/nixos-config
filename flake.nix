@@ -5,14 +5,9 @@
       url = "github:MSF-OCB/NixOS/rvdp/flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Is there a better way?
-    private-key = {
-      url = "/etc/nixos/local/id_tunnel";
-      flake = false;
-    };
   };
 
-  outputs = { self, nixpkgs, ocb-modules, private-key }: with nixpkgs.lib;
+  outputs = { self, nixpkgs, ocb-modules }: with nixpkgs.lib;
     let
       system = "x86_64-linux";
     in
@@ -21,9 +16,6 @@
         imports = [
           ./.
           ocb-modules.nixosModules.default
-          {
-            settings.system.private_key_source = private-key;
-          }
         ];
       };
 

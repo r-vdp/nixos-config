@@ -34,7 +34,7 @@ in
         # TODO: fix. Can we avoid needing to load the key from outside?
         #            How would we bootstrap the decryption of the secrets then?
         # We need to load the server's key from the filesystem, which is impure.
-        #"--impure"
+        "--impure"
       ];
       dates = "Fri 18:00";
       allowReboot = true;
