@@ -60,8 +60,9 @@ local on_attach = function(client, bufnr)
   -- autoformat only for selected languages
   local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
 
+  -- Set a max timeout of 10000 to give the formatter a bit more time.
   vim.api.nvim_command[[
-    autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()]]
+    autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 10000)]]
 
   if filetype == 'haskell' then
     -- automatically refresh codelenses, which can then be run with gl
@@ -107,8 +108,7 @@ for _, lsp in ipairs(servers) do
           },
           pycodestyle = {
             -- W503: deprecated in favour of W504
-            -- E111, E114: requiring 4 spaces indentation
-            ignore = {'W503', 'E111', 'E114'},
+            ignore = {'W503'},
             maxLineLength = 100
           }
         }
