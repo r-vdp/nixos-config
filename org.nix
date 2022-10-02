@@ -28,6 +28,7 @@ in
       enable = true;
       flake = "git+ssh://github.com/R-VdP/nixos-config";
       flags = [
+        "--refresh"
         # We pull a remote repo into the nix store,
         # so we cannot write the lock file.
         "--no-write-lock-file"
