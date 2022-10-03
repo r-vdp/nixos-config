@@ -33,8 +33,8 @@
           haskell-vim
           elm-vim
           dracula-vim
-          vim-airline
-          vim-airline-themes
+          lualine-nvim
+          bufferline-nvim
           vim-colorschemes
           indent-blankline-nvim
           nerdtree
