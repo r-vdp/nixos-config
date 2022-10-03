@@ -149,7 +149,7 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, ...)
   end
 
-  local opts = {silent = true, buffer = bufnr}
+  local opts = { silent = true, buffer = bufnr }
 
   vim.keymap.set('n', 'K',  function() vim.lsp.buf.hover() end,           opts)
   vim.keymap.set('n', 'ga', function() vim.lsp.buf.code_action() end,     opts)
@@ -172,18 +172,22 @@ local on_attach = function(client, bufnr)
   -- vim.api.nvim_buf_set_keymap(0, 'i', '<C-s>',
   --   '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 
-  -- Set a max timeout of 10000 to give the formatter a bit more time.
-  vim.api.nvim_command([[
-    autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 10000)
-  ]])
-
-  -- autoformat only for selected languages
-  local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-  if filetype == 'haskell' then
-    -- automatically refresh codelenses, which can then be run with gL
-    vim.api.nvim_command([[
-      autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()
-    ]])
+  local lsp_augroup = "lsp_augroup"
+  vim.api.nvim_create_augroup(lsp_augroup, { clear = false })
+  vim.api.nvim_clear_autocmds({ buffer = bufnr, group = lsp_augroup })
+  vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+    group = lsp_augroup,
+    buffer = bufnr,
+    -- Set a max timeout of 10000 to give the formatter a bit more time.
+    callback = function() vim.lsp.buf.formatting_sync(nil, 10000) end
+  })
+  if vim.bo.filetype == "haskell" then
+    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "InsertLeave" }, {
+      group = lsp_augroup,
+      buffer = bufnr,
+      -- automatically refresh codelenses, which can then be run with gL
+      callback = function() vim.lsp.codelens.refresh() end
+    })
   end
 end
 
