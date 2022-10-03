@@ -16,9 +16,11 @@ vim.opt.expandtab = true
 vim.opt.shiftwidth = 2 -- width for autoindents
 vim.opt.autoindent = true -- indent a new line the same amount as the line just typed
 vim.opt.hidden = true -- Enable hidden buffers with unsaved changes
+-- Split right and below
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 vim.opt.ruler = true
 vim.opt.cursorline = true
-vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.laststatus = 2
 vim.opt.colorcolumn = "80" -- set an 80 char column border
@@ -31,11 +33,29 @@ vim.opt.mouse = 'a' -- 'v'
 vim.opt.clipboard = "unnamedplus" -- using system clipboard
 vim.opt.updatetime = 150
 
+-- Set up spell checking
+vim.opt.spelllang = "en_gb"
+local spell_augroup = "spell_augroup"
+vim.api.nvim_create_augroup(spell_augroup, { clear = false })
+vim.api.nvim_clear_autocmds({ buffer = bufnr, group = spell_augroup })
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  group = spell_augroup,
+  pattern = { "*.md" },
+  callback = function() vim.wo.spell = true end
+})
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+  group = spell_augroup,
+  callback = function()
+    vim.wo.spell = false
+    vim.wo.relativenumber = false
+  end
+})
+
 vim.cmd([[
   colorscheme jellybeans
-  filetype plugin indent on   " allow auto-indenting depending on file type
-  syntax on                   " syntax highlighting
+  syntax on
   filetype plugin on
+  filetype plugin indent on   " allow auto-indenting depending on file type
 
   silent !mkdir ~/.cache/vim > /dev/null 2>&1
   set backupdir=~/.cache/vim " Directory to store backup files.
@@ -102,6 +122,7 @@ vim.api.nvim_command([[
   autocmd BufWritePre * :%s/\s\+$//e
 ]])
 
+local silent_opts = { silent = true }
 vim.keymap.set('n', '<F1>', ':NERDTreeToggle<CR>')
 vim.keymap.set('n', '<Space><Space>', ':w<CR>')
 vim.keymap.set('i', 'jj', '<Esc>')
@@ -112,10 +133,15 @@ vim.keymap.set('n', 'gb', ':buffers<CR>:buffer<Space>')
 vim.keymap.set('n', '<C-PageDown>', ':bprevious<CR>')
 vim.keymap.set('n', '<C-PageUp>', ':bnext<CR>')
 -- Center the cursor on movement in normal mode
-vim.keymap.set('n', '<down>', 'jzz')
-vim.keymap.set('n', '<up>', 'kzz')
-vim.keymap.set('n', '<PageUp>', '<PageUp>zz')
-vim.keymap.set('n', '<PageDown>', '<PageDown>zz')
+vim.keymap.set('n', '<Up>', 'kzz', silent_opts)
+vim.keymap.set('n', '<Down>', 'jzz', silent_opts)
+vim.keymap.set('n', '<PageUp>', '<PageUp>zz', silent_opts)
+vim.keymap.set('n', '<PageDown>', '<PageDown>zz', silent_opts)
+
+-- Go back to normal mode in a terminal buffer
+vim.keymap.set('t', '<C-Space>', '<C-\\><C-n>')
+vim.keymap.set('n', '<Leader>t', ':vsplit +term<CR>')
+vim.keymap.set('n', '<Leader>T', ':split +term<CR>')
 
 
 local nvim_lsp = require('lspconfig')
