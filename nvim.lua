@@ -151,20 +151,20 @@ local on_attach = function(client, bufnr)
 
   local opts = {silent = true, buffer = bufnr}
 
-  vim.keymap.set('n', 'K',  ':lua vim.lsp.buf.hover()<CR>',           opts)
-  vim.keymap.set('n', 'ga', ':lua vim.lsp.buf.code_action()<CR>',     opts)
-  vim.keymap.set('n', 'gL', ':lua vim.lsp.codelens.run()<CR>',        opts)
-  vim.keymap.set('n', 'gd', ':lua vim.lsp.buf.definition()<CR>',      opts)
-  vim.keymap.set('n', 'gD', ':lua vim.lsp.buf.type_definition()<CR>', opts)
-  vim.keymap.set('n', 'gi', ':lua vim.lsp.buf.implementation()<CR>',  opts)
-  vim.keymap.set('n', 'g[', ':lua vim.diagnostic.goto_prev()<CR>',    opts)
-  vim.keymap.set('n', 'g]', ':lua vim.diagnostic.goto_next()<CR>',    opts)
-  vim.keymap.set('n', 'gl', ':lua vim.diagnostic.setloclist()<CR>',   opts)
-  vim.keymap.set('n', 'gr', ':lua vim.lsp.buf.references()<CR>',      opts)
-  vim.keymap.set('n', 'gR', ':lua vim.lsp.buf.rename()<CR>',          opts)
-  vim.keymap.set('n', 'gF', ':lua vim.lsp.buf.formatting_sync()<CR>', opts)
-  vim.keymap.set('n', '<leader>fs', ':lua vim.lsp.buf.workspace_symbol()<CR>', opts)
-  vim.keymap.set('n', '<leader>e', ':lua vim.diagnostic.open_float()<CR>', opts)
+  vim.keymap.set('n', 'K',  function() vim.lsp.buf.hover() end,           opts)
+  vim.keymap.set('n', 'ga', function() vim.lsp.buf.code_action() end,     opts)
+  vim.keymap.set('n', 'gL', function() vim.lsp.codelens.run() end,        opts)
+  vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end,      opts)
+  vim.keymap.set('n', 'gD', function() vim.lsp.buf.type_definition() end, opts)
+  vim.keymap.set('n', 'gi', function() vim.lsp.buf.implementation() end,  opts)
+  vim.keymap.set('n', 'g[', function() vim.diagnostic.goto_prev() end,    opts)
+  vim.keymap.set('n', 'g]', function() vim.diagnostic.goto_next() end,    opts)
+  vim.keymap.set('n', 'gl', function() vim.diagnostic.setloclist() end,   opts)
+  vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end,      opts)
+  vim.keymap.set('n', 'gR', function() vim.lsp.buf.rename() end,          opts)
+  vim.keymap.set('n', 'gF', function() vim.lsp.buf.formatting_sync() end, opts)
+  vim.keymap.set('n', '<leader>fs', function() vim.lsp.buf.workspace_symbol() end, opts)
+  vim.keymap.set('n', '<leader>e', function() vim.diagnostic.open_float() end, opts)
 
   -- Mappings
   -- vim.api.nvim_buf_set_keymap(0, 'n', 'gd',
@@ -172,14 +172,13 @@ local on_attach = function(client, bufnr)
   -- vim.api.nvim_buf_set_keymap(0, 'i', '<C-s>',
   --   '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 
-  -- autoformat only for selected languages
-  local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
-
   -- Set a max timeout of 10000 to give the formatter a bit more time.
   vim.api.nvim_command([[
     autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 10000)
   ]])
 
+  -- autoformat only for selected languages
+  local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
   if filetype == 'haskell' then
     -- automatically refresh codelenses, which can then be run with gL
     vim.api.nvim_command([[
