@@ -113,7 +113,7 @@ vim.keymap.set('n', '<C-PageDown>', ':bprevious<CR>')
 vim.keymap.set('n', '<C-PageUp>', ':bnext<CR>')
 -- Center the cursor on movement in normal mode
 vim.keymap.set('n', '<down>', 'jzz')
-vim.keymap.set('n', 'up', 'kzz')
+vim.keymap.set('n', '<up>', 'kzz')
 vim.keymap.set('n', '<PageUp>', '<PageUp>zz')
 vim.keymap.set('n', '<PageDown>', '<PageDown>zz')
 
