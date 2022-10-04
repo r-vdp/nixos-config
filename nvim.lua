@@ -1,21 +1,30 @@
-vim.opt.compatible = false -- disable compatibility to old-time vi
+-- disable compatibility to old-time vi
+vim.opt.compatible = false
 vim.opt.encoding = "utf-8"
 vim.opt.scrolloff = 3
 vim.opt.backspace = { "indent", "eol", "start" }
 vim.opt.list = true
 vim.opt.listchars = { tab = "▸ ", trail = "·" } -- , eol = "¬"
 vim.opt.termguicolors = true
-vim.opt.hlsearch = true --highlight search
-vim.opt.incsearch = true -- incremental search
+--highlight search
+vim.opt.hlsearch = true
+-- incremental search
+vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.showmatch = true
 vim.opt.tabstop = 2
-vim.opt.softtabstop = 2 -- see multiple spaces as tabstops so <BS> does the right thing
+-- see multiple spaces as tabstops so <BS> does the right thing
+vim.opt.softtabstop = 2
 vim.opt.expandtab = true
-vim.opt.shiftwidth = 2 -- width for autoindents
-vim.opt.autoindent = true -- indent a new line the same amount as the line just typed
-vim.opt.hidden = true -- Enable hidden buffers with unsaved changes
+-- width for autoindents
+vim.opt.shiftwidth = 2
+-- indent a new line the same amount as the line just typed
+vim.opt.autoindent = true
+-- Use conceal in MarkDown to format inline
+vim.opt.conceallevel = 3
+-- Enable hidden buffers with unsaved changes
+vim.opt.hidden = true
 -- Split right and below
 vim.opt.splitright = true
 vim.opt.splitbelow = true
@@ -23,14 +32,19 @@ vim.opt.ruler = true
 vim.opt.cursorline = true
 vim.opt.relativenumber = true
 vim.opt.laststatus = 2
-vim.opt.colorcolumn = "80" -- set an 80 char column border
-vim.opt.cmdheight = 1 -- height of the command window at the bottom
+-- set an 80 char column border
+vim.opt.colorcolumn = "80"
+-- height of the command window at the bottom
+vim.opt.cmdheight = 1
 vim.opt.wildmenu = true
-vim.opt.wildmode = { longest = "full", "full" } -- get bash-like tab completions
-vim.opt.ttyfast = true -- Speed up scrolling in Vim
+-- get bash-like tab completions
+vim.opt.wildmode = { longest = "full", "full" }
+-- Speed up scrolling in Vim
+vim.opt.ttyfast = true
 vim.opt.undofile = true
 vim.opt.mouse = 'a' -- 'v'
-vim.opt.clipboard = "unnamedplus" -- using system clipboard
+-- using system clipboard
+vim.opt.clipboard = "unnamedplus"
 vim.opt.updatetime = 150
 
 -- Set up spell checking
@@ -99,6 +113,8 @@ vim.keymap.set('n', 'gb', ':buffers<CR>:buffer<Space>')
 -- Move between buffers
 vim.keymap.set('n', '<C-PageDown>', ':bprevious<CR>')
 vim.keymap.set('n', '<C-PageUp>', ':bnext<CR>')
+vim.keymap.set('n', '<C-h>', ':bprevious<CR>')
+vim.keymap.set('n', '<C-l>', ':bnext<CR>')
 -- Center the cursor on movement in normal mode
 vim.keymap.set('n', '<Up>', 'kzz', silent_opts)
 vim.keymap.set('n', '<Down>', 'jzz', silent_opts)

@@ -32,6 +32,7 @@
           vim-nix
           haskell-vim
           elm-vim
+          vim-markdown
           dracula-vim
           lualine-nvim
           bufferline-nvim
