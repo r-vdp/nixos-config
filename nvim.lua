@@ -67,9 +67,6 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
 
 vim.cmd([[
   colorscheme jellybeans
-  syntax on
-  filetype plugin on
-  filetype plugin indent on   " allow auto-indenting depending on file type
 
   silent !mkdir ~/.cache/vim > /dev/null 2>&1
   set backupdir=~/.cache/vim " Directory to store backup files.
