@@ -35,7 +35,7 @@ vim.opt.laststatus = 2
 -- set an 80 char column border
 vim.opt.colorcolumn = "80"
 -- height of the command window at the bottom
-vim.opt.cmdheight = 1
+vim.opt.cmdheight = 0
 vim.opt.wildmenu = true
 -- get bash-like tab completions
 vim.opt.wildmode = { longest = "full", "full" }
@@ -65,6 +65,23 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
   end
 })
 
+local general_augroup = "general_augroup"
+vim.api.nvim_create_augroup(general_augroup, { clear = true })
+-- reopen files at the position we were at
+vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+  group = general_augroup,
+  command = [[
+    if line("'\"") >= 1 && line("'\"") <= line("$")
+      exe "normal! g`\""
+    endif
+  ]]
+})
+-- Strip trailing whitespace
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  group = general_augroup,
+  command = [[:%s/\s\+$//e]]
+})
+
 vim.cmd([[
   colorscheme jellybeans
 
@@ -86,19 +103,6 @@ vim.opt.foldtext =
   [[ substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g') . ]] ..
   [[ ' ¬ (' . (v:foldend - v:foldstart + 1) . ' lines) ¬ ' . ]] ..
   [[ trim(getline(v:foldend)) ]]
-
--- reopen files at the position we were at
-vim.api.nvim_command([[
-  autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-]])
-
--- remove trailing whitespace
-vim.api.nvim_command([[
-  autocmd BufWritePre * :%s/\s\+$//e
-]])
 
 local silent_opts = { silent = true }
 vim.keymap.set('n', '<F1>', ':NERDTreeToggle<CR>')
