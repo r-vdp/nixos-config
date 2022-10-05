@@ -68,7 +68,7 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
 vim.cmd([[
   colorscheme jellybeans
 
-  silent !mkdir ~/.cache/vim > /dev/null 2>&1
+  silent !mkdir --parents ~/.cache/vim > /dev/null 2>&1
   set backupdir=~/.cache/vim " Directory to store backup files.
 ]])
 
@@ -113,10 +113,14 @@ vim.keymap.set('n', '<C-PageUp>', ':bnext<CR>')
 vim.keymap.set('n', '<C-h>', ':bprevious<CR>')
 vim.keymap.set('n', '<C-l>', ':bnext<CR>')
 -- Center the cursor on movement in normal mode
-vim.keymap.set('n', '<Up>', 'kzz', silent_opts)
-vim.keymap.set('n', '<Down>', 'jzz', silent_opts)
-vim.keymap.set('n', '<PageUp>', '<PageUp>zz', silent_opts)
-vim.keymap.set('n', '<PageDown>', '<PageDown>zz', silent_opts)
+vim.keymap.set({'n', 'v'}, '<Up>', 'kzz', silent_opts)
+vim.keymap.set({'n', 'v'}, '<Down>', 'jzz', silent_opts)
+vim.keymap.set({'n', 'v'}, '<PageUp>', '<PageUp>zz', silent_opts)
+vim.keymap.set({'n', 'v'}, '<PageDown>', '<PageDown>zz', silent_opts)
+vim.keymap.set({'n', 'v'}, 'k', 'kzz', silent_opts)
+vim.keymap.set({'n', 'v'}, 'j', 'jzz', silent_opts)
+vim.keymap.set({'n', 'v'}, '<C-u>', '<C-u>zz', silent_opts)
+vim.keymap.set({'n', 'v'}, '<C-d>', '<C-d>zz', silent_opts)
 
 -- Go back to normal mode in a terminal buffer
 vim.keymap.set('t', '<C-Space>', '<C-\\><C-n>')
@@ -268,7 +272,6 @@ for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
     on_attach = on_attach,
     capabilities = capabilities,
-    flags = {debounce_text_changes = 150},
     settings = {
       haskell = {
         hlintOn = true,
