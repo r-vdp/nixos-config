@@ -56,7 +56,7 @@ in
         in
         {
           ${ext_disk_wd} = {
-            enable = true;
+            enable = false;
             device = "/dev/disk/by-partlabel/${ext_disk_wd}";
             device_units = [ "dev-disk-by\\x2dpartlabel-ext_disk_wd.device" ];
             mount_point = "/run/${ext_disk_wd}";
