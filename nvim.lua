@@ -1,15 +1,9 @@
--- disable compatibility to old-time vi
-vim.opt.compatible = false
-vim.opt.encoding = "utf-8"
+local xdg_state_home = vim.env.XDG_STATE_HOME
+
 vim.opt.scrolloff = 3
-vim.opt.backspace = { "indent", "eol", "start" }
 vim.opt.list = true
-vim.opt.listchars = { tab = "▸ ", trail = "·" } -- , eol = "¬"
+vim.opt.listchars = { tab = "▸ ", trail = "·", nbsp = "+" } -- , eol = "¬"
 vim.opt.termguicolors = true
---highlight search
-vim.opt.hlsearch = true
--- incremental search
-vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.showmatch = true
@@ -23,29 +17,27 @@ vim.opt.shiftwidth = 2
 vim.opt.autoindent = true
 -- Use conceal in MarkDown to format inline
 vim.opt.conceallevel = 3
--- Enable hidden buffers with unsaved changes
-vim.opt.hidden = true
 -- Split right and below
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.ruler = true
 vim.opt.cursorline = true
 vim.opt.relativenumber = true
-vim.opt.laststatus = 2
 -- set an 80 char column border
 vim.opt.colorcolumn = "80"
 -- height of the command window at the bottom
 vim.opt.cmdheight = 0
-vim.opt.wildmenu = true
 -- get bash-like tab completions
 vim.opt.wildmode = { longest = "full", "full" }
--- Speed up scrolling in Vim
-vim.opt.ttyfast = true
-vim.opt.undofile = true
-vim.opt.mouse = 'a' -- 'v'
+vim.opt.mouse = 'a'
 -- using system clipboard
 vim.opt.clipboard = "unnamedplus"
 vim.opt.updatetime = 150
+
+-- persistent undo history
+vim.opt.undofile = true
+vim.opt.backupdir = { xdg_state_home .. "/nvim/backup//" }
+vim.opt.undodir = { xdg_state_home .. "/nvim/undo//" }
+vim.opt.directory = { xdg_state_home .. "/nvim/swp//" }
 
 -- Set up spell checking
 vim.opt.spelllang = "en_gb"
@@ -76,18 +68,13 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
     endif
   ]]
 })
--- Strip trailing whitespace
+-- Strip trailing whitespace on save
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   group = general_augroup,
   command = [[:%s/\s\+$//e]]
 })
 
-vim.cmd([[
-  colorscheme jellybeans
-
-  silent !mkdir --parents ~/.cache/vim > /dev/null 2>&1
-  set backupdir=~/.cache/vim " Directory to store backup files.
-]])
+vim.cmd([[colorscheme jellybeans]])
 
 vim.g.mapleader = ','
 
@@ -130,7 +117,6 @@ vim.keymap.set({'n', 'v'}, '<C-d>', '<C-d>zz', silent_opts)
 vim.keymap.set('t', '<C-Space>', '<C-\\><C-n>')
 vim.keymap.set('n', '<Leader>t', ':vsplit +term<CR>')
 vim.keymap.set('n', '<Leader>T', ':split +term<CR>')
-
 
 require('lualine').setup {
   options = {
