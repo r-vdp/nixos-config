@@ -28,7 +28,7 @@
       '';
       packages.nix = with pkgs.vimPlugins; {
         start = [
-          (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
+          (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
           vim-nix
           haskell-vim
           elm-vim
