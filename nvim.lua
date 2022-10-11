@@ -113,6 +113,16 @@ vim.keymap.set({'n', 'v'}, 'j', 'jzz', silent_opts)
 vim.keymap.set({'n', 'v'}, '<C-u>', '<C-u>zz', silent_opts)
 vim.keymap.set({'n', 'v'}, '<C-d>', '<C-d>zz', silent_opts)
 
+local telescope_builtin = require('telescope.builtin')
+vim.keymap.set('n', '<Leader>ff', telescope_builtin.find_files)
+vim.keymap.set('n', '<Leader>fb', telescope_builtin.buffers)
+vim.keymap.set('n', '<Leader>fg', telescope_builtin.live_grep)
+vim.keymap.set('n', '<Leader>fc', telescope_builtin.command_history)
+vim.keymap.set('n', '<Leader>fm', telescope_builtin.man_pages)
+vim.keymap.set('n', '<Leader>ft', telescope_builtin.treesitter)
+vim.keymap.set('n', '<Leader>fd', telescope_builtin.diagnostics)
+vim.keymap.set('n', '<Leader>fws', telescope_builtin.lsp_workspace_symbols)
+
 -- Go back to normal mode in a terminal buffer
 vim.keymap.set('t', '<C-Space>', '<C-\\><C-n>')
 vim.keymap.set('n', '<Leader>t', ':vsplit +term<CR>')
@@ -155,30 +165,37 @@ require('lualine').setup {
   },
   tabline = {},
   winbar = {
---[[    lualine_a = {},
+    lualine_a = {},
     lualine_b = {},
-    lualine_c = {'filename'},
+    lualine_c = {{
+      'buffers',
+      mode = 2,
+      buffers_color = {
+        active = { fg = 'white', gui = 'italic,bold' },
+        inactive = { fg = '#8197bf' }
+      }
+    }},
     lualine_x = {},
     lualine_y = {},
-    lualine_z = {}--]]
+    lualine_z = {}
   },
   inactive_winbar = {
---[[    lualine_a = {},
+    lualine_a = {},
     lualine_b = {},
-    lualine_c = {'filename'},
+    lualine_c = {{
+      'buffers',
+      mode = 2,
+      buffers_color = {
+        active = { fg = '#8197bf', gui = 'italic' },
+        inactive = { fg = 'grey' }
+      }
+    }},
     lualine_x = {},
     lualine_y = {},
-    lualine_z = {}--]]
+    lualine_z = {}
   },
   extensions = {}
 }
-
-require("bufferline").setup {
-  options = {
-    buffer_close_icon = 'x'
-  }
-}
-
 
 local nvim_lsp = require('lspconfig')
 
@@ -224,7 +241,7 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'gl', function() vim.diagnostic.setloclist() end,   opts)
   vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end,      opts)
   vim.keymap.set('n', 'gR', function() vim.lsp.buf.rename() end,          opts)
-  vim.keymap.set('n', 'gF', function() vim.lsp.buf.formatting_sync() end, opts)
+  vim.keymap.set('n', 'gF', function() vim.lsp.buf.format() end, opts)
   vim.keymap.set('n', '<leader>fs', function() vim.lsp.buf.workspace_symbol() end, opts)
   vim.keymap.set('n', '<leader>e', function() vim.diagnostic.open_float() end, opts)
 

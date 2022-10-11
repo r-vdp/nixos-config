@@ -30,6 +30,10 @@ in
       XDG_STATE_HOME = "\${HOME}/.local/state";
     };
 
+    # Populate the man-db cache so that apropos works.
+    # Also needed for manpage searching using telescope in neovim.
+    documentation.man.generateCaches = true;
+
     system.activationScripts.tunnel_key_permissions = mkForce "";
 
     system.autoUpgrade = {

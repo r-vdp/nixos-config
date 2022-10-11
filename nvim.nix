@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
+
+with lib;
 
 {
   # Disable the default neovim config
@@ -7,6 +9,9 @@
   environment.systemPackages = with pkgs; [
     rnix-lsp
     nodePackages.yaml-language-server
+    # Needed for telescope-nvim
+    ripgrep
+    fd
   ];
 
   settings.packages.python_package =
@@ -28,14 +33,13 @@
       '';
       packages.nix = with pkgs.vimPlugins; {
         start = [
-          (nvim-treesitter.withPlugins (_: pkgs.tree-sitter.allGrammars))
+          (nvim-treesitter.withPlugins (const pkgs.tree-sitter.allGrammars))
           vim-nix
           haskell-vim
           elm-vim
           vim-markdown
           dracula-vim
           lualine-nvim
-          bufferline-nvim
           vim-colorschemes
           indent-blankline-nvim
           nerdtree
@@ -45,6 +49,7 @@
           cmp-buffer
           luasnip
           cmp_luasnip
+          telescope-nvim
         ];
         opt = [ ];
       };
