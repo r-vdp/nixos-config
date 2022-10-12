@@ -27,6 +27,13 @@
             ./hosts/nixer.nix
           ];
         };
+        nikser = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./hosts/nikser.nix
+            ./system.nix
+          ];
+        };
       };
     };
 }

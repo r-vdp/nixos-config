@@ -4,23 +4,21 @@ with lib;
 
 {
   # Disable the default neovim config
-  settings.vim.enable = false;
+  #settings.vim.enable = false;
 
   environment.systemPackages = with pkgs; [
     rnix-lsp
     nodePackages.yaml-language-server
     # Needed for telescope-nvim
-    ripgrep
-    fd
-  ];
-
-  settings.packages.python_package =
-    pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
+    (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
       python-lsp-server
       pylsp-mypy
       mypy
       pyflakes
-    ]);
+    ]))
+    ripgrep
+    fd
+  ];
 
   programs.neovim = {
     enable = true;
