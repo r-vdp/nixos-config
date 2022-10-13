@@ -1,68 +1,63 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ../nikser_hardware-configuration.nix
-      ../nvim.nix
-    ];
-
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi";
+    };
+  };
 
-  networking.hostName = "nikser"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking = {
+    hostName = "nikser";
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    # Configure network proxy if necessary
+    # networking.proxy.default = "http://user:password@proxy:port/";
+    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
-  networking.networkmanager.enable = true;
+    # Enable networking
+    networkmanager.enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "Africa/Cairo";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_GB.utf8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "nl_BE.utf8";
-    LC_IDENTIFICATION = "nl_BE.utf8";
-    LC_MEASUREMENT = "nl_BE.utf8";
-    LC_MONETARY = "nl_BE.utf8";
-    LC_NAME = "nl_BE.utf8";
-    LC_NUMERIC = "nl_BE.utf8";
-    LC_PAPER = "nl_BE.utf8";
-    LC_TELEPHONE = "nl_BE.utf8";
-    LC_TIME = "nl_BE.utf8";
+  i18n = {
+    defaultLocale = "en_GB.utf8";
+    extraLocaleSettings = {
+      LC_ADDRESS = "nl_BE.utf8";
+      LC_IDENTIFICATION = "nl_BE.utf8";
+      LC_MEASUREMENT = "nl_BE.utf8";
+      LC_MONETARY = "nl_BE.utf8";
+      LC_NAME = "nl_BE.utf8";
+      LC_NUMERIC = "nl_BE.utf8";
+      LC_PAPER = "nl_BE.utf8";
+      LC_TELEPHONE = "nl_BE.utf8";
+      LC_TIME = "nl_BE.utf8";
+    };
   };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "intl";
+  services = {
+    xserver = {
+      enable = true;
+      # Enable the GNOME Desktop Environment.
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
+      # Configure keymap in X11
+      layout = "us";
+      xkbVariant = "intl";
+    };
+    # Enable CUPS to print documents.
+    printing.enable = true;
   };
 
   # Configure console keymap
   console.keyMap = "us-acentos";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -70,8 +65,10 @@
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
@@ -90,12 +87,32 @@
     description = "Ramses";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      firefox
+      firefox-wayland
       keepassxc
+      signal-desktop
+      slack
+      dropbox
+      pcloud
+      authy
+      vlc
     ];
   };
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    packageOverrides = pkgs: {
+      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    };
+  };
+
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

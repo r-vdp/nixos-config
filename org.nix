@@ -23,19 +23,6 @@ in
 {
   config = {
 
-    environment.sessionVariables = {
-      XDG_CACHE_HOME = "\${HOME}/.cache";
-      XDG_CONFIG_HOME = "\${HOME}/.config";
-      XDG_DATA_HOME = "\${HOME}/.local/share";
-      XDG_STATE_HOME = "\${HOME}/.local/state";
-    };
-
-    # Populate the man-db cache so that apropos works.
-    # Also needed for manpage searching using telescope in neovim.
-    documentation.man.generateCaches = true;
-
-    system.activationScripts.tunnel_key_permissions = mkForce "";
-
     system.autoUpgrade = {
       enable = true;
       flake = "git+ssh://github.com/R-VdP/nixos-config";

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, nixos-channel, ... }:
 
 with lib;
 
@@ -11,6 +11,20 @@ with lib;
       XDG_DATA_HOME = "\${HOME}/.local/share";
       XDG_STATE_HOME = "\${HOME}/.local/state";
     };
+
+    # Populate the man-db cache so that apropos works.
+    # Also needed for manpage searching using telescope in neovim.
+    documentation.man.generateCaches = true;
+
+    # Because we do not have a nix channel when building the system from a flake,
+    # we need to get the sqlite DB containing the available packages and their
+    # binaries from somewhere else.
+    # For now we just add the nixos-channel as an input to our flake and
+    # extract the sqlite DB ourselves.
+    programs.command-not-found.dbPath =
+      pkgs.runCommandLocal "programs_sqlite" { } ''
+        cp ${nixos-channel}/programs.sqlite $out
+      '';
 
     environment.systemPackages = with pkgs; [
       (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
@@ -78,11 +92,12 @@ with lib;
 
         resolved =
           let
+            quad9 = "dns.quad9.net";
             nameservers = [
-              "2620:fe::fe#dns.quad9.net"
-              "2620:fe::9#dns.quad9.net"
-              "9.9.9.9#dns.quad9.net"
-              "149.112.112.112#dns.quad9.net"
+              "2620:fe::fe#${quad9}"
+              "2620:fe::9#${quad9}"
+              "9.9.9.9#${quad9}"
+              "149.112.112.112#${quad9}"
             ];
           in
           {
