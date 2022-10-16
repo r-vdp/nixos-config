@@ -8,41 +8,20 @@ let
   lan2_interface = "enp2s0";
   #local_ip = "10.0.7.252";
   #upstream_gateway = "10.0.7.254";
-  nameservers = [
-    "2620:fe::fe#dns.quad9.net"
-    "2620:fe::9#dns.quad9.net"
-    #"9.9.9.9#dns.quad9.net"
-    #"149.112.112.112#dns.quad9.net"
-  ];
+  inherit (config.services.resolved) nameservers;
 in
 
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   environment.systemPackages = with pkgs; [
-    (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
-      stack
-    ]))
-    haskell-language-server
-    elmPackages.elm
-    elmPackages.elm-language-server
-    elmPackages.elm-format
-    elmPackages.elm-review
-    elm2nix
-    nixos-option
     ocb_python_scripts
   ];
 
   time.timeZone = "Europe/Brussels";
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Only safe on single-user machines
-  programs.ssh.startAgent = mkForce true;
-
   settings = {
     network.host_name = "nixer";
     boot.mode = "uefi";
+    vim.enable = false;
     # We will use flakes instead of channels.
     maintenance.enable = false;
     reverse_tunnel.enable = true;
@@ -155,16 +134,6 @@ in
   };
 
   services = {
-    resolved = {
-      enable = true;
-      domains = [ "~." ];
-      dnssec = "false";
-      extraConfig = ''
-        DNS=${concatStringsSep " " nameservers}
-        DNSOverTLS=true
-      '';
-    };
-
     openssh = {
       ports = [ 22 2443 ];
     };
