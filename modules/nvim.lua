@@ -92,16 +92,16 @@ vim.opt.foldtext =
   [[ trim(getline(v:foldend)) ]]
 
 local silent_opts = { silent = true }
-vim.keymap.set('n', '<F1>', ':NERDTreeToggle<CR>')
-vim.keymap.set('n', '<Space><Space>', ':w<CR>')
-vim.keymap.set('i', 'jj', '<Esc>')
-vim.keymap.set('n', '<Leader><Space>', ':nohl<CR>')
-vim.keymap.set({'n', 'v'}, '<Tab>', '%')
+vim.keymap.set('n', '<F1>', ':NERDTreeToggle<CR>', silent_opts)
+vim.keymap.set('n', '<Space><Space>', ':silent w<CR>', silent_opts)
+vim.keymap.set('i', 'jj', '<Esc>', silent_opts)
+vim.keymap.set('n', '<Leader><Space>', ':nohl<CR>', silent_opts)
+vim.keymap.set({'n', 'v'}, '<Tab>', '%', silent_opts)
 -- Move between buffers
-vim.keymap.set('n', '<C-PageDown>', ':bprevious<CR>')
-vim.keymap.set('n', '<C-PageUp>', ':bnext<CR>')
-vim.keymap.set('n', '<C-h>', ':bprevious<CR>')
-vim.keymap.set('n', '<C-l>', ':bnext<CR>')
+vim.keymap.set('n', '<C-PageDown>', ':bprevious<CR>', silent_opts)
+vim.keymap.set('n', '<C-PageUp>', ':bnext<CR>', silent_opts)
+vim.keymap.set('n', '<C-h>', ':bprevious<CR>', silent_opts)
+vim.keymap.set('n', '<C-l>', ':bnext<CR>', silent_opts)
 -- Center the cursor on movement in normal mode
 vim.keymap.set({'n', 'v'}, '<Up>', 'kzz', silent_opts)
 vim.keymap.set({'n', 'v'}, '<Down>', 'jzz', silent_opts)
@@ -113,20 +113,20 @@ vim.keymap.set({'n', 'v'}, '<C-u>', '<C-u>zz', silent_opts)
 vim.keymap.set({'n', 'v'}, '<C-d>', '<C-d>zz', silent_opts)
 
 local telescope_builtin = require('telescope.builtin')
-vim.keymap.set('n', '<Leader>ff', telescope_builtin.find_files)
-vim.keymap.set('n', '<Leader>fb', telescope_builtin.buffers)
-vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers)
-vim.keymap.set('n', '<Leader>fg', telescope_builtin.live_grep)
-vim.keymap.set('n', '<Leader>fc', telescope_builtin.command_history)
-vim.keymap.set('n', '<Leader>fm', telescope_builtin.man_pages)
-vim.keymap.set('n', '<Leader>ft', telescope_builtin.treesitter)
-vim.keymap.set('n', '<Leader>fd', telescope_builtin.diagnostics)
-vim.keymap.set('n', '<Leader>fws', telescope_builtin.lsp_workspace_symbols)
+vim.keymap.set('n', '<Leader>ff', telescope_builtin.find_files, silent_opts)
+vim.keymap.set('n', '<Leader>fb', telescope_builtin.buffers, silent_opts)
+vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers, silent_opts)
+vim.keymap.set('n', '<Leader>fg', telescope_builtin.live_grep, silent_opts)
+vim.keymap.set('n', '<Leader>fc', telescope_builtin.command_history, silent_opts)
+vim.keymap.set('n', '<Leader>fm', telescope_builtin.man_pages, silent_opts)
+vim.keymap.set('n', '<Leader>ft', telescope_builtin.treesitter, silent_opts)
+vim.keymap.set('n', '<Leader>fd', telescope_builtin.diagnostics, silent_opts)
+vim.keymap.set('n', '<Leader>fws', telescope_builtin.lsp_workspace_symbols, silent_opts)
 
 -- Go back to normal mode in a terminal buffer
-vim.keymap.set('t', '<C-Space>', '<C-\\><C-n>')
-vim.keymap.set('n', '<Leader>t', ':vsplit +term<CR>')
-vim.keymap.set('n', '<Leader>T', ':split +term<CR>')
+vim.keymap.set('t', '<C-Space>', '<C-\\><C-n>', silent_opts)
+vim.keymap.set('n', '<Leader>t', ':vsplit +term<CR>', silent_opts)
+vim.keymap.set('n', '<Leader>T', ':split +term<CR>', silent_opts)
 
 require('lualine').setup {
   options = {
@@ -159,9 +159,9 @@ require('lualine').setup {
     lualine_a = {},
     lualine_b = {},
     lualine_c = {'filename'},
-    lualine_x = {'location'},
-    lualine_y = {},
-    lualine_z = {}
+    lualine_x = {},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
   },
   tabline = {},
   winbar = {

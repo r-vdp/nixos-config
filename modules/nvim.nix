@@ -3,21 +3,25 @@
 with lib;
 
 {
-  # Disable the default neovim config
-  #settings.vim.enable = false;
-
   environment.systemPackages = with pkgs; [
     rnix-lsp
     nodePackages.yaml-language-server
+    haskell-language-server
+    elmPackages.elm-language-server
+    elmPackages.elm-format
+    elmPackages.elm-review
     # Needed for telescope-nvim
-    (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
+    ripgrep
+    fd
+  ];
+
+  settings.system.withExtraPythonPackages = [
+    (pyPkgs: with pyPkgs; [
       python-lsp-server
       pylsp-mypy
       mypy
       pyflakes
-    ]))
-    ripgrep
-    fd
+    ])
   ];
 
   programs.neovim = {

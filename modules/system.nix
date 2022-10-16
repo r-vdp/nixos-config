@@ -2,7 +2,18 @@
 
 with lib;
 
+let
+  cfg = config.settings.system;
+in
+
 {
+  options = {
+    settings.system.withExtraPythonPackages = mkOption {
+      type = with types; listOf (functionTo (listOf types.package));
+      default = const [ ];
+    };
+  };
+
   config = {
 
     environment.sessionVariables = {
@@ -30,15 +41,14 @@ with lib;
       (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
         stack
       ]))
-      haskell-language-server
       elmPackages.elm
-      elmPackages.elm-language-server
-      elmPackages.elm-format
-      elmPackages.elm-review
       elm2nix
       nixos-option
       git
       htop
+      (pkgs.python3.withPackages (pyPkgs:
+        concatMap (withPyPkgs: withPyPkgs pyPkgs) cfg.withExtraPythonPackages)
+      )
     ];
 
     boot.kernelPackages = pkgs.linuxPackages_latest;

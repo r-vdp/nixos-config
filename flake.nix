@@ -8,7 +8,12 @@
     };
   };
 
-  outputs = { self, nixpkgs, ocb-modules, nixos-channel }@inputs: with nixpkgs.lib;
+  outputs =
+    { self
+    , nixpkgs
+    , ocb-modules
+    , nixos-channel
+    }@inputs: with nixpkgs.lib;
     let
       system = "x86_64-linux";
     in
