@@ -172,6 +172,8 @@ in
         hashedPassword = mkForce "!";
       };
     };
+
+    hardware.enableRedistributableFirmware = true;
   };
 }
 
