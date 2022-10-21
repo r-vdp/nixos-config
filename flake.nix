@@ -45,6 +45,18 @@
             ./modules/dropbox.nix
           ];
         };
+        starbook = nixpkgs.lib.nixosSystem {
+          inherit system;
+          # Pass the nixos-channel input to the modules
+          specialArgs = { inherit nixos-channel; };
+          modules = [
+            self.nixosModules.default
+            ./hosts/starbook.nix
+            ./hardware-config/starbook.nix
+            ./modules/system.nix
+            ./modules/dropbox.nix
+          ];
+        };
       };
     };
 }
