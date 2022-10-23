@@ -82,8 +82,7 @@
     git =
       let
         userEmail = "141248+R-VdP@users.noreply.github.com";
-        signingKey =
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K";
+        signingKey = "/home/ramses/.ssh/id_ec";
       in
       {
         enable = true;
