@@ -62,26 +62,6 @@ in
     programs = {
       # Only safe on single-user machines
       ssh.startAgent = mkForce true;
-
-      tmux =
-        let
-          tmux_term = "tmux-256color";
-        in
-        {
-          enable = true;
-          newSession = true;
-          clock24 = true;
-          historyLimit = 10000;
-          escapeTime = 250;
-          terminal = tmux_term;
-          keyMode = "vi";
-          extraConfig = ''
-            set -g mouse on
-            set-option -g focus-events on
-            set-option -g default-terminal "${tmux_term}"
-            set-option -sa terminal-overrides ',xterm-256color:RGB'
-          '';
-        };
     };
 
     nix = {

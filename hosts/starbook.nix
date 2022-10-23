@@ -1,4 +1,6 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 {
   boot = {
@@ -42,7 +44,14 @@
 
   networking = {
     hostName = "starbook";
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      # Do not take DNS servers from DHCP
+      dns = mkForce "none";
+      wifi = {
+        macAddress = "random";
+      };
+    };
   };
 
   time.timeZone = "Africa/Cairo";
