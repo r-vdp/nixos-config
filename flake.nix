@@ -2,6 +2,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-channel.url = "https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ocb-modules = {
       url = "github:MSF-OCB/NixOS/rvdp/flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -11,8 +15,9 @@
   outputs =
     { self
     , nixpkgs
-    , ocb-modules
     , nixos-channel
+    , home-manager
+    , ocb-modules
     }@inputs: with nixpkgs.lib;
     let
       system = "x86_64-linux";
@@ -51,6 +56,12 @@
           specialArgs = { inherit nixos-channel; };
           modules = [
             self.nixosModules.default
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.ramses = import ./users/ramses.nix;
+            }
             ./hosts/starbook.nix
             ./hardware-config/starbook.nix
             ./modules/system.nix

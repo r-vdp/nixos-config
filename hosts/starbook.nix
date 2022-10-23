@@ -25,11 +25,13 @@
       {
         device = "/dev/disk/by-label/nixos-root";
         fsType = "ext4";
+        options = [ "defaults" "noatime" "acl" ];
       };
     "/boot" =
       {
         device = "/dev/disk/by-label/nixos-boot";
         fsType = "ext4";
+        options = [ "defaults" "noatime" "nosuid" "nodev" "noexec" ];
       };
     "/boot/efi" =
       {
@@ -105,16 +107,6 @@
     isNormalUser = true;
     description = "Ramses";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      firefox-wayland
-      keepassxc
-      signal-desktop
-      slack
-      dropbox
-      pcloud
-      authy
-      vlc
-    ];
   };
 
   nixpkgs.config = {

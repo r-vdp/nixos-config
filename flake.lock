@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1666463764,
+        "narHash": "sha256-NmayV9S0s7CgNEA2QbIxDU0VCIiX6bIHu8PCQPnYHDM=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "69d19b9839638fc487b370e0600a03577a559081",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "nixos-channel": {
       "locked": {
         "narHash": "sha256-jDsZxXKqH/jSCwb2aThDOnZCSBvnFSYu+uDIWgaMx6U=",
@@ -50,9 +71,25 @@
     },
     "root": {
       "inputs": {
+        "home-manager": "home-manager",
         "nixos-channel": "nixos-channel",
         "nixpkgs": "nixpkgs",
         "ocb-modules": "ocb-modules"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
       }
     }
   },
