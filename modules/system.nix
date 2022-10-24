@@ -38,14 +38,7 @@ in
       '';
 
     environment.systemPackages = with pkgs; [
-      (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
-        stack
-      ]))
-      elmPackages.elm
-      elm2nix
-      nixos-option
       git
-      htop
       (pkgs.python3.withPackages (pyPkgs:
         concatMap (withPyPkgs: withPyPkgs pyPkgs) cfg.withExtraPythonPackages)
       )

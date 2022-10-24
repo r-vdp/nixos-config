@@ -1,5 +1,10 @@
 { config, lib, pkgs, ... }:
 
+let
+  privKeyFile = "${config.home.homeDirectory}/.ssh/id_ec";
+  pubKey =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K";
+in
 {
   home = {
     username = "ramses";
@@ -7,6 +12,13 @@
     stateVersion = "22.05";
 
     packages = with pkgs; [
+      (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
+        stack
+      ]))
+      elmPackages.elm
+      elm2nix
+      nixos-option
+      htop
       keepassxc
       signal-desktop
       slack
@@ -82,7 +94,8 @@
     git =
       let
         userEmail = "141248+R-VdP@users.noreply.github.com";
-        signingKey = "${config.home.homeDirectory}/.ssh/id_ec";
+        signingKey = privKeyFile;
+        inherit pubKey;
       in
       {
         enable = true;
@@ -95,7 +108,7 @@
             ssh.allowedSignersFile =
               let
                 signers = ''
-                  ${userEmail} ${signingKey}
+                  ${userEmail} ${pubKey}
                 '';
               in
               ''${pkgs.writeText "git-allowed-signers" signers}'';
@@ -119,7 +132,7 @@
         UpdateHostKeys yes
         GSSAPIAuthentication no
         User = ${config.home.username}
-        IdentityFile ${config.home.homeDirectory}/.ssh/id_ec
+        IdentityFile ${privKeyFile}
         AddKeysToAgent = no
         Ciphers = aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
       '';
