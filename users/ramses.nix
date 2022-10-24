@@ -1,33 +1,40 @@
-{ config, lib, pkgs, ... }:
+{ osConfig, config, lib, pkgs, ... }:
 
 let
+  inherit (lib.hm) dag;
+
   privKeyFile = "${config.home.homeDirectory}/.ssh/id_ec";
   pubKey =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K";
 in
 {
-  home = {
-    username = "ramses";
-    homeDirectory = "/home/" + config.home.username;
-    stateVersion = "22.05";
+  home =
+    let
+      osUser = osConfig.users.users.ramses;
+    in
+    {
+      inherit (osConfig.system) stateVersion;
+      username = osUser.name;
+      homeDirectory = osUser.home;
 
-    packages = with pkgs; [
-      (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
-        stack
-      ]))
-      elmPackages.elm
-      elm2nix
-      nixos-option
-      htop
-      keepassxc
-      signal-desktop
-      slack
-      dropbox
-      pcloud
-      authy
-      vlc
-    ];
-  };
+      packages = with pkgs; [
+        authy
+        dropbox
+        htop
+        keepassxc
+        nixos-option
+        pcloud
+        signal-desktop
+        slack
+        vlc
+
+        elmPackages.elm
+        elm2nix
+        (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
+          stack
+        ]))
+      ];
+    };
 
   programs = {
     home-manager.enable = true;
@@ -137,22 +144,22 @@ in
         Ciphers = aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
       '';
       matchBlocks = {
-        nixer = lib.hm.dag.entryBefore [ "tmux" ] {
+        nixer = dag.entryBefore [ "tmux" ] {
           host = "nixer nixer-tmux";
           hostname = "sshv6.engyandramses.xyz";
           port = 2443;
         };
-        nixer-local = lib.hm.dag.entryBefore [ "tmux" ] {
+        nixer-local = dag.entryBefore [ "tmux" ] {
           host = "nixer-local nixer-local-tmux";
           hostname = "nixer.local";
         };
-        nixer-relayed = lib.hm.dag.entryBefore [ "tmux" ] {
+        nixer-relayed = dag.entryBefore [ "tmux" ] {
           host = "nixer-relayed nixer-relayed-tmux";
           hostname = "localhost";
           port = 6012;
           proxyJump = "ssh-relay-proxy";
         };
-        rescue-iso = lib.hm.dag.entryBefore [ "tmux" ] {
+        rescue-iso = dag.entryBefore [ "tmux" ] {
           host = "rescue-iso rescue-iso-tmux";
           hostname = "localhost";
           port = 8000;
@@ -169,7 +176,7 @@ in
           user = "tunneller";
           port = 443;
         };
-        generic = lib.hm.dag.entryBefore [ "tmux" ] {
+        generic = dag.entryBefore [ "tmux" ] {
           host = "generic generic-tmux";
           hostname = "localhost";
           proxyJump = "ssh-relay-proxy";

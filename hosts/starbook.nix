@@ -2,6 +2,9 @@
 
 with lib;
 
+let
+  username = "ramses";
+in
 {
   boot = {
     loader = {
@@ -112,11 +115,12 @@ with lib;
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.ramses = {
+  users.users.${username} = {
     isNormalUser = true;
     description = "Ramses";
     extraGroups = [ "networkmanager" "wheel" ];
   };
+  home-manager.users.${username} = import ../users/${username}.nix;
 
   nixpkgs.config = {
     allowUnfree = true;

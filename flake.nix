@@ -53,7 +53,6 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.ramses = import ./users/ramses.nix;
             }
             ./hosts/starbook.nix
             ./hardware-config/starbook.nix
