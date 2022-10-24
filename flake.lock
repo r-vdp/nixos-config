@@ -5,7 +5,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "utils": "utils"
+        "utils": [ "flake-utils" ]
       },
       "locked": {
         "lastModified": 1666463764,
@@ -71,13 +71,14 @@
     },
     "root": {
       "inputs": {
+        "flake-utils": "flake-utils",
         "home-manager": "home-manager",
         "nixos-channel": "nixos-channel",
         "nixpkgs": "nixpkgs",
         "ocb-modules": "ocb-modules"
       }
     },
-    "utils": {
+    "flake-utils": {
       "locked": {
         "lastModified": 1659877975,
         "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",

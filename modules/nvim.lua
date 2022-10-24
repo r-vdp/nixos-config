@@ -128,6 +128,10 @@ vim.keymap.set('t', '<C-Space>', '<C-\\><C-n>', silent_opts)
 vim.keymap.set('n', '<Leader>t', ':vsplit +term<CR>', silent_opts)
 vim.keymap.set('n', '<Leader>T', ':split +term<CR>', silent_opts)
 
+local function num_of_lines()
+  return vim.fn.line('$')
+end
+
 require('lualine').setup {
   options = {
     icons_enabled = false,
@@ -153,7 +157,7 @@ require('lualine').setup {
     lualine_c = {'filename'},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
-    lualine_z = {'location'}
+    lualine_z = {'location', num_of_lines}
   },
   inactive_sections = {
     lualine_a = {},
