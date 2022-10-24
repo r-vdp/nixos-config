@@ -17,7 +17,7 @@ in
 
     initrd.luks.devices = {
       decrypted = {
-        device = "/dev/disk/by-path/pci-0000:01:00.0-nvme-1-part6";
+        device = "/dev/disk/by-partuuid/07065c4d-825f-4a68-a388-8660c1dfed4a";
         header = "/dev/disk/by-partuuid/e1fda992-218c-4809-9522-01db59c8e6f8";
         allowDiscards = true;
         preLVM = true;
