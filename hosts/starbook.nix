@@ -11,7 +11,7 @@ in
       systemd-boot.enable = true;
       efi = {
         canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot/efi";
+        efiSysMountPoint = "/boot";
       };
     };
 
@@ -33,12 +33,6 @@ in
         options = [ "defaults" "noatime" "acl" ];
       };
     "/boot" =
-      {
-        device = "/dev/disk/by-label/nixos-boot";
-        fsType = "ext4";
-        options = [ "defaults" "noatime" "nosuid" "nodev" "noexec" ];
-      };
-    "/boot/efi" =
       {
         device = "/dev/disk/by-label/ESP";
         fsType = "vfat";
@@ -74,6 +68,9 @@ in
     };
   };
 
+  # Configure console keymap
+  console.keyMap = "us-acentos";
+
   # Enable the X11 windowing system.
   services = {
     xserver = {
@@ -88,9 +85,6 @@ in
     # Enable CUPS to print documents.
     printing.enable = true;
   };
-
-  # Configure console keymap
-  console.keyMap = "us-acentos";
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -128,17 +122,21 @@ in
     };
   home-manager.users.${username} = import ../users/${username}.nix;
 
-  sops = {
-    defaultSopsFile = ../secrets/sops/secrets.yaml;
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-    secrets = {
-      ssh-priv-key = {
-        mode = "0600";
-        owner = osUser.name;
-        group = osUser.group;
+  sops =
+    let
+      user_cfg = config.users.users;
+    in
+    {
+      defaultSopsFile = ../secrets/sops/secrets.yaml;
+      age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+      secrets = {
+        ssh-priv-key = {
+          mode = "0600";
+          owner = user_cfg.${username}.name;
+          group = user_cfg.${username}.group;
+        };
       };
     };
-  };
 
   nixpkgs.config = {
     allowUnfree = true;

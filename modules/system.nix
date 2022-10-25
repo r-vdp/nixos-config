@@ -46,7 +46,10 @@ in
           )
         ];
 
-      boot.kernelPackages = pkgs.linuxPackages_latest;
+      boot = {
+        kernelPackages = pkgs.linuxPackages_latest;
+        tmpOnTmpfs = true;
+      };
 
       security = {
         sudo = {
