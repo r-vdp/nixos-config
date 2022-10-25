@@ -128,7 +128,8 @@ in
       user_cfg = config.users.users;
     in
     {
-      defaultSopsFile = ../secrets/sops/secrets.yaml;
+      defaultSopsFile =
+        ../secrets/sops/${config.networking.hostName}-secrets.yaml;
       age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
       secrets = {
         ssh-priv-key = {

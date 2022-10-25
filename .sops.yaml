@@ -4,7 +4,7 @@ keys:
   # servers
   - &starbook age1lkddy5f6duxxgdf92eng0x8juqm492klzu4ffcyrsh6y8ywlzcnsw8a6j4
 creation_rules:
-  - path_regex: 'secrets/sops/[^/]+\.yaml$'
+  - path_regex: 'secrets/sops/starbook-secrets\.yaml$'
     key_groups:
     - age:
       - *ramses
