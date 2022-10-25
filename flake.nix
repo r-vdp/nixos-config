@@ -63,7 +63,6 @@
             ./hosts/starbook.nix
             ./hardware-config/starbook.nix
             ./modules/system.nix
-            ./modules/dropbox.nix
           ];
         };
       };
