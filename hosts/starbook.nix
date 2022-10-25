@@ -119,6 +119,7 @@ in
       extraGroups =
         map (group: user_cfg.groups.${group}.name)
           [ "wheel" "networkmanager" "keys" ];
+      passwordFile = config.sops.secrets."${username}-user-password".path;
     };
   home-manager.users.${username} = import ../users/${username}.nix;
 
@@ -134,6 +135,9 @@ in
           mode = "0600";
           owner = user_cfg.${username}.name;
           group = user_cfg.${username}.group;
+        };
+        ramses-user-password = {
+          neededForUsers = true;
         };
       };
     };

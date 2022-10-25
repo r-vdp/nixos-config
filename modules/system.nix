@@ -16,7 +16,6 @@ in
 
   config =
     {
-
       environment.sessionVariables = {
         XDG_CACHE_HOME = "\${HOME}/.cache";
         XDG_CONFIG_HOME = "\${HOME}/.config";
@@ -56,6 +55,12 @@ in
           enable = true;
           wheelNeedsPassword = true;
         };
+      };
+
+      users = {
+        mutableUsers = false;
+        # Disable the root user
+        users.root.hashedPassword = "!";
       };
 
       zramSwap = {
