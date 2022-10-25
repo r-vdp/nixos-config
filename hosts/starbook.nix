@@ -115,12 +115,30 @@ in
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${username} = {
-    isNormalUser = true;
-    description = "Ramses";
-    extraGroups = [ "networkmanager" "wheel" ];
-  };
+  users.users.${username} =
+    let
+      user_cfg = config.users;
+    in
+    {
+      isNormalUser = true;
+      description = "Ramses";
+      extraGroups =
+        map (group: user_cfg.groups.${group}.name)
+          [ "wheel" "networkmanager" "keys" ];
+    };
   home-manager.users.${username} = import ../users/${username}.nix;
+
+  sops = {
+    defaultSopsFile = ../secrets/sops/secrets.yaml;
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    secrets = {
+      ssh-priv-key = {
+        mode = "0600";
+        owner = osUser.name;
+        group = osUser.group;
+      };
+    };
+  };
 
   nixpkgs.config = {
     allowUnfree = true;

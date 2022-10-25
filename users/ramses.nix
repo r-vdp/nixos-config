@@ -3,38 +3,51 @@
 let
   inherit (lib.hm) dag;
 
-  privKeyFile = "${config.home.homeDirectory}/.ssh/id_ec";
+  privKeyFile = osConfig.sops.secrets.ssh-priv-key.path;
   pubKey =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K";
+  osUser = osConfig.users.users.ramses;
 in
 {
-  home =
-    let
-      osUser = osConfig.users.users.ramses;
-    in
-    {
-      inherit (osConfig.system) stateVersion;
-      username = osUser.name;
-      homeDirectory = osUser.home;
+  home = {
+    inherit (osConfig.system) stateVersion;
+    username = osUser.name;
+    homeDirectory = osUser.home;
 
-      packages = with pkgs; [
-        authy
-        dropbox
-        htop
-        keepassxc
-        nixos-option
-        pcloud
-        signal-desktop
-        slack
-        vlc
+    packages = with pkgs; [
+      authy
+      dropbox
+      htop
+      keepassxc
+      nixos-option
+      pcloud
+      signal-desktop
+      slack
+      vlc
 
-        elmPackages.elm
-        elm2nix
-        (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
-          stack
-        ]))
-      ];
+      elmPackages.elm
+      elm2nix
+      (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
+        stack
+      ]))
+    ];
+
+    activation = {
+      ssh-to-age =
+        let
+          out_dir = "~/.config/sops/age/";
+          out_file = "${out_dir}/keys.txt";
+        in
+        dag.entryAfter [ "writeBoundary" ] ''
+          ''${DRY_RUN_CMD} rm --force ''${VERBOSE_ARG} ${out_file}
+          ''${DRY_RUN_CMD} mkdir --parents ''${VERBOSE_ARG} ${out_dir}
+          ''${DRY_RUN_CMD} ${pkgs.ssh-to-age}/bin/ssh-to-age -- \
+            -private-key \
+            -i ${privKeyFile} \
+            -o ${out_file}
+        '';
     };
+  };
 
   programs = {
     home-manager.enable = true;
@@ -44,22 +57,28 @@ in
       package = pkgs.firefox-wayland;
       profiles.ramses = {
         isDefault = true;
-        settings = {
-          "browser.ctrlTab.sortByRecentlyUsed" = true;
-          "browser.startup.page" = 3;
-          "browser.search.region" = "BE";
-          "browser.tabs.warnOnClose" = true;
-          "dom.security.https_only_mode" = true;
-          "network.proxy.type" = 0;
-          "network.trr.custom_uri" = "https://quad9.net/dns-query";
-          "network.trr.default_provider_uri" = "https://quad9.net/dns-query";
-          "network.trr.mode" = 2;
-          "privacy.donottrackheader.enabled" = true;
-          "spellchecker.dictionary" = "en-GB";
-          # https://wiki.archlinux.org/title/Firefox#Hardware_video_acceleration
-          "gfx.webrender.all" = true;
-          "media.ffmpeg.vaapi.enabled" = true;
-        };
+        settings =
+          let
+            quad9 = "https://quad9.net/dns-query";
+          in
+          {
+            "browser.ctrlTab.sortByRecentlyUsed" = true;
+            "browser.startup.page" = 3;
+            "browser.search.region" = "BE";
+            "browser.tabs.warnOnClose" = true;
+            "dom.security.https_only_mode" = true;
+            "network.proxy.type" = 0;
+            "network.trr.custom_uri" = quad9;
+            "network.trr.default_provider_uri" = quad9;
+            "network.trr.uri" = quad9;
+            "network.trr.mode" = 2;
+            "network.trr.wait-for-portal" = true;
+            "privacy.donottrackheader.enabled" = true;
+            "spellchecker.dictionary" = "en-GB";
+            # https://wiki.archlinux.org/title/Firefox#Hardware_video_acceleration
+            "gfx.webrender.all" = true;
+            "media.ffmpeg.vaapi.enabled" = true;
+          };
         search = {
           default = "DuckDuckGo";
           force = true;

@@ -11,6 +11,10 @@
         utils.follows = "flake-utils";
       };
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ocb-modules = {
       url = "github:MSF-OCB/NixOS/rvdp/flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,6 +27,7 @@
     , nixpkgs
     , nixos-channel
     , home-manager
+    , sops-nix
     , ocb-modules
     }@inputs: with nixpkgs.lib;
     let
@@ -33,6 +38,7 @@
       nixosModules.default = {
         imports = [
           ./modules/nvim.nix
+          sops-nix.nixosModules.sops
         ];
       };
 

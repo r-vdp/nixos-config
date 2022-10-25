@@ -1,0 +1,12 @@
+keys:
+  # users
+  - &ramses age1wkxv0fjg5k0u2fg48s2cna03vwhtwthmart2d2d72eg8hm5hdansk8rc9u
+  # servers
+  - &starbook age1lkddy5f6duxxgdf92eng0x8juqm492klzu4ffcyrsh6y8ywlzcnsw8a6j4
+creation_rules:
+  - path_regex: 'secrets/sops/[^/]+\.yaml$'
+    key_groups:
+    - age:
+      - *ramses
+      - *starbook
+

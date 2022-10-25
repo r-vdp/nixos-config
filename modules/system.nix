@@ -48,6 +48,13 @@ in
 
       boot.kernelPackages = pkgs.linuxPackages_latest;
 
+      security = {
+        sudo = {
+          enable = true;
+          wheelNeedsPassword = true;
+        };
+      };
+
       zramSwap = {
         enable = true;
         algorithm = "zstd";
@@ -78,30 +85,42 @@ in
       };
       environment.etc."channels/nixpkgs".source = nixpkgs.outPath;
 
-      services =
-        {
-          fwupd.enable = true;
+      services = {
+        fwupd.enable = true;
+        fstrim.enable = true;
 
-          resolved =
-            let
-              quad9 = "dns.quad9.net";
-              nameservers = [
-                "2620:fe::fe#${quad9}"
-                "2620:fe::9#${quad9}"
-                "9.9.9.9#${quad9}"
-                "149.112.112.112#${quad9}"
-              ];
-            in
-            {
-              enable = true;
-              domains = [ "~." ];
-              dnssec = "false";
-              extraConfig = ''
-                DNS=${concatStringsSep " " nameservers}
-                DNSOverTLS=true
-              '';
-            };
+        timesyncd = {
+          enable = true;
+          servers = mkDefault [
+            "0.nixos.pool.ntp.org"
+            "1.nixos.pool.ntp.org"
+            "2.nixos.pool.ntp.org"
+            "3.nixos.pool.ntp.org"
+            "time.windows.com"
+            "time.google.com"
+          ];
         };
+
+        resolved =
+          let
+            quad9 = "dns.quad9.net";
+            nameservers = [
+              "2620:fe::fe#${quad9}"
+              "2620:fe::9#${quad9}"
+              "9.9.9.9#${quad9}"
+              "149.112.112.112#${quad9}"
+            ];
+          in
+          {
+            enable = true;
+            domains = [ "~." ];
+            dnssec = "false";
+            extraConfig = ''
+              DNS=${concatStringsSep " " nameservers}
+              DNSOverTLS=true
+            '';
+          };
+      };
 
       system.autoUpgrade = {
         enable = false;
