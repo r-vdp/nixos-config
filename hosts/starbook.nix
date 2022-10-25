@@ -111,13 +111,13 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${username} =
     let
-      user_cfg = config.users;
+      group_cfg = config.users.groups;
     in
     {
       isNormalUser = true;
       description = "Ramses";
       extraGroups =
-        map (group: user_cfg.groups.${group}.name)
+        map (group: group_cfg.${group}.name)
           [ "wheel" "networkmanager" "keys" ];
       passwordFile = config.sops.secrets."${username}-user-password".path;
     };
@@ -136,7 +136,7 @@ in
           owner = user_cfg.${username}.name;
           group = user_cfg.${username}.group;
         };
-        ramses-user-password = {
+        "${username}-user-password" = {
           neededForUsers = true;
         };
       };
