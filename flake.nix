@@ -38,6 +38,7 @@
       nixosModules.default = {
         imports = [
           ./modules/nvim.nix
+          ./modules/home-manager.nix
           sops-nix.nixosModules.sops
         ];
       };
@@ -56,13 +57,10 @@
           modules = [
             self.nixosModules.default
             home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-            }
             ./hosts/starbook.nix
             ./hardware-config/starbook.nix
             ./modules/system.nix
+            ./users/ramses.nix
           ];
         };
       };

@@ -2,9 +2,6 @@
 
 with lib;
 
-let
-  username = "ramses";
-in
 {
   boot = {
     loader = {
@@ -113,44 +110,11 @@ in
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${username} =
-    let
-      group_cfg = config.users.groups;
-    in
-    {
-      isNormalUser = true;
-      description = "Ramses";
-      extraGroups =
-        map (group: group_cfg.${group}.name) [
-          "audio"
-          "keys"
-          "networkmanager"
-          "wheel"
-        ];
-      passwordFile = config.sops.secrets."${username}-user-password".path;
-    };
-  home-manager.users.${username} = import ../users/${username}.nix;
-
-  sops =
-    let
-      user_cfg = config.users.users;
-    in
-    {
-      defaultSopsFile =
-        ../secrets/sops/${config.networking.hostName}-secrets.yaml;
-      age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-      secrets = {
-        ssh-priv-key = {
-          mode = "0600";
-          owner = user_cfg.${username}.name;
-          group = user_cfg.${username}.group;
-        };
-        "${username}-user-password" = {
-          neededForUsers = true;
-        };
-      };
-    };
+  sops = {
+    defaultSopsFile =
+      ../secrets/sops/${config.networking.hostName}-secrets.yaml;
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  };
 
   nixpkgs.config = {
     allowUnfree = true;
