@@ -3,6 +3,12 @@
 with lib;
 
 {
+  imports = [
+    ../hardware-config/starbook.nix
+  ];
+
+  settings.system.isHeadless = false;
+
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -12,6 +18,7 @@ with lib;
       };
     };
 
+    # Get sound working, but no microphone...
     # https://thesofproject.github.io/latest/getting_started/intel_debug/introduction.html#pci-devices-introduced-after-2016
     extraModprobeConfig = ''
       options snd-intel-dspcfg dsp_driver=1
@@ -40,6 +47,10 @@ with lib;
         fsType = "vfat";
       };
   };
+
+  swapDevices = [
+    { device = "/dev/disk/by-label/swap"; }
+  ];
 
   networking = {
     hostName = "starbook";
@@ -110,14 +121,7 @@ with lib;
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  sops = {
-    defaultSopsFile =
-      ../secrets/sops/${config.networking.hostName}-secrets.yaml;
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  };
-
   nixpkgs.config = {
-    allowUnfree = true;
     packageOverrides = pkgs: {
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
     };

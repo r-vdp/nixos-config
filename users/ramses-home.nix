@@ -1,7 +1,11 @@
 { osConfig, config, lib, pkgs, ... }:
 
+with lib;
+
 let
   inherit (lib.hm) dag;
+
+  isHeadless = osConfig.settings.system.isHeadless;
 
   username = "ramses";
   privKeyFile = osConfig.sops.secrets."${username}-ssh-priv-key".path;
@@ -16,22 +20,24 @@ in
     homeDirectory = osUser.home;
 
     packages = with pkgs; [
-      authy
-      dropbox
-      keepassxc
       nixos-option
-      pavucontrol
-      pcloud
-      signal-desktop
-      slack
       sops
-      vlc
 
       elmPackages.elm
       elm2nix
       (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
         stack
       ]))
+    ] ++
+    optionals (! isHeadless) [
+      authy
+      dropbox
+      keepassxc
+      pavucontrol
+      pcloud
+      signal-desktop
+      slack
+      vlc
     ];
 
     activation = {
@@ -56,7 +62,7 @@ in
     home-manager.enable = true;
 
     firefox = {
-      enable = true;
+      enable = ! isHeadless;
       package = pkgs.firefox-wayland;
       profiles.${username} = {
         isDefault = true;
@@ -124,14 +130,15 @@ in
       let
         userEmail = "141248+R-VdP@users.noreply.github.com";
         signingKey = privKeyFile;
-        inherit pubKey;
       in
       {
         enable = true;
         userName = "R-VdP";
         inherit userEmail;
         extraConfig = {
-          core = { };
+          push.autoSetupRemote = true;
+          pull.rebase = true;
+          rebase.autoStash = true;
           gpg = {
             format = "ssh";
             ssh.allowedSignersFile =
@@ -236,7 +243,7 @@ in
 
     tmux =
       let
-        tmux_term = "tmux-256color";
+        inherit (osConfig.settings.system) tmux_term;
       in
       {
         enable = true;

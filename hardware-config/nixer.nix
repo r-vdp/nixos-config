@@ -8,7 +8,7 @@
 
   boot = {
     initrd = {
-      availableKernelModules = [ "xhci_pci" "vmd" "nvme" "usb_storage" "sd_mod" ];
+      availableKernelModules = [ "ahci" "xhci_pci" "sd_mod" ];
       kernelModules = [ "dm-snapshot" ];
     };
     kernelModules = [ "kvm-intel" ];
@@ -20,7 +20,7 @@
   # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
   hardware.cpu.intel.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
 

@@ -1,5 +1,7 @@
 { config, lib, ... }:
 
+with lib;
+
 let
   group_cfg = config.users.groups;
   user_cfg = config.users.users;
@@ -10,13 +12,13 @@ in
   users.users.${username} = {
     uid = 1000;
     isNormalUser = true;
-    description = "Normal user account";
-    extraGroups = map (group: group_cfg.${group}.name) [
-      "audio"
+    description = username;
+    extraGroups = map (group: group_cfg.${group}.name) ([
       "keys"
-      "networkmanager"
       "wheel"
-    ];
+    ]
+    ++ optional config.services.pipewire.enable "audio"
+    ++ optional config.networking.networkmanager.enable "networkmanager");
     passwordFile = config.sops.secrets."${username}-user-password".path;
   };
 

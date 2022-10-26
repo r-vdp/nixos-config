@@ -8,42 +8,63 @@ let
   lan2_interface = "enp2s0";
   #local_ip = "10.0.7.252";
   #upstream_gateway = "10.0.7.254";
-  inherit (config.services.resolved) nameservers;
+  inherit (config.settings.system) nameservers;
 in
 
 {
-  environment.systemPackages = with pkgs; [
-    ocb_python_scripts
+  imports = [
+    ../hardware-config/nixer.nix
   ];
 
   time.timeZone = "Europe/Brussels";
 
-  settings = {
-    network.host_name = "nixer";
-    boot.mode = "uefi";
-    vim.enable = false;
-    # We will use flakes instead of channels.
-    maintenance.enable = false;
-    reverse_tunnel.enable = true;
-    crypto = {
-      encrypted_opt.enable = true;
-      mounts =
-        let
-          ext_disk_wd = "ext_disk_wd";
-        in
-        {
-          ${ext_disk_wd} = {
-            enable = false;
-            device = "/dev/disk/by-partlabel/${ext_disk_wd}";
-            device_units = [ "dev-disk-by\\x2dpartlabel-ext_disk_wd.device" ];
-            mount_point = "/run/${ext_disk_wd}";
-            mount_options = "acl,noatime,nosuid,nodev";
-          };
-        };
+  settings.system.isHeadless = true;
+
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot";
+      };
+    };
+    kernel.sysctl = {
+      "net.ipv6.conf.all.use_tempaddr" = "2";
+      "net.ipv6.conf.${bridge_interface}.use_tempaddr" = mkForce "2";
     };
   };
 
+  #TODO /opt
+  fileSystems = {
+    "/" =
+      {
+        device = "/dev/disk/by-label/nixos-root";
+        fsType = "ext4";
+        options = [ "defaults" "noatime" "acl" ];
+      };
+    "/boot" =
+      {
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+      };
+  };
+
+  sops.secrets = {
+    sshv6_token = { };
+  };
+
+  # TODO
+  #swapDevices = [
+  #  { device = "/dev/disk/by-label/swap"; }
+  #];
+
+  #settings = {
+  #  maintenance.enable = false;
+  #  reverse_tunnel.enable = true;
+  #};
+
   networking = {
+    hostName = "nixer";
     useNetworkd = true;
     firewall = {
       extraCommands = ''
@@ -94,9 +115,27 @@ in
     inherit nameservers;
   };
 
-  boot.kernel.sysctl = {
-    "net.ipv6.conf.all.use_tempaddr" = "2";
-    "net.ipv6.conf.${bridge_interface}.use_tempaddr" = mkForce "2";
+  settings.reverse_tunnel = {
+    enable = true;
+    remote_forward_port = 6012;
+    relay_servers =
+      let
+        public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDsn2Dvtzm6jJyL9SJY6D1/lRwhFeWR5bQtSSQv6bZYf";
+      in
+      {
+        sshrelay1 = {
+          inherit public_key;
+          addresses = [ "sshrelay1.ocb.msf.org" "185.199.180.11" ];
+        };
+        sshrelay2 = {
+          inherit public_key;
+          addresses = [ "sshrelay2.ocb.msf.org" "15.188.17.148" ];
+        };
+        sshrelay-za-1 = {
+          inherit public_key;
+          addresses = [ "sshrelay-za-1.ocb.msf.org" "13.245.67.199" ];
+        };
+      };
   };
 
   systemd.network = {
@@ -145,7 +184,7 @@ in
     ddclient = {
       enable = true;
       username = "VoEF8e1gHa1FpVWT";
-      passwordFile = config.settings.system.secrets.dest_directory + "/sshv6_token";
+      passwordFile = config.sops.secrets.sshv6_token.path;
       use = ''web, web=https://api6.ipify.org'';
       server = "domains.google.com";
       protocol = "dyndns2";

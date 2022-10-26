@@ -15,10 +15,6 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    ocb-modules = {
-      url = "github:MSF-OCB/NixOS/rvdp/flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -28,7 +24,6 @@
     , nixos-channel
     , home-manager
     , sops-nix
-    , ocb-modules
     }@inputs: with nixpkgs.lib;
     let
       system = flake-utils.lib.system.x86_64-linux;
@@ -37,30 +32,30 @@
     {
       nixosModules.default = {
         imports = [
-          ./modules/nvim.nix
           ./modules/home-manager.nix
+          ./modules/lib.nix
+          ./modules/nvim.nix
+          ./modules/reverse-tunnel.nix
+          ./modules/system.nix
+          ./users/ramses.nix
+          home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
         ];
       };
 
       nixosConfigurations = {
         nixer = nixpkgs.lib.nixosSystem {
-          inherit system;
+          inherit system specialArgs;
           modules = [
-            ./org.nix
+            self.nixosModules.default
             ./hosts/nixer.nix
-            ocb-modules.nixosModules.default
           ];
         };
         starbook = nixpkgs.lib.nixosSystem {
           inherit system specialArgs;
           modules = [
             self.nixosModules.default
-            home-manager.nixosModules.home-manager
             ./hosts/starbook.nix
-            ./hardware-config/starbook.nix
-            ./modules/system.nix
-            ./users/ramses.nix
           ];
         };
       };
