@@ -39,7 +39,15 @@ in
 
       environment.systemPackages = with pkgs;
         [
+          file
           git
+          gptfdisk
+          htop
+          lsof
+          parted
+          pciutils
+          sysfsutils
+
           (pkgs.python3.withPackages (pyPkgs:
             concatMap (withPyPkgs: withPyPkgs pyPkgs) cfg.withExtraPythonPackages)
           )
@@ -175,7 +183,10 @@ in
           };
         };
 
-      hardware.enableRedistributableFirmware = true;
+      hardware = {
+        enableRedistributableFirmware = true;
+        enableAllFirmware = true;
+      };
     };
 }
 

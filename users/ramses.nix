@@ -17,12 +17,9 @@ in
     packages = with pkgs; [
       authy
       dropbox
-      file
-      htop
-      gptfdisk
       keepassxc
       nixos-option
-      parted
+      pavucontrol
       pcloud
       signal-desktop
       slack

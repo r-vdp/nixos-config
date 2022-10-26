@@ -15,6 +15,11 @@ in
       };
     };
 
+    # https://thesofproject.github.io/latest/getting_started/intel_debug/introduction.html#pci-devices-introduced-after-2016
+    extraModprobeConfig = ''
+      options snd-intel-dspcfg dsp_driver=1
+    '';
+
     initrd.luks.devices = {
       decrypted = {
         device = "/dev/disk/by-partuuid/07065c4d-825f-4a68-a388-8660c1dfed4a";
@@ -87,7 +92,7 @@ in
   };
 
   # Enable sound with pipewire.
-  sound.enable = true;
+  sound.enable = false;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -117,8 +122,12 @@ in
       isNormalUser = true;
       description = "Ramses";
       extraGroups =
-        map (group: group_cfg.${group}.name)
-          [ "wheel" "networkmanager" "keys" ];
+        map (group: group_cfg.${group}.name) [
+          "audio"
+          "keys"
+          "networkmanager"
+          "wheel"
+        ];
       passwordFile = config.sops.secrets."${username}-user-password".path;
     };
   home-manager.users.${username} = import ../users/${username}.nix;
