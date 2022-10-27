@@ -135,6 +135,9 @@ in
         enable = true;
         userName = "R-VdP";
         inherit userEmail;
+        ignores = [
+          ".worktrees"
+        ];
         extraConfig = {
           push.autoSetupRemote = true;
           pull.rebase = true;
