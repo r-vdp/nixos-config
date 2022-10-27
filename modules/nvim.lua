@@ -5,7 +5,7 @@ vim.opt.list = true
 vim.opt.listchars = { tab = "▸ ", trail = "·", nbsp = "+" } -- , eol = "¬"
 -- Do not consider '=' to be part of filenames,
 -- so we can use gf in systemd unit files.
-lua vim.opt.isfname:remove('=')
+vim.opt.isfname:remove('=')
 vim.opt.termguicolors = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -78,6 +78,21 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   group = general_augroup,
   command = [[:%s/\s\+$//e]]
+})
+
+-- Match systemd files in the nix store
+local function systemd_patterns()
+  local systemd_prefix = '/nix/store/.*/.*%.'
+  local systemd_exts = { 'automount', 'mount', 'path', 'service', 'socket',
+                         'swap', 'target', 'timer' }
+  local patterns = {}
+  for _, ext in ipairs(systemd_exts) do
+    patterns[systemd_prefix .. ext] = 'systemd'
+  end
+  return patterns
+end
+vim.filetype.add({
+  pattern = systemd_patterns()
 })
 
 vim.cmd([[colorscheme jellybeans]])
