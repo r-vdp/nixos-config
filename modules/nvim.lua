@@ -3,6 +3,9 @@ local xdg_state_home = vim.env.XDG_STATE_HOME
 vim.opt.scrolloff = 3
 vim.opt.list = true
 vim.opt.listchars = { tab = "▸ ", trail = "·", nbsp = "+" } -- , eol = "¬"
+-- Do not consider '=' to be part of filenames,
+-- so we can use gf in systemd unit files.
+lua vim.opt.isfname:remove('=')
 vim.opt.termguicolors = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
