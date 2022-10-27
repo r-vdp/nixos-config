@@ -7,6 +7,12 @@ keys:
   - &starbook age1lkddy5f6duxxgdf92eng0x8juqm492klzu4ffcyrsh6y8ywlzcnsw8a6j4
   - &nixer    age1e4larxc5ydy4kar30ar2x4uzg4u2lchjhcefnzvxmx7a9rs3hygswqrmez
 creation_rules:
+  - path_regex: 'secrets/sops/github-secrets\.yaml$'
+    key_groups:
+    - age:
+      - *ramses
+      - *starbook
+      - *nixer
   - path_regex: 'secrets/sops/ramses-secrets\.yaml$'
     key_groups:
     - age:

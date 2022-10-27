@@ -118,6 +118,11 @@ in
       defaultSopsFile =
         ../secrets/sops/${config.networking.hostName}-secrets.yaml;
       age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+      secrets = {
+        nixos-config-deploy-key = {
+          sopsFile = ../secrets/sops/github-secrets.yaml;
+        };
+      };
     };
 
     users = {
@@ -179,23 +184,18 @@ in
     };
 
     system.autoUpgrade = {
-      enable = false;
+      enable = true;
       flake = "git+ssh://github.com/R-VdP/nixos-config";
       flags = [
         "--refresh"
         # We pull a remote repo into the nix store,
         # so we cannot write the lock file.
         "--no-write-lock-file"
-        # TODO: fix. Can we avoid needing to load the key from outside?
-        #            How would we bootstrap the decryption of the secrets then?
-        # We need to load the server's key from the filesystem, which is impure.
-        "--impure"
       ];
-      dates = "Fri 18:00";
-      allowReboot = true;
-      rebootWindow = mkForce { lower = "10:00"; upper = "21:00"; };
+      dates = "Fri 20:00";
+      allowReboot = cfg.isHeadless;
+      rebootWindow = mkForce { lower = "12:00"; upper = "21:00"; };
     };
-
 
     systemd = mkMerge [
       (mkIf cfg.isHeadless {
@@ -224,34 +224,15 @@ in
           AllowHibernation=no
         '';
       })
-      # TODO
-      (mkIf false {
-        services.nixos-upgrade =
-          let
-            runtimeDir = "nixos-upgrade";
-            github_key_path = "/run/${runtimeDir}/key";
-          in
-          {
-            serviceConfig = {
-              RuntimeDirectoryMode = "0700";
-              RuntimeDirectory = runtimeDir;
-            };
-            preStart = ''
-              install \
-                --mode=0600 \
-                "${config.settings.system.secrets.dest_directory}/nixos-config-deploy-key" \
-                "${github_key_path}"
-            '';
-            environment = {
-              GIT_SSH_COMMAND = concatStringsSep " " [
-                "${pkgs.openssh}/bin/ssh"
-                "-F /etc/ssh/ssh_config"
-                "-i ${github_key_path}"
-                "-o IdentitiesOnly=yes"
-                "-o StrictHostKeyChecking=yes"
-              ];
-            };
-          };
+      (mkIf config.system.autoUpgrade.enable {
+        services.nixos-upgrade.environment.GIT_SSH_COMMAND =
+          concatStringsSep " " [
+            "${pkgs.openssh}/bin/ssh"
+            "-F /etc/ssh/ssh_config"
+            "-i ${config.sops.secrets.nixos-config-deploy-key.path}"
+            "-o IdentitiesOnly=yes"
+            "-o StrictHostKeyChecking=yes"
+          ];
       })
     ];
 
