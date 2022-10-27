@@ -2,8 +2,6 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # Used to extract programs.sqlite for command-not-found
-    nixos-channel.url = "https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs = {
@@ -15,15 +13,19 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    command-not-found = {
+      url = "github:R-VdP/command-not-found";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     { self
     , flake-utils
     , nixpkgs
-    , nixos-channel
     , home-manager
     , sops-nix
+    , command-not-found
     }@inputs: with nixpkgs.lib;
     let
       system = flake-utils.lib.system.x86_64-linux;
@@ -40,6 +42,7 @@
           ./users/ramses.nix
           home-manager.nixosModules.home-manager
           sops-nix.nixosModules.sops
+          command-not-found.nixosModules.command-not-found
         ];
       };
 
@@ -61,4 +64,5 @@
       };
     };
 }
+
 

@@ -139,9 +139,12 @@ in
           ".worktrees"
         ];
         extraConfig = {
-          push.autoSetupRemote = true;
+          init.defaultBranch = "main";
           pull.rebase = true;
+          push.autoSetupRemote = true;
           rebase.autoStash = true;
+
+          # Signing
           gpg = {
             format = "ssh";
             ssh.allowedSignersFile =

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixos-channel, nixpkgs, ... }:
+{ config, lib, pkgs, nixpkgs, ... }:
 
 with lib;
 
@@ -65,15 +65,7 @@ in
     # Also needed for manpage searching using telescope in neovim.
     documentation.man.generateCaches = true;
 
-    # Because we do not have a nix channel when building the system from a flake,
-    # we need to get the sqlite DB containing the available packages and their
-    # binaries from somewhere else.
-    # For now we just add the nixos-channel as an input to our flake and
-    # use its sqlite DB.
-    programs.command-not-found = {
-      enable = true;
-      dbPath = "${nixos-channel}/programs.sqlite";
-    };
+    programs.command-not-found.enable = true;
 
     environment.systemPackages = with pkgs;
       [

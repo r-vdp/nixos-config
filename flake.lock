@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "command-not-found": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1666906394,
+        "narHash": "sha256-qCuYyM2R3B4EXPrxPkza++56VXdzjdPdxuoH8Mm8+c8=",
+        "owner": "R-VdP",
+        "repo": "command-not-found",
+        "rev": "c551c9e232336b4f60054cdf408be047882e6c23",
+        "type": "github"
+      },
+      "original": {
+        "owner": "R-VdP",
+        "repo": "command-not-found",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1659877975,
@@ -38,17 +58,6 @@
         "type": "github"
       }
     },
-    "nixos-channel": {
-      "locked": {
-        "narHash": "sha256-31o2r5b7s2lqhElIAbfcNOK5YRrW4NsDSPda4xjuzOs=",
-        "type": "tarball",
-        "url": "https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1666539104,
@@ -83,9 +92,9 @@
     },
     "root": {
       "inputs": {
+        "command-not-found": "command-not-found",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
-        "nixos-channel": "nixos-channel",
         "nixpkgs": "nixpkgs",
         "sops-nix": "sops-nix"
       }
