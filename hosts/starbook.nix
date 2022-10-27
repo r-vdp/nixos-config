@@ -7,6 +7,8 @@ with lib;
     ../hardware-config/starbook.nix
   ];
 
+  time.timeZone = "Africa/Cairo";
+
   settings.system.isHeadless = false;
 
   boot = {
@@ -56,8 +58,6 @@ with lib;
     };
   };
 
-  time.timeZone = "Africa/Cairo";
-
   i18n = {
     defaultLocale = "en_GB.utf8";
     extraLocaleSettings = {
@@ -105,12 +105,13 @@ with lib;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # use the example session desktopManager
+    # (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
+  # Enable touchpad support (enabled default in most desktopManagers).
   # services.xserver.libinput.enable = true;
 
   nixpkgs.config = {
@@ -127,24 +128,5 @@ with lib;
       libvdpau-va-gl
     ];
   };
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 }
 
