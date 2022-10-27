@@ -40,9 +40,9 @@
           ./modules/reverse-tunnel.nix
           ./modules/system.nix
           ./users/ramses.nix
-          home-manager.nixosModules.home-manager
-          sops-nix.nixosModules.sops
-          command-not-found.nixosModules.command-not-found
+          home-manager.nixosModule
+          sops-nix.nixosModule
+          command-not-found.nixosModule
         ];
       };
 
@@ -64,5 +64,4 @@
       };
     };
 }
-
 
