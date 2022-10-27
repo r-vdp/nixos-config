@@ -77,6 +77,7 @@ in
 
     environment.systemPackages = with pkgs;
       [
+        acl
         file
         git
         gptfdisk
@@ -92,8 +93,18 @@ in
       ];
 
     boot = {
+      loader = {
+        systemd-boot.enable = true;
+        efi = {
+          canTouchEfiVariables = true;
+          efiSysMountPoint = config.fileSystems."/boot".mountPoint;
+        };
+      };
       kernelPackages = pkgs.linuxPackages_latest;
       tmpOnTmpfs = true;
+      kernel.sysctl = {
+        "net.ipv6.conf.all.use_tempaddr" = "2";
+      };
     };
 
     security = {

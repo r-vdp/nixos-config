@@ -20,37 +20,25 @@ in
 
   settings.system.isHeadless = true;
 
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-    };
-    kernel.sysctl = {
-      "net.ipv6.conf.all.use_tempaddr" = "2";
-      "net.ipv6.conf.${bridge_interface}.use_tempaddr" = mkForce "2";
-    };
+  boot.kernel.sysctl = {
+    "net.ipv6.conf.${bridge_interface}.use_tempaddr" = mkForce "2";
   };
 
-  #TODO /opt
   fileSystems = {
-    "/" =
-      {
-        device = "/dev/disk/by-label/nixos-root";
-        fsType = "ext4";
-        options = [ "defaults" "noatime" "acl" ];
-      };
-    "/boot" =
-      {
-        device = "/dev/disk/by-label/ESP";
-        fsType = "vfat";
-      };
+    "/" = {
+      device = "/dev/disk/by-label/nixos_root";
+      fsType = "ext4";
+      options = [ "defaults" "noatime" "acl" ];
+    };
+    "/boot" = {
+      device = "/dev/disk/by-label/EFI";
+      fsType = "vfat";
+    };
   };
 
   sops.secrets = {
     sshv6_token = { };
+    opt-keyfile = { };
   };
 
   # TODO
@@ -60,7 +48,6 @@ in
 
   #settings = {
   #  maintenance.enable = false;
-  #  reverse_tunnel.enable = true;
   #};
 
   networking = {
@@ -138,39 +125,126 @@ in
       };
   };
 
-  systemd.network = {
-    enable = true;
+  systemd = mkMerge [
+    {
+      network = {
+        enable = true;
 
-    netdevs.${bridge_interface} = {
-      enable = true;
-      netdevConfig = {
-        Name = bridge_interface;
-        Kind = "bridge";
-      };
-    };
+        netdevs.${bridge_interface} = {
+          enable = true;
+          netdevConfig = {
+            Name = bridge_interface;
+            Kind = "bridge";
+          };
+        };
 
-    networks = {
-      ${lan1_interface} = {
-        enable = true;
-        matchConfig = { Name = lan1_interface; };
-        bridge = [ bridge_interface ];
+        networks = {
+          ${lan1_interface} = {
+            enable = true;
+            matchConfig = { Name = lan1_interface; };
+            bridge = [ bridge_interface ];
+          };
+          ${lan2_interface} = {
+            enable = true;
+            matchConfig = { Name = lan2_interface; };
+            bridge = [ bridge_interface ];
+          };
+          ${bridge_interface} = {
+            enable = true;
+            matchConfig = { Name = bridge_interface; };
+            DHCP = "yes";
+            dhcpV6Config = { UseDNS = false; };
+            ipv6AcceptRAConfig = { UseDNS = false; };
+            dhcpV4Config = { UseDNS = false; };
+            networkConfig = { IPv6PrivacyExtensions = "kernel"; };
+          };
+        };
       };
-      ${lan2_interface} = {
-        enable = true;
-        matchConfig = { Name = lan2_interface; };
-        bridge = [ bridge_interface ];
-      };
-      ${bridge_interface} = {
-        enable = true;
-        matchConfig = { Name = bridge_interface; };
-        DHCP = "yes";
-        dhcpV6Config = { UseDNS = false; };
-        ipv6AcceptRAConfig = { UseDNS = false; };
-        dhcpV4Config = { UseDNS = false; };
-        networkConfig = { IPv6PrivacyExtensions = "kernel"; };
-      };
-    };
-  };
+    }
+    (
+      let
+        open_opt_service = "open-encrypted-opt";
+        decrypted_name = "decrypted_opt";
+      in
+      {
+        services = {
+          ${open_opt_service} =
+            let
+              device = "/dev/LVMVolGroup/nixos_data";
+            in
+            {
+              enable = true;
+              description = "Open the encrypted /opt partition.";
+              conflicts = [ "shutdown.target" ];
+              before = [ "shutdown.target" ];
+              restartIfChanged = false;
+              unitConfig = {
+                DefaultDependencies = "no";
+                ConditionPathExists = "!/dev/mapper/${decrypted_name}";
+                AssertPathExists = config.sops.secrets.opt-keyfile.path;
+              };
+              serviceConfig = {
+                User = "root";
+                Type = "oneshot";
+                Restart = "on-failure";
+                RemainAfterExit = true;
+                ExecStop = ''
+                  ${pkgs.cryptsetup}/bin/cryptsetup close --deferred ${decrypted_name}
+                '';
+              };
+              script = ''
+                # Avoid a harmless warning
+                mkdir --parents /run/cryptsetup
+
+                ${pkgs.cryptsetup}/bin/cryptsetup \
+                  open ${device} ${decrypted_name} \
+                  --key-file ${config.sops.secrets.opt-keyfile.path}
+
+                # We wait to exit from this script until
+                # the decrypted device has been created by udev
+                dev="/dev/mapper/${decrypted_name}"
+                echo "Making sure that ''${dev} exists before exiting..."
+                for countdown in $( seq 60 -1 0 ); do
+                  if [ -b "''${dev}" ]; then
+                    exit 0
+                  fi
+                  echo "Waiting for ''${dev}... (''${countdown})"
+                  sleep 5
+                  udevadm settle --exit-if-exists="''${dev}"
+                done
+                echo "Device node could not be found, exiting..."
+                exit 1
+              '';
+            };
+        };
+        mounts = [
+          {
+            enable = true;
+            what = "/dev/mapper/${decrypted_name}";
+            where = "/opt";
+            type = "ext4";
+            options = "acl,noatime,nosuid,nodev";
+            after = [ "${open_opt_service}.service" ];
+            requires = [ "${open_opt_service}.service" ];
+            wantedBy = [
+              "multi-user.target"
+              "${open_opt_service}.service"
+            ];
+          }
+          {
+            enable = true;
+            what = "/opt/.home";
+            where = "/home";
+            type = "none";
+            options = "bind";
+            after = [ "opt.mount" ];
+            requires = [ "opt.mount" ];
+            wantedBy = [ "multi-user.target" ];
+          }
+        ];
+      }
+    )
+  ];
 
   services = {
     openssh = {

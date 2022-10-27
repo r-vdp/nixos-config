@@ -10,14 +10,6 @@ with lib;
   settings.system.isHeadless = false;
 
   boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-    };
-
     # Get sound working, but no microphone...
     # https://thesofproject.github.io/latest/getting_started/intel_debug/introduction.html#pci-devices-introduced-after-2016
     extraModprobeConfig = ''
