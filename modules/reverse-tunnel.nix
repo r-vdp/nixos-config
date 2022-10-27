@@ -38,9 +38,8 @@ in
     settings.reverse_tunnel = {
       enable = mkEnableOption "the reverse tunnel services";
 
-      # TODO: there is a type for TCP ports?
       remote_forward_port = mkOption {
-        type = with types; (ints.between 2000 9999);
+        type = types.port;
         description = "The port used for this server on the relay servers.";
       };
 
