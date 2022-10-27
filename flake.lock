@@ -2,16 +2,19 @@
   "nodes": {
     "command-not-found": {
       "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1666906394,
-        "narHash": "sha256-qCuYyM2R3B4EXPrxPkza++56VXdzjdPdxuoH8Mm8+c8=",
+        "lastModified": 1666909627,
+        "narHash": "sha256-pLisvr0jYQqJRJUuqMjBc0QkXgrZEmMcV6seEsrbtEE=",
         "owner": "R-VdP",
         "repo": "command-not-found",
-        "rev": "c551c9e232336b4f60054cdf408be047882e6c23",
+        "rev": "e5ea9654cf6613b4b4c9e36fa987dfeb12cdeefb",
         "type": "github"
       },
       "original": {

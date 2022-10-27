@@ -15,7 +15,10 @@
     };
     command-not-found = {
       url = "github:R-VdP/command-not-found";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
     };
   };
 
