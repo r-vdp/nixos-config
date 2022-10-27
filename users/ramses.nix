@@ -26,7 +26,7 @@ in
 
   sops.secrets =
     let
-      sopsFile = ../secrets/sops/${username}-secrets.yaml;
+      sopsFile = ../secrets/${username}-secrets.yaml;
     in
     {
       "${username}-ssh-priv-key" = {
