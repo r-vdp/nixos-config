@@ -13,7 +13,7 @@ in
     };
 
     withExtraPythonPackages = mkOption {
-      type = with types; listOf (functionTo (listOf types.package));
+      type = with types; listOf (functionTo (listOf package));
       default = const [ ];
     };
 
