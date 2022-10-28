@@ -1,28 +1,5 @@
 {
   "nodes": {
-    "command-not-found": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1666909627,
-        "narHash": "sha256-pLisvr0jYQqJRJUuqMjBc0QkXgrZEmMcV6seEsrbtEE=",
-        "owner": "R-VdP",
-        "repo": "command-not-found",
-        "rev": "e5ea9654cf6613b4b4c9e36fa987dfeb12cdeefb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "R-VdP",
-        "repo": "command-not-found",
-        "type": "github"
-      }
-    },
     "flake-utils": {
       "locked": {
         "lastModified": 1659877975,
@@ -61,6 +38,21 @@
         "type": "github"
       }
     },
+    "nix-index-database": {
+      "locked": {
+        "lastModified": 1666685883,
+        "narHash": "sha256-rLDeUmBklae5IEvmFk0LSHpUl0AE1qsScZmEDr5JMR8=",
+        "owner": "Mic92",
+        "repo": "nix-index-database",
+        "rev": "6a7f3f06fb502aafbbd5447c95ce86c45b4dd3dc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1666539104,
@@ -95,9 +87,9 @@
     },
     "root": {
       "inputs": {
-        "command-not-found": "command-not-found",
         "flake-utils": "flake-utils",
         "home-manager": "home-manager",
+        "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
         "sops-nix": "sops-nix"
       }

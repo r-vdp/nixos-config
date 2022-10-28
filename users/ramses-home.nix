@@ -1,4 +1,4 @@
-{ osConfig, config, lib, pkgs, ... }:
+{ osConfig, config, lib, pkgs, nix-index-database, ... }:
 
 with lib;
 
@@ -40,6 +40,13 @@ in
       vlc
     ];
 
+    file = {
+      # Put the pre-generated nix-index database in place,
+      # used for command-not-found.
+      ".cache/nix-index/files".source =
+        nix-index-database.legacyPackages.${pkgs.system}.database;
+    };
+
     activation = {
       # Automatically put in place the age key corresponding to our SSH key
       ssh-to-age =
@@ -60,6 +67,10 @@ in
 
   programs = {
     home-manager.enable = true;
+    # Needed for command-not-found integration
+    nix-index.enable = true;
+
+    bash.enable = true;
 
     firefox = {
       enable = ! isHeadless;

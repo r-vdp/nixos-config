@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixpkgs, ... }:
+{ config, lib, pkgs, nixpkgs, nix-index-database, ... }:
 
 with lib;
 
@@ -65,7 +65,8 @@ in
     # Also needed for manpage searching using telescope in neovim.
     documentation.man.generateCaches = true;
 
-    programs.command-not-found.enable = true;
+    # We use nix-index instead, setup with home-manager
+    programs.command-not-found.enable = false;
 
     environment.systemPackages = with pkgs;
       [

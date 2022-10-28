@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, nix-index-database, ... }:
 
 with lib;
 
@@ -22,7 +22,11 @@ in
     passwordFile = config.sops.secrets."${username}-user-password".path;
   };
 
-  home-manager.users.${username} = import ../users/${username}-home.nix;
+  home-manager = {
+    # Extra arguments to pass to home-manager modules
+    extraSpecialArgs = { inherit nix-index-database; };
+    users.${ username} = import ../users/${username}-home.nix;
+  };
 
   sops.secrets =
     let

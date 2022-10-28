@@ -13,13 +13,7 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    command-not-found = {
-      url = "github:R-VdP/command-not-found";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
-    };
+    nix-index-database.url = "github:Mic92/nix-index-database";
   };
 
   outputs =
@@ -28,11 +22,11 @@
     , nixpkgs
     , home-manager
     , sops-nix
-    , command-not-found
+    , nix-index-database
     }@inputs: with nixpkgs.lib;
     let
       system = flake-utils.lib.system.x86_64-linux;
-      specialArgs = { inherit nixos-channel nixpkgs; };
+      specialArgs = { inherit nixpkgs nix-index-database; };
     in
     {
       nixosModules.default = {
@@ -45,7 +39,6 @@
           ./users/ramses.nix
           home-manager.nixosModule
           sops-nix.nixosModule
-          command-not-found.nixosModule
         ];
       };
 
