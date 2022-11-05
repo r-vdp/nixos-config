@@ -41,12 +41,6 @@ in
 
   config = {
     environment = {
-      sessionVariables = {
-        XDG_CACHE_HOME = "\${HOME}/.cache";
-        XDG_CONFIG_HOME = "\${HOME}/.config";
-        XDG_DATA_HOME = "\${HOME}/.local/share";
-        XDG_STATE_HOME = "\${HOME}/.local/state";
-      };
       shellInit = ''
         if [ "''${TERM}" != "${cfg.tmux_term}" ] || [ -z "''${TMUX}" ]; then
           alias nixos-rebuild='printf "nixos-rebuild: not in tmux." 2> /dev/null'

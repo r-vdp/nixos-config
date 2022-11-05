@@ -53,9 +53,13 @@ with lib;
       # Do not take DNS servers from DHCP
       dns = mkForce "none";
       wifi = {
-        macAddress = "random";
+        macAddress = "preserve";
       };
     };
+    extraHosts = ''
+      # I hate captive portals
+      41.128.153.50 ezxcess.antlabs.com
+    '';
   };
 
   i18n = {

@@ -4,12 +4,27 @@ with lib;
 
 {
   environment.systemPackages = with pkgs; [
-    rnix-lsp
-    nodePackages.yaml-language-server
     haskell-language-server
+    (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
+      stack
+    ]))
+
+    elm2nix
+    elmPackages.elm
     elmPackages.elm-language-server
     elmPackages.elm-format
     elmPackages.elm-review
+
+    nodePackages.yaml-language-server
+
+    rnix-lsp
+
+    cargo
+    gcc
+    rustc
+    rustfmt
+    rust-analyzer
+
     # Needed for telescope-nvim
     ripgrep
     fd

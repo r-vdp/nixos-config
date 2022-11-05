@@ -20,18 +20,12 @@ in
     homeDirectory = osUser.home;
 
     packages = with pkgs; [
+      bind # For the dig command
       nixos-option
       sops
-
-      elmPackages.elm
-      elm2nix
-      (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
-        stack
-      ]))
     ] ++
     optionals (! isHeadless) [
       authy
-      dropbox
       keepassxc
       pavucontrol
       pcloud
@@ -63,6 +57,10 @@ in
             -o ${out_file}
         '';
     };
+  };
+
+  xdg = {
+    enable = true;
   };
 
   programs = {

@@ -186,7 +186,7 @@ require('lualine').setup {
     lualine_c = {'filename'},
     lualine_x = {},
     lualine_y = {'progress'},
-    lualine_z = {'location'}
+    lualine_z = {'location', num_of_lines}
   },
   tabline = {},
   winbar = {
@@ -311,29 +311,35 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-local servers = {"hls", "elmls", "rnix", "yamlls", "pylsp"}
+local servers = {
+  "elmls",
+  "gopls",
+  "hls",
+  "pylsp",
+  "rnix",
+  "rust_analyzer",
+  "yamlls",
+}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
-      haskell = {
-        hlintOn = true,
-        formattingProvider = "ormolu"
-      },
       elmLS = {
         elmReviewDiagnostics = "warning",
         disableElmLSDiagnostics = false
       },
-      yaml = {
-        format = {
-          enable = true,
-          printWidth = 100,
-          bracketSpacing = true,
-          proseWrap = "always"
+      gopls = {
+        experimentalPostfixCompletions = true,
+        analyses = {
+          unusedparams = true,
+          shadow = true,
         },
-        validate = true,
-        completion = true
+        staticcheck = true,
+      },
+      haskell = {
+        hlintOn = true,
+        formattingProvider = "ormolu"
       },
       pylsp = {
         plugins = {
@@ -346,7 +352,33 @@ for _, lsp in ipairs(servers) do
             maxLineLength = 100
           }
         }
-      }
+      },
+      ["rust-analyzer"] = {
+        imports = {
+          granularity = {
+            group = "module",
+          },
+          prefix = "self",
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+        },
+        procMacro = {
+          enable = true,
+        },
+      },
+      yaml = {
+        format = {
+          enable = true,
+          printWidth = 100,
+          bracketSpacing = true,
+          proseWrap = "always"
+        },
+        validate = true,
+        completion = true
+      },
     }
   })
 end
