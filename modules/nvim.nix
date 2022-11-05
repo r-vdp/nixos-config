@@ -4,26 +4,34 @@ with lib;
 
 {
   environment.systemPackages = with pkgs; [
+    # Haskell
     haskell-language-server
     (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
       stack
     ]))
 
+    # Elm
     elm2nix
     elmPackages.elm
     elmPackages.elm-language-server
     elmPackages.elm-format
     elmPackages.elm-review
 
+    # YAML
     nodePackages.yaml-language-server
 
+    # Nix
     rnix-lsp
 
+    # Rust
     cargo
     gcc
     rustc
     rustfmt
     rust-analyzer
+
+    # Go
+    gopls
 
     # Needed for telescope-nvim
     ripgrep
@@ -51,22 +59,22 @@ with lib;
       packages.nix = with pkgs.vimPlugins; {
         start = [
           (nvim-treesitter.withPlugins (const pkgs.tree-sitter.allGrammars))
-          vim-nix
-          haskell-vim
-          elm-vim
-          vim-markdown
-          dracula-vim
-          lualine-nvim
-          vim-colorschemes
-          indent-blankline-nvim
-          nerdtree
-          nvim-lspconfig
-          nvim-cmp
-          cmp-nvim-lsp
           cmp-buffer
-          luasnip
           cmp_luasnip
+          cmp-nvim-lsp
+          dracula-vim
+          elm-vim
+          haskell-vim
+          indent-blankline-nvim
+          lualine-nvim
+          luasnip
+          nerdtree
+          nvim-cmp
+          nvim-lspconfig
           telescope-nvim
+          vim-nix
+          vim-markdown
+          vim-colorschemes
         ];
         opt = [ ];
       };
