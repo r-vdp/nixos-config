@@ -27,6 +27,15 @@
     let
       system = flake-utils.lib.system.x86_64-linux;
       specialArgs = { inherit nixpkgs nix-index-database; };
+
+      mkStandardHost = hostname:
+        nixpkgs.lib.nixosSystem {
+          inherit system specialArgs;
+          modules = [
+            self.nixosModules.default
+            ./hosts/${hostname}.nix
+          ];
+        };
     in
     {
       nixosModules.default = {
@@ -42,22 +51,10 @@
         ];
       };
 
-      nixosConfigurations = {
-        nixer = nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
-          modules = [
-            self.nixosModules.default
-            ./hosts/nixer.nix
-          ];
-        };
-        starbook = nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
-          modules = [
-            self.nixosModules.default
-            ./hosts/starbook.nix
-          ];
-        };
-      };
+      nixosConfigurations = flip genAttrs mkStandardHost [
+        "nixer"
+        "starbook"
+      ];
     };
 }
 
