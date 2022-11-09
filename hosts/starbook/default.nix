@@ -4,7 +4,7 @@ with lib;
 
 {
   imports = [
-    ../hardware-config/starbook.nix
+    ./hardware-configuration.nix
   ];
 
   time.timeZone = "Africa/Cairo";

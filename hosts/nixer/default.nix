@@ -13,7 +13,7 @@ in
 
 {
   imports = [
-    ../hardware-config/nixer.nix
+    ./hardware-configuration.nix
   ];
 
   time.timeZone = "Europe/Brussels";

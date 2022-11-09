@@ -33,7 +33,7 @@
           inherit system specialArgs;
           modules = [
             self.nixosModules.default
-            ./hosts/${hostname}.nix
+            ./hosts/${hostname}
           ];
         };
     in
