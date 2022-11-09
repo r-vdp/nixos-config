@@ -24,19 +24,6 @@
     , sops-nix
     , nix-index-database
     }@inputs: with nixpkgs.lib;
-    let
-      system = flake-utils.lib.system.x86_64-linux;
-      specialArgs = { inherit nixpkgs nix-index-database; };
-
-      mkStandardHost = hostname:
-        nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
-          modules = [
-            self.nixosModules.default
-            ./hosts/${hostname}
-          ];
-        };
-    in
     {
       nixosModules.default = {
         imports = [
@@ -51,10 +38,24 @@
         ];
       };
 
-      nixosConfigurations = flip genAttrs mkStandardHost [
-        "nixer"
-        "starbook"
-      ];
+      nixosConfigurations =
+        let
+          system = flake-utils.lib.system.x86_64-linux;
+          specialArgs = { inherit nixpkgs nix-index-database; };
+
+          mkStandardHost = hostname:
+            nixpkgs.lib.nixosSystem {
+              inherit system specialArgs;
+              modules = [
+                self.nixosModules.default
+                ./hosts/${hostname}
+              ];
+            };
+        in
+        flip genAttrs mkStandardHost [
+          "nixer"
+          "starbook"
+        ];
     };
 }
 
