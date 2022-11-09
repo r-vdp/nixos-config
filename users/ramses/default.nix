@@ -25,12 +25,12 @@ in
   home-manager = {
     # Extra arguments to pass to home-manager modules
     extraSpecialArgs = { inherit nix-index-database; };
-    users.${ username} = import ../users/${username}-home.nix;
+    users.${ username} = import ./home.nix;
   };
 
   sops.secrets =
     let
-      sopsFile = ../secrets/${username}-secrets.yaml;
+      sopsFile = ../../secrets/${username}-secrets.yaml;
     in
     {
       "${username}-ssh-priv-key" = {

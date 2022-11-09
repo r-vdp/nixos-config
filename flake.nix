@@ -32,7 +32,7 @@
           ./modules/nvim.nix
           ./modules/reverse-tunnel.nix
           ./modules/system.nix
-          ./users/ramses.nix
+          ./users/ramses
           home-manager.nixosModule
           sops-nix.nixosModule
         ];
