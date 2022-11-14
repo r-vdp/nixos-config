@@ -27,12 +27,8 @@
     {
       nixosModules.default = {
         imports = [
-          ./modules/home-manager.nix
-          ./modules/lib.nix
-          ./modules/nvim.nix
-          ./modules/reverse-tunnel.nix
-          ./modules/system.nix
-          ./users/ramses
+          ./modules
+          ./users
           home-manager.nixosModule
           sops-nix.nixosModule
         ];
