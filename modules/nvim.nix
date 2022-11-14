@@ -32,6 +32,7 @@ with lib;
 
     # Go
     gopls
+    go
 
     # Needed for telescope-nvim
     ripgrep
