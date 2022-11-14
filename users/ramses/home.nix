@@ -31,6 +31,7 @@ in
       pcloud
       signal-desktop
       slack
+      teams
       vlc
     ];
 
