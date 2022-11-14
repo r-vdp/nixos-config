@@ -23,7 +23,7 @@
     , home-manager
     , sops-nix
     , nix-index-database
-    }@inputs: with nixpkgs.lib;
+    }: with nixpkgs.lib;
     {
       nixosModules.default = {
         imports = [
