@@ -43,6 +43,12 @@ in
         inherit sopsFile;
         neededForUsers = true;
       };
+      "${username}-keepass-keyfile" = {
+        inherit sopsFile;
+        mode = "0600";
+        owner = user_cfg.${username}.name;
+        group = user_cfg.${username}.group;
+      };
     };
 }
 
