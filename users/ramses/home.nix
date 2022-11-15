@@ -1,3 +1,5 @@
+# We take a username as argument and return a home-manager module.
+{ username }:
 { osConfig, config, lib, pkgs, nix-index-database, ... }:
 
 with lib;
@@ -7,7 +9,6 @@ let
 
   isHeadless = osConfig.settings.system.isHeadless;
 
-  username = "ramses";
   privKeyFile = osConfig.sops.secrets."${username}-ssh-priv-key".path;
   pubKey =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K";
