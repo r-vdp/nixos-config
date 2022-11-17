@@ -69,8 +69,8 @@ in
     home-manager.enable = true;
     # Needed for command-not-found integration
     nix-index.enable = true;
-
     bash.enable = true;
+    starship.enable = true;
 
     firefox = {
       enable = ! isHeadless;
