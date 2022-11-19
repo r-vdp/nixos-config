@@ -29,6 +29,7 @@ in
     optionals (! isHeadless) [
       authy
       keepassxc
+      nerdfonts
       pavucontrol
       pcloud
       signal-desktop
@@ -62,9 +63,7 @@ in
     };
   };
 
-  xdg = {
-    enable = true;
-  };
+  xdg.enable = true;
 
   programs = {
     home-manager.enable = true;
@@ -77,14 +76,10 @@ in
     };
     bash = {
       enable = true;
-      initExtra = ''
-        if [ "''${TERM}" != "${tmux_term}" ] || [ -z "''${TMUX}" ]; then
-          alias nixos-rebuild='printf "nixos-rebuild: not in tmux." 2> /dev/null'
-        fi
-      '';
       shellAliases = {
-        l = "${pkgs.exa}/bin/exa --long --all --git";
-        lt = "${pkgs.exa}/bin/exa --tree --long";
+        l = "${pkgs.exa}/bin/exa --long --group --git --icons";
+        la = mkForce "${pkgs.exa}/bin/exa --long --group --all --git --icons";
+        lt = mkForce "${pkgs.exa}/bin/exa --tree --long --group --git --icons";
         nix-env = ''printf "The nix-env command has been disabled." 2> /dev/null'';
         # Have bash resolve aliases with sudo
         # https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
