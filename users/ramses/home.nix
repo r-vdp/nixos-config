@@ -80,7 +80,8 @@ in
       enable = true;
       shellAliases = {
         l = "${pkgs.exa}/bin/exa --long --group --git --icons";
-        la = mkForce "${pkgs.exa}/bin/exa --long --group --all --git --icons";
+        # Use --all twice to also show . and ..
+        la = mkForce "${pkgs.exa}/bin/exa --long --group --all --all --git --icons";
         lt = mkForce "${pkgs.exa}/bin/exa --tree --long --group --git --icons";
         nix-env = ''printf "The nix-env command has been disabled." 2> /dev/null'';
         # Have bash resolve aliases with sudo
