@@ -132,6 +132,8 @@ in
       fwupd.enable = true;
       fstrim.enable = true;
 
+      nscd.enableNsncd = true;
+
       timesyncd = {
         enable = true;
         servers = mkDefault [
