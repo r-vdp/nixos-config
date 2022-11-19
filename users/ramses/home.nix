@@ -6,6 +6,7 @@ with lib;
 
 let
   inherit (lib.hm) dag;
+  inherit (osConfig.settings.system) tmux_term;
 
   isHeadless = osConfig.settings.system.isHeadless;
 
@@ -69,7 +70,28 @@ in
     home-manager.enable = true;
     # Needed for command-not-found integration
     nix-index.enable = true;
-    bash.enable = true;
+
+    exa = {
+      enable = true;
+      enableAliases = true;
+    };
+    bash = {
+      enable = true;
+      initExtra = ''
+        if [ "''${TERM}" != "${tmux_term}" ] || [ -z "''${TMUX}" ]; then
+          alias nixos-rebuild='printf "nixos-rebuild: not in tmux." 2> /dev/null'
+        fi
+      '';
+      shellAliases = {
+        l = "${pkgs.exa}/bin/exa --long --all --git";
+        lt = "${pkgs.exa}/bin/exa --tree --long";
+        nix-env = ''printf "The nix-env command has been disabled." 2> /dev/null'';
+        # Have bash resolve aliases with sudo
+        # https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
+        sudo = "sudo ";
+        whereami = "curl ipinfo.io";
+      };
+    };
     starship.enable = true;
 
     firefox = {
@@ -258,24 +280,20 @@ in
       };
     };
 
-    tmux =
-      let
-        inherit (osConfig.settings.system) tmux_term;
-      in
-      {
-        enable = true;
-        newSession = true;
-        clock24 = true;
-        historyLimit = 10000;
-        escapeTime = 250;
-        terminal = tmux_term;
-        keyMode = "vi";
-        extraConfig = ''
-          set -g mouse on
-          set-option -g focus-events on
-          set-option -sa terminal-overrides ',xterm-256color:RGB'
-        '';
-      };
+    tmux = {
+      enable = true;
+      newSession = true;
+      clock24 = true;
+      historyLimit = 10000;
+      escapeTime = 250;
+      terminal = tmux_term;
+      keyMode = "vi";
+      extraConfig = ''
+        set -g mouse on
+        set-option -g focus-events on
+        set-option -sa terminal-overrides ',xterm-256color:RGB'
+      '';
+    };
   };
 }
 

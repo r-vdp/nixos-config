@@ -40,21 +40,6 @@ in
   };
 
   config = {
-    environment = {
-      shellInit = ''
-        if [ "''${TERM}" != "${cfg.tmux_term}" ] || [ -z "''${TMUX}" ]; then
-          alias nixos-rebuild='printf "nixos-rebuild: not in tmux." 2> /dev/null'
-        fi
-      '';
-      shellAliases = {
-        nix-env = ''printf "The nix-env command has been disabled." 2> /dev/null'';
-        # Have bash resolve aliases with sudo
-        # https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
-        sudo = "sudo ";
-        whereami = "curl ipinfo.io";
-      };
-    };
-
     # Populate the man-db cache so that apropos works.
     # Also needed for manpage searching using telescope in neovim.
     documentation.man.generateCaches = true;
