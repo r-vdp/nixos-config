@@ -132,6 +132,7 @@ in
       fwupd.enable = true;
       fstrim.enable = true;
 
+      # https://flokli.de/posts/2022-11-18-nsncd/
       nscd.enableNsncd = true;
 
       timesyncd = {
