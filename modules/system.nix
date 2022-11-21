@@ -44,8 +44,28 @@ in
     # Also needed for manpage searching using telescope in neovim.
     documentation.man.generateCaches = true;
 
-    # We use nix-index instead, setup with home-manager
-    programs.command-not-found.enable = false;
+    programs = {
+      # We use nix-index instead, setup with home-manager
+      command-not-found.enable = false;
+
+      ssh = {
+        knownHosts.github = {
+          hostNames = [ "github.com" "ssh.github.com" ];
+          publicKey =
+            "ssh-ed25519 " +
+            "AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl";
+        };
+        extraConfig = ''
+          # Some internet providers block port 22,
+          # so we connect to GitHub using port 443
+          Host github.com
+            HostName ssh.github.com
+            User git
+            Port 443
+            UserKnownHostsFile /dev/null
+        '';
+      };
+    };
 
     environment.systemPackages = with pkgs;
       [
