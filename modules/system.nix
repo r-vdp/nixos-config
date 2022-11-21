@@ -179,10 +179,11 @@ in
     };
 
     system.autoUpgrade = {
-      enable = true;
+      enable = cfg.isHeadless;
       flake = "git+ssh://github.com/R-VdP/nixos-config";
       flags = [
         "--refresh"
+        "--no-update-lock-file"
         # We pull a remote repo into the nix store,
         # so we cannot write the lock file.
         "--no-write-lock-file"
