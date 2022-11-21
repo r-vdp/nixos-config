@@ -1,4 +1,4 @@
-{ config, lib, nix-index-database, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -23,9 +23,10 @@ in
   };
 
   home-manager = {
-    # Extra arguments to pass to home-manager modules
-    extraSpecialArgs = { inherit nix-index-database; };
-    users.${username} = import ./home.nix { inherit username; };
+    users.${username} = {
+      imports = [ ./home.nix ];
+      home = { inherit username; };
+    };
   };
 
   sops.secrets =
