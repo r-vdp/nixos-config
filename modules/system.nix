@@ -156,6 +156,42 @@ in
           DNSOverTLS=true
         '';
       };
+
+      # Enable the X11 windowing system.
+      xserver = {
+        enable = ! cfg.isHeadless;
+        # Enable the GNOME Desktop Environment.
+        displayManager.gdm.enable = ! cfg.isHeadless;
+        desktopManager.gnome.enable = ! cfg.isHeadless;
+        # Configure keymap in X11
+        layout = "us";
+        xkbVariant = "intl";
+        # Enable touchpad support (enabled default in most desktopManagers).
+        # libinput.enable = true;
+
+      };
+      # Enable CUPS to print documents.
+      printing.enable = ! cfg.isHeadless;
+    };
+
+    # Enable sound with pipewire.
+    sound.enable = false;
+    hardware.pulseaudio.enable = false;
+    security.rtkit.enable = true;
+    services.pipewire = {
+      enable = ! cfg.isHeadless;
+      alsa = {
+        enable = true;
+        support32Bit = true;
+      };
+      pulse.enable = true;
+      # If you want to use JACK applications, uncomment this
+      #jack.enable = true;
+
+      # use the example session desktopManager
+      # (no others are packaged yet so this is enabled by default,
+      # no need to redefine it in your config for now)
+      #media-session.enable = true;
     };
 
     i18n = {

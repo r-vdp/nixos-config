@@ -62,44 +62,6 @@ with lib;
     '';
   };
 
-  # Enable the X11 windowing system.
-  services = {
-    xserver = {
-      enable = true;
-      # Enable the GNOME Desktop Environment.
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
-      # Configure keymap in X11
-      layout = "us";
-      xkbVariant = "intl";
-    };
-    # Enable CUPS to print documents.
-    printing.enable = true;
-  };
-
-  # Enable sound with pipewire.
-  sound.enable = false;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa = {
-      enable = true;
-      support32Bit = true;
-    };
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session desktopManager
-    # (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManagers).
-  # services.xserver.libinput.enable = true;
-
   nixpkgs.config = {
     packageOverrides = pkgs: {
       vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
