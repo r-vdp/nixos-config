@@ -73,7 +73,6 @@ in
         file
         git
         gptfdisk
-        htop
         lsof
         parted
         pciutils

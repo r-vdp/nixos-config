@@ -42,6 +42,7 @@ in
   };
 
   programs = {
+    htop.enable = true;
     exa = {
       enable = true;
       enableAliases = true;
