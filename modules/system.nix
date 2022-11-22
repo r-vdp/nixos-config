@@ -128,25 +128,6 @@ in
       memoryPercent = 40;
     };
 
-    nix = {
-      settings = {
-        experimental-features = [ "nix-command" "flakes" ];
-        auto-optimise-store = true;
-      };
-      gc = {
-        automatic = true;
-        dates = "Tue 12:00";
-        options = "--delete-older-than 30d";
-      };
-      # https://dataswamp.org/~solene/2022-07-20-nixos-flakes-command-sync-with-system.html
-      registry.nixpkgs.flake = nixpkgs;
-      nixPath = [
-        "nixpkgs=/etc/channels/nixpkgs"
-        "/nix/var/nix/profiles/per-user/root/channels"
-      ];
-    };
-    environment.etc."channels/nixpkgs".source = nixpkgs.outPath;
-
     services = {
       fwupd.enable = true;
       fstrim.enable = true;
@@ -176,6 +157,24 @@ in
         '';
       };
     };
+
+    i18n = {
+      defaultLocale = "en_GB.utf8";
+      extraLocaleSettings = {
+        LC_ADDRESS = "nl_BE.utf8";
+        LC_IDENTIFICATION = "nl_BE.utf8";
+        LC_MEASUREMENT = "nl_BE.utf8";
+        LC_MONETARY = "nl_BE.utf8";
+        LC_NAME = "nl_BE.utf8";
+        LC_NUMERIC = "nl_BE.utf8";
+        LC_PAPER = "nl_BE.utf8";
+        LC_TELEPHONE = "nl_BE.utf8";
+        LC_TIME = "nl_BE.utf8";
+      };
+    };
+
+    # Configure console keymap
+    console.keyMap = "us-acentos";
 
     system.autoUpgrade = {
       enable = cfg.isHeadless;

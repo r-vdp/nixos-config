@@ -62,24 +62,6 @@ with lib;
     '';
   };
 
-  i18n = {
-    defaultLocale = "en_GB.utf8";
-    extraLocaleSettings = {
-      LC_ADDRESS = "nl_BE.utf8";
-      LC_IDENTIFICATION = "nl_BE.utf8";
-      LC_MEASUREMENT = "nl_BE.utf8";
-      LC_MONETARY = "nl_BE.utf8";
-      LC_NAME = "nl_BE.utf8";
-      LC_NUMERIC = "nl_BE.utf8";
-      LC_PAPER = "nl_BE.utf8";
-      LC_TELEPHONE = "nl_BE.utf8";
-      LC_TIME = "nl_BE.utf8";
-    };
-  };
-
-  # Configure console keymap
-  console.keyMap = "us-acentos";
-
   # Enable the X11 windowing system.
   services = {
     xserver = {
