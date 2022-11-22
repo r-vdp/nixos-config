@@ -29,6 +29,7 @@ in
     ] ++
     optionals (! isHeadless) [
       authy
+      gimp
       keepassxc
       nerdfonts
       pavucontrol
