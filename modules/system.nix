@@ -76,7 +76,11 @@ in
 
     boot = {
       loader = {
-        systemd-boot.enable = true;
+        systemd-boot = {
+          enable = true;
+          editor = false;
+          configurationLimit = 100;
+        };
         efi = {
           canTouchEfiVariables = true;
           efiSysMountPoint = config.fileSystems."/boot".mountPoint;
