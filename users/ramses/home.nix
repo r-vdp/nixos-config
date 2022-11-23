@@ -22,27 +22,22 @@ in
       };
     };
 
-    packages = with pkgs; [
-      bind # For the dig command
-      nixos-option
-      sops
-    ] ++
-    optionals (! isHeadless) [
-      authy
-      gimp
-      keepassxc
-      nerdfonts
-      pavucontrol
-      pcloud
-      signal-desktop
-      slack
-      teams
-      vlc
-    ];
+    packages = with pkgs;
+      optionals (! isHeadless) [
+        authy
+        gimp
+        keepassxc
+        nerdfonts
+        pavucontrol
+        pcloud
+        signal-desktop
+        slack
+        teams
+        vlc
+      ];
   };
 
   programs = {
-    htop.enable = true;
     exa = {
       enable = true;
       enableAliases = true;
@@ -66,5 +61,4 @@ in
     starship.enable = true;
   };
 }
-
 

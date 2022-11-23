@@ -69,15 +69,6 @@ in
 
     environment.systemPackages = with pkgs;
       [
-        acl
-        file
-        git
-        gptfdisk
-        lsof
-        parted
-        pciutils
-        sysfsutils
-
         (pkgs.python3.withPackages (pyPkgs:
           concatMap (withPyPkgs: withPyPkgs pyPkgs) cfg.withExtraPythonPackages)
         )
