@@ -26,6 +26,7 @@ in
       optionals (! isHeadless) [
         authy
         gimp
+        gparted
         keepassxc
         nerdfonts
         pavucontrol

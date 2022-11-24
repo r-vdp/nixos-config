@@ -7,6 +7,7 @@ with lib;
     ./firefox.nix
     ./git.nix
     ./nix-index.nix
+    ./nvim.nix
     ./ssh.nix
     ./ssh-to-age.nix
     ./tmux.nix

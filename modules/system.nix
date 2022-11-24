@@ -12,11 +12,6 @@ in
       type = types.bool;
     };
 
-    withExtraPythonPackages = mkOption {
-      type = with types; listOf (functionTo (listOf package));
-      default = const [ ];
-    };
-
     nameservers = mkOption {
       type = with types; listOf str;
       default =
@@ -66,13 +61,6 @@ in
         '';
       };
     };
-
-    environment.systemPackages = with pkgs;
-      [
-        (pkgs.python3.withPackages (pyPkgs:
-          concatMap (withPyPkgs: withPyPkgs pyPkgs) cfg.withExtraPythonPackages)
-        )
-      ];
 
     boot = {
       loader = {
