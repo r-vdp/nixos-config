@@ -3,15 +3,7 @@
 with lib;
 
 {
-  imports = [
-    ./firefox.nix
-    ./git.nix
-    ./nix-index.nix
-    ./nvim.nix
-    ./ssh.nix
-    ./ssh-to-age.nix
-    ./tmux.nix
-  ];
+  imports = import ../import-dir.nix { inherit lib; fromDir = ./.; };
 
   options = {
     home.settings = {

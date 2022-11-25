@@ -1,10 +1,5 @@
+{ lib, ... }:
 {
-  imports = [
-    ./home-manager.nix
-    ./lib.nix
-    ./nix.nix
-    ./reverse-tunnel.nix
-    ./system.nix
-  ];
+  imports = import ../import-dir.nix { inherit lib; fromDir = ./.; };
 }
 
