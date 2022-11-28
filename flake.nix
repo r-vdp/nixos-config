@@ -33,7 +33,7 @@
     , home-manager
     , sops-nix
     , devenv
-    , nix-index-database
+    , ...
     }@inputs: with nixpkgs.lib;
 
     # Some things should be defined for every system.
