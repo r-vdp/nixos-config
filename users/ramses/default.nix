@@ -40,29 +40,23 @@ in
   sops.secrets =
     let
       sopsFile = ../../secrets/${username}-secrets.yaml;
+      owner = user_cfg.${username}.name;
+      group = user_cfg.${username}.group;
+      mode = "0600";
     in
     {
       "${username}-ssh-priv-key" = {
-        inherit sopsFile;
-        mode = "0600";
-        owner = user_cfg.${username}.name;
-        group = user_cfg.${username}.group;
+        inherit sopsFile owner group mode;
       };
       "${username}-2-ssh-priv-key" = {
-        inherit sopsFile;
-        mode = "0600";
-        owner = user_cfg.${username}.name;
-        group = user_cfg.${username}.group;
+        inherit sopsFile owner group mode;
       };
       "${username}-user-password" = {
         inherit sopsFile;
         neededForUsers = true;
       };
       "${username}-keepass-keyfile" = {
-        inherit sopsFile;
-        mode = "0600";
-        owner = user_cfg.${username}.name;
-        group = user_cfg.${username}.group;
+        inherit sopsFile owner group mode;
       };
     };
 }
