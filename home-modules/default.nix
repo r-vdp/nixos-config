@@ -8,12 +8,8 @@ with lib;
   options = {
     home.settings = {
       keys = {
-        privateKeyFile = mkOption {
-          type = types.str;
-        };
-
-        publicKey = mkOption {
-          type = types.str;
+        privateKeyFiles = mkOption {
+          type = with types; attrsOf str;
         };
       };
     };

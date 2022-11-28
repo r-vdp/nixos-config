@@ -20,6 +20,14 @@ in
     ++ optional config.services.pipewire.enable "audio"
     ++ optional config.networking.networkmanager.enable "networkmanager");
     passwordFile = config.sops.secrets."${username}-user-password".path;
+    openssh.authorizedKeys.keys = [
+      # Old id_ec key
+      ("ssh-ed25519 " +
+        "AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K")
+      # New key
+      ("ssh-ed25519 " +
+        "AAAAC3NzaC1lZDI1NTE5AAAAIIXvTazOvC1ajjkN7Iq+qHrofOp8iXBI7TMwwHnsrm58")
+    ];
   };
 
   home-manager = {
@@ -35,6 +43,12 @@ in
     in
     {
       "${username}-ssh-priv-key" = {
+        inherit sopsFile;
+        mode = "0600";
+        owner = user_cfg.${username}.name;
+        group = user_cfg.${username}.group;
+      };
+      "${username}-2-ssh-priv-key" = {
         inherit sopsFile;
         mode = "0600";
         owner = user_cfg.${username}.name;

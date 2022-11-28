@@ -102,29 +102,6 @@ in
     inherit nameservers;
   };
 
-  settings.reverse_tunnel = {
-    enable = true;
-    remote_forward_port = 6012;
-    relay_servers =
-      let
-        public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDsn2Dvtzm6jJyL9SJY6D1/lRwhFeWR5bQtSSQv6bZYf";
-      in
-      {
-        sshrelay1 = {
-          inherit public_key;
-          addresses = [ "sshrelay1.ocb.msf.org" "185.199.180.11" ];
-        };
-        sshrelay2 = {
-          inherit public_key;
-          addresses = [ "sshrelay2.ocb.msf.org" "15.188.17.148" ];
-        };
-        sshrelay-za-1 = {
-          inherit public_key;
-          addresses = [ "sshrelay-za-1.ocb.msf.org" "13.245.67.199" ];
-        };
-      };
-  };
-
   systemd = mkMerge [
     {
       network = {

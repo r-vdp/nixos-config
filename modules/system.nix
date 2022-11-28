@@ -153,9 +153,29 @@ in
         # libinput.enable = true;
 
       };
+
+      # https://nixos.wiki/wiki/GNOME
+      udev.packages = with pkgs; [
+        gnome.gnome-settings-daemon
+      ];
+
       # Enable CUPS to print documents.
       printing.enable = ! cfg.isHeadless;
     };
+
+    environment.gnome.excludePackages =
+      (with pkgs; [
+        gnome-text-editor
+        gnome-tour
+        gnome-user-docs
+      ]) ++ (with pkgs.gnome; [
+        evince
+        geary
+        gnome-contacts
+        gnome-maps
+        gnome-music
+        totem
+      ]);
 
     # Enable sound with pipewire.
     sound.enable = false;

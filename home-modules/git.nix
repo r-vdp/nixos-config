@@ -16,6 +16,9 @@ in
         userEmail = mkOption {
           type = types.str;
         };
+        signerKeys = mkOption {
+          type = with types; listOf str;
+        };
       };
     };
   };
@@ -37,13 +40,12 @@ in
         format = "ssh";
         ssh.allowedSignersFile =
           let
-            signers = ''
-              ${settings.git.userEmail} ${settings.keys.publicKey}
-            '';
+            mkLine = pubkey: ''${settings.git.userEmail} ${pubkey}'';
+            signers = concatMapStringsSep "\n" mkLine settings.git.signerKeys;
           in
           ''${pkgs.writeText "git-allowed-signers" signers}'';
       };
-      user.signingKey = settings.keys.privateKeyFile;
+      user.signingKey = settings.keys.privateKeyFiles.current;
       commit.gpgsign = true;
       tag.gpgsign = true;
     };

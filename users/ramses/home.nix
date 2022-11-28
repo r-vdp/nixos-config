@@ -6,19 +6,25 @@ let
   isHeadless = osConfig.settings.system.isHeadless;
 in
 {
+
+  imports = [ ./dconf.nix ];
+
   home = {
     settings = {
       keys = {
-        privateKeyFile =
-          osConfig.sops.secrets."${config.home.username}-ssh-priv-key".path;
-        publicKey =
-          "ssh-ed25519 " +
-          "AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K";
+        privateKeyFiles = {
+          id_ec = osConfig.sops.secrets."${config.home.username}-ssh-priv-key".path;
+          current = osConfig.sops.secrets."${config.home.username}-2-ssh-priv-key".path;
+        };
       };
 
       git = {
         userName = "R-VdP";
         userEmail = "141248+R-VdP@users.noreply.github.com";
+        # TODO do we really want all of these?
+        # Should we add valid-before on the old key?
+        signerKeys =
+          osConfig.users.users.${config.home.username}.openssh.authorizedKeys.keys;
       };
     };
 
@@ -35,6 +41,10 @@ in
         slack
         teams
         vlc
+
+        gnome-extension-manager
+        gnomeExtensions.appindicator
+        gnomeExtensions.system-monitor
       ];
   };
 

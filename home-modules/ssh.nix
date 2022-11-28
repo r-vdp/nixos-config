@@ -19,13 +19,14 @@ in
       UpdateHostKeys yes
       GSSAPIAuthentication no
       User = ${config.home.username}
-      IdentityFile ${config.home.settings.keys.privateKeyFile}
+      IdentityFile ${config.home.settings.keys.privateKeyFiles.current}
       AddKeysToAgent = no
       Ciphers = aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
     '';
     matchBlocks =
       let
         needs_tmux = dag.entryBefore [ "tmux" ];
+        id_ec = config.home.settings.keys.privateKeyFiles.id_ec;
       in
       {
         nixer = needs_tmux {
@@ -41,24 +42,28 @@ in
           host = "sshrelay2 sshrelay2-tmux";
           hostname = "sshrelay2.ocb.msf.org";
           port = 443;
+          identityFile = id_ec;
         };
         ssh-relay-proxy = {
           host = "ssh-relay-proxy";
           hostname = "sshrelay.ocb.msf.org";
           user = "tunneller";
           port = 443;
+          identityFile = id_ec;
         };
         nixer-relayed = needs_tmux {
           host = "nixer-relayed nixer-relayed-tmux";
           hostname = "localhost";
           port = 6012;
           proxyJump = "ssh-relay-proxy";
+          identityFile = id_ec;
         };
         rescue-iso = needs_tmux {
           host = "rescue-iso rescue-iso-tmux";
           hostname = "localhost";
           port = 8000;
           proxyJump = "ssh-relay-proxy";
+          identityFile = id_ec;
           extraOptions = {
             UserKnownHostsFile = "/dev/null";
             GlobalKnownHostsFile = "/dev/null";
@@ -69,11 +74,13 @@ in
           host = "generic generic-tmux";
           hostname = "localhost";
           proxyJump = "ssh-relay-proxy";
+          identityFile = id_ec;
         };
         proxy = {
           host = "proxy";
           hostname = "sshrelay.ocb.msf.org";
           port = 443;
+          identityFile = id_ec;
           dynamicForwards = [
             { port = 9443; }
           ];
