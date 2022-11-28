@@ -1,8 +1,8 @@
-{ nix-index-database, ... }:
+{ inputs, ... }:
 {
   home-manager = {
     # Extra arguments to pass to home-manager modules
-    extraSpecialArgs = { inherit nix-index-database; };
+    extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
     useUserPackages = true;
     sharedModules = [

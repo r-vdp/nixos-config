@@ -34,7 +34,7 @@
     , sops-nix
     , devenv
     , nix-index-database
-    }: with nixpkgs.lib;
+    }@inputs: with nixpkgs.lib;
 
     # Some things should be defined for every system.
     flake-utils.lib.eachDefaultSystem
@@ -62,9 +62,7 @@
           system = flake-utils.lib.system.x86_64-linux;
           mkStandardHost = hostname:
             nixpkgs.lib.nixosSystem {
-              specialArgs = {
-                inherit nixpkgs nix-index-database;
-              };
+              specialArgs = { inherit inputs; };
               modules = [
                 self.nixosModules.${system}.default
                 ./hosts/${hostname}

@@ -1,4 +1,4 @@
-{ osConfig, config, lib, pkgs, nix-index-database, ... }:
+{ osConfig, config, lib, pkgs, ... }:
 
 with lib;
 

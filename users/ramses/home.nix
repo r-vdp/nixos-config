@@ -6,7 +6,6 @@ let
   isHeadless = osConfig.settings.system.isHeadless;
 in
 {
-
   imports = [ ./dconf.nix ];
 
   home = {

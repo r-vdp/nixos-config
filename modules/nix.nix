@@ -1,4 +1,4 @@
-{ nixpkgs, ... }:
+{ inputs, ... }:
 
 let
   channels_path = "channels/nixpkgs";
@@ -16,12 +16,12 @@ in
       options = "--delete-older-than 30d";
     };
     # https://dataswamp.org/~solene/2022-07-20-nixos-flakes-command-sync-with-system.html
-    registry.nixpkgs.flake = nixpkgs;
+    registry.nixpkgs.flake = inputs.nixpkgs;
     nixPath = [
       "nixpkgs=/etc/${channels_path}"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
-  environment.etc."${channels_path}".source = nixpkgs.outPath;
+  environment.etc."${channels_path}".source = inputs.nixpkgs.outPath;
 }
 

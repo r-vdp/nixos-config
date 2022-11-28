@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nix-index-database, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -10,7 +10,7 @@ in
     # Put the pre-generated nix-index database in place,
     # used for command-not-found.
     ".cache/nix-index/files".source =
-      nix-index-database.legacyPackages.${pkgs.system}.database;
+      inputs.nix-index-database.legacyPackages.${pkgs.system}.database;
   };
 
   programs = {
