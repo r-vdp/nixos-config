@@ -2,6 +2,9 @@
 #   for secret_file in secrets/*.yaml; do
 #     sops updatekeys "${secret_file}
 #   done
+#
+# Age keys are obtained from SSH keys by running
+#   nix run nixpkgs#ssh-to-age -- --input <pub_key>
 keys:
   # users
   - &ramses age1wkxv0fjg5k0u2fg48s2cna03vwhtwthmart2d2d72eg8hm5hdansk8rc9u
