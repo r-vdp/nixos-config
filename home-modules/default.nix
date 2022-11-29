@@ -32,6 +32,7 @@ with lib;
         pciutils
         sops
         sysfsutils
+        tcptrack
       ];
     };
 
