@@ -45,29 +45,25 @@ in
         gnomeExtensions.appindicator
         gnomeExtensions.system-monitor
       ];
+
+    shellAliases = {
+      # Use --all twice to also show . and ..
+      ls = "${pkgs.exa}/bin/exa";
+      ll = "${pkgs.exa}/bin/exa --long --group --git --icons";
+      la = "${pkgs.exa}/bin/exa --long --group --all --all --git --icons";
+      lt = "${pkgs.exa}/bin/exa --tree --long --group --git --icons";
+
+      nix-env = ''printf "The nix-env command has been disabled." 2> /dev/null'';
+      # Have bash resolve aliases with sudo
+      # https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
+      sudo = "sudo ";
+      whereami = "curl ipinfo.io";
+    };
   };
 
   programs = {
-    exa = {
-      enable = true;
-      enableAliases = true;
-    };
-
-    bash = {
-      enable = true;
-      shellAliases = {
-        l = "${pkgs.exa}/bin/exa --long --group --git --icons";
-        # Use --all twice to also show . and ..
-        la = mkForce "${pkgs.exa}/bin/exa --long --group --all --all --git --icons";
-        lt = mkForce "${pkgs.exa}/bin/exa --tree --long --group --git --icons";
-        nix-env = ''printf "The nix-env command has been disabled." 2> /dev/null'';
-        # Have bash resolve aliases with sudo
-        # https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
-        sudo = "sudo ";
-        whereami = "curl ipinfo.io";
-      };
-    };
-
+    exa.enable = true;
+    bash.enable = true;
     starship.enable = true;
   };
 }
