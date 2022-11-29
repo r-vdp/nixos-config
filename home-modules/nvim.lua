@@ -194,7 +194,7 @@ require('lualine').setup {
     lualine_b = {},
     lualine_c = {{
       'buffers',
-      mode = 2,
+      mode = 4,
       buffers_color = {
         active = { fg = 'white', gui = 'italic,bold' },
         inactive = { fg = '#8197bf' }
@@ -209,7 +209,7 @@ require('lualine').setup {
     lualine_b = {},
     lualine_c = {{
       'buffers',
-      mode = 2,
+      mode = 4,
       buffers_color = {
         active = { fg = '#8197bf', gui = 'italic' },
         inactive = { fg = 'grey' }
