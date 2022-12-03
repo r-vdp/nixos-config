@@ -1,16 +1,19 @@
-{ lib, pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 
 with lib;
 
 {
-  home.packages = with pkgs; [
-    (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
-      stack
-    ]))
-    python3
-    devenv
-    ripgrep
-  ];
+  home = {
+    packages = with pkgs; [
+      (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
+        stack
+      ]))
+
+      inputs.devenv.packages.${pkgs.system}.devenv
+      python3
+      ripgrep
+    ];
+  };
 
   programs = {
     direnv.enable = true;

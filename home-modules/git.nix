@@ -28,6 +28,8 @@ in
     inherit (settings.git) userName userEmail;
     ignores = [
       ".worktrees"
+      "*.qcow2"
+      "result"
     ];
     extraConfig = {
       init.defaultBranch = "main";

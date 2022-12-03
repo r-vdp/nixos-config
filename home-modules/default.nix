@@ -27,10 +27,10 @@ with lib;
         git
         gptfdisk
         lsof
-        nixos-option
         parted
         pciutils
         sops
+        sshuttle
         sysfsutils
         tcptrack
       ];

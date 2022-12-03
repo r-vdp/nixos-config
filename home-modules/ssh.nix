@@ -23,23 +23,28 @@ in
       AddKeysToAgent = no
       Ciphers = aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
     '';
+    includes = [
+      "config.d/*"
+    ];
     matchBlocks =
       let
         needs_tmux = dag.entryBefore [ "tmux" ];
         id_ec = config.home.settings.keys.privateKeyFiles.id_ec;
+
+        with_tmux = name: ''${name} ${name}-tmux'';
       in
       {
         nixer = needs_tmux {
-          host = "nixer nixer-tmux";
+          host = with_tmux "nixer";
           hostname = "sshv6.engyandramses.xyz";
           port = 2443;
         };
         nixer-local = needs_tmux {
-          host = "nixer-local nixer-local-tmux";
+          host = with_tmux "nixer-local";
           hostname = "nixer.local";
         };
         sshrelay2 = needs_tmux {
-          host = "sshrelay2 sshrelay2-tmux";
+          host = with_tmux "sshrelay2";
           hostname = "sshrelay2.ocb.msf.org";
           port = 443;
           identityFile = id_ec;
@@ -52,14 +57,14 @@ in
           identityFile = id_ec;
         };
         nixer-relayed = needs_tmux {
-          host = "nixer-relayed nixer-relayed-tmux";
+          host = with_tmux "nixer-relayed";
           hostname = "localhost";
           port = 6012;
           proxyJump = "ssh-relay-proxy";
           identityFile = id_ec;
         };
         rescue-iso = needs_tmux {
-          host = "rescue-iso rescue-iso-tmux";
+          host = with_tmux "rescue-iso";
           hostname = "localhost";
           port = 8000;
           proxyJump = "ssh-relay-proxy";
@@ -71,7 +76,7 @@ in
           };
         };
         generic = needs_tmux {
-          host = "generic generic-tmux";
+          host = with_tmux "generic";
           hostname = "localhost";
           proxyJump = "ssh-relay-proxy";
           identityFile = id_ec;
@@ -104,6 +109,10 @@ in
             RequestTTY = "Force";
             RemoteCommand = "tmux attach";
           };
+        };
+        dev1 = {
+          host = with_tmux "dev1";
+          hostname = "dev1.numtide.com";
         };
       };
   };

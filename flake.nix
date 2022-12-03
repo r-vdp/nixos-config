@@ -20,7 +20,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devenv = {
-      url = "github:cachix/devenv";
+      url = "github:R-VdP/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-index-database.url = "github:Mic92/nix-index-database";
@@ -36,27 +36,16 @@
     , ...
     }@inputs: with nixpkgs.lib;
 
-    # Some things should be defined for every system.
-    flake-utils.lib.eachDefaultSystem
-      (system: {
-        nixosModules.default =
-          let
-            # Add the devenv packages to nixpkgs
-            devenv-overlay = final: prev: devenv.packages.${system};
-          in
-          {
-            imports = [
-              ./modules
-              ./users
-              home-manager.nixosModule
-              sops-nix.nixosModule
-            ];
-            nixpkgs.overlays = [ devenv-overlay ];
-          };
-      })
-    //
-    # Things in here will define a single system that they are compatible with.
     {
+      nixosModules.default = {
+        imports = [
+          ./modules
+          ./users
+          home-manager.nixosModule
+          sops-nix.nixosModule
+        ];
+      };
+
       nixosConfigurations =
         let
           system = flake-utils.lib.system.x86_64-linux;
@@ -64,7 +53,7 @@
             nixpkgs.lib.nixosSystem {
               specialArgs = { inherit inputs; };
               modules = [
-                self.nixosModules.${system}.default
+                self.nixosModules.default
                 ./hosts/${hostname}
               ];
             };

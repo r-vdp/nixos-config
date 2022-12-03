@@ -29,6 +29,12 @@ with lib;
           dblVal2 = 0.88720903061268674;
           dblVal3 = 0.07563092843532343;
         };
+        toronto = mkLocationEntry "Toronto" "CYTZ" {
+          dblVal0 = 0.76154532446909495;
+          dblVal1 = -1.3857914260834978;
+          dblVal2 = 0.76212711252195475;
+          dblVal3 = -1.3860823201099277;
+        };
       };
     in
     {
