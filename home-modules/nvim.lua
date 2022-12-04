@@ -24,6 +24,8 @@ vim.opt.conceallevel = 3
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.cursorline = true
+-- enabling both number and relativenumber means hybrid mode
+vim.opt.number = true
 vim.opt.relativenumber = true
 -- set an 80 char column border
 vim.opt.colorcolumn = "80"
