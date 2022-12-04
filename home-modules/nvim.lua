@@ -61,6 +61,7 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
   group = spell_augroup,
   callback = function()
     vim.wo.spell = false
+    vim.wo.number = false
     vim.wo.relativenumber = false
   end
 })
