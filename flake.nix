@@ -20,7 +20,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devenv = {
-      url = "github:R-VdP/devenv";
+      url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-index-database.url = "github:Mic92/nix-index-database";
@@ -32,7 +32,6 @@
     , nixpkgs
     , home-manager
     , sops-nix
-    , devenv
     , ...
     }@inputs: with nixpkgs.lib;
 
