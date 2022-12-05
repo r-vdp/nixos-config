@@ -114,6 +114,12 @@ in
     services = {
       fwupd.enable = true;
       fstrim.enable = true;
+      gvfs.enable = ! cfg.isHeadless;
+
+      # for dconf in home-manager
+      dbus.packages = with pkgs; optionals (! cfg.isHeadless) [
+        dconf
+      ];
 
       # https://flokli.de/posts/2022-11-18-nsncd/
       nscd.enableNsncd = true;
@@ -155,7 +161,7 @@ in
       };
 
       # https://nixos.wiki/wiki/GNOME
-      udev.packages = with pkgs; [
+      udev.packages = with pkgs; optionals (! cfg.isHeadless) [
         gnome.gnome-settings-daemon
       ];
 
