@@ -27,8 +27,11 @@ in
           osConfig.users.users.${config.home.username}.openssh.authorizedKeys.keys ++
           [
             # Old id_ec key
-            ("ssh-ed25519 " +
-            "AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K")
+            (concatStringsSep " " [
+              ''valid-before="20221201"''
+              "ssh-ed25519"
+              "AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K"
+            ])
           ];
       };
     };
