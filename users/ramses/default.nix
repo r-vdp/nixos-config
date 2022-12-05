@@ -21,8 +21,10 @@ in
     ++ optional config.networking.networkmanager.enable "networkmanager");
     passwordFile = config.sops.secrets."${username}-user-password".path;
     openssh.authorizedKeys.keys = [
-      ("ssh-ed25519 " +
-        "AAAAC3NzaC1lZDI1NTE5AAAAIIXvTazOvC1ajjkN7Iq+qHrofOp8iXBI7TMwwHnsrm58")
+      (concatStringsSep " " [
+        "ssh-ed25519"
+        "AAAAC3NzaC1lZDI1NTE5AAAAIIXvTazOvC1ajjkN7Iq+qHrofOp8iXBI7TMwwHnsrm58"
+      ])
     ];
   };
 
