@@ -3,6 +3,7 @@
 with lib;
 
 let
+  inherit (lib.hm) dag;
   isHeadless = osConfig.settings.system.isHeadless;
 in
 {
@@ -32,24 +33,40 @@ in
       };
     };
 
-    packages = with pkgs;
-      optionals (! isHeadless) [
-        authy
-        gimp
-        gparted
-        keepassxc
-        nerdfonts
-        pavucontrol
-        pcloud
-        signal-desktop
-        slack
-        teams
-        vlc
+    activation.ssh-extra-config =
+      let
+        ssh_dir = "${config.home.homeDirectory}/.ssh/";
+        config_dir = "${ssh_dir}/.config.d/";
+        out_file = "${config_dir}/ssh-extra-config";
+        source = osConfig.sops.secrets."ssh-extra-config".path;
+      in
+      dag.entryAfter [ "writeBoundary" ] ''
+        ''${DRY_RUN_CMD} rm ''${VERBOSE_ARG} --force --recursive ${config_dir}
+        ''${DRY_RUN_CMD} mkdir ''${VERBOSE_ARG} --parents ${config_dir}
+        ''${DRY_RUN_CMD} ln ''${VERBOSE_ARG} --symbolic ${source} ${out_file}
+        ''${DRY_RUN_CMD} chmod ''${VERBOSE_ARG} --recursive u=rwX,g=,o= ${config_dir}
+      '';
 
-        gnome-extension-manager
-        gnomeExtensions.appindicator
-        gnomeExtensions.system-monitor
-      ];
+    packages = with pkgs; [
+      jq
+    ] ++
+    optionals (! isHeadless) [
+      authy
+      gimp
+      gparted
+      keepassxc
+      nerdfonts
+      pavucontrol
+      pcloud
+      signal-desktop
+      slack
+      teams
+      vlc
+
+      gnome-extension-manager
+      gnomeExtensions.appindicator
+      gnomeExtensions.system-monitor
+    ];
 
     shellAliases = {
       # Use --all twice to also show . and ..

@@ -54,6 +54,9 @@ in
       "${username}-keepass-keyfile" = {
         inherit sopsFile owner group mode;
       };
+      "ssh-extra-config" = {
+        inherit sopsFile owner group mode;
+      };
     };
 }
 
