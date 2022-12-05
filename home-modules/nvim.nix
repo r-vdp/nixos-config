@@ -13,6 +13,8 @@ with lib;
       python3
       ripgrep
     ];
+
+    sessionVariables.EDITOR = "nvim";
   };
 
   programs = {
