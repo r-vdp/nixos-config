@@ -12,6 +12,16 @@ with lib;
           type = with types; attrsOf str;
         };
       };
+
+      isHeadless = mkOption {
+        type = types.bool;
+        default = osConfig.settings.system.isHeadless;
+      };
+
+      tmux_term = mkOption {
+        type = types.str;
+        default = osConfig.settings.system.tmux_term;
+      };
     };
   };
 

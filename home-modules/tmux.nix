@@ -1,4 +1,4 @@
-{ osConfig, ... }:
+{ config, ... }:
 
 {
   programs.tmux = {
@@ -7,7 +7,7 @@
     clock24 = true;
     historyLimit = 10000;
     escapeTime = 250;
-    terminal = osConfig.settings.system.tmux_term;
+    terminal = config.home.settings.tmux_term;
     keyMode = "vi";
     extraConfig = ''
       set -g mouse on

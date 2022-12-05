@@ -1,7 +1,7 @@
-{ config, osConfig, pkgs, ... }:
+{ config, pkgs, ... }:
 {
   programs.firefox = {
-    enable = ! osConfig.settings.system.isHeadless;
+    enable = ! config.home.settings.isHeadless;
     package = pkgs.firefox-wayland;
     profiles.${config.home.username} = {
       isDefault = true;

@@ -4,7 +4,7 @@ with lib;
 
 let
   inherit (lib.hm) dag;
-  isHeadless = osConfig.settings.system.isHeadless;
+  isHeadless = config.home.settings.isHeadless;
 in
 {
   imports = [ ./dconf.nix ];
