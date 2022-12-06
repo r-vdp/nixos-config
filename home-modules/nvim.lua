@@ -57,12 +57,25 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.md" },
   callback = function() vim.wo.spell = true end
 })
+-- Autocommands for terminal buffers
+local term_augroup = "term_augroup"
+vim.api.nvim_create_augroup(term_augroup, { clear = false })
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
-  group = spell_augroup,
+  group = term_augroup,
   callback = function()
     vim.wo.spell = false
     vim.wo.number = false
     vim.wo.relativenumber = false
+  end
+})
+-- Restore line numbers if we're not in a term
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  group = term_augroup,
+  callback = function()
+    if vim.o.buftype ~= "terminal" then
+      vim.wo.number = true
+      vim.wo.relativenumber = true
+    end
   end
 })
 
@@ -158,7 +171,7 @@ end
 
 require('lualine').setup {
   options = {
-    icons_enabled = false,
+    icons_enabled = true,
     theme = 'auto',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
@@ -178,7 +191,7 @@ require('lualine').setup {
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
-    lualine_c = {'filename'},
+    lualine_c = {'filename', path = 1},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location', num_of_lines}
@@ -186,7 +199,7 @@ require('lualine').setup {
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = {'filename'},
+    lualine_c = {'filename', path = 1},
     lualine_x = {},
     lualine_y = {'progress'},
     lualine_z = {'location', num_of_lines}
