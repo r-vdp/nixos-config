@@ -12,6 +12,9 @@ with lib;
       inputs.devenv.packages.${pkgs.system}.devenv
       python3
       ripgrep
+
+      # Allow Neovim to sync the unnamed register with the Wayland clipboard.
+      wl-clipboard
     ];
 
     sessionVariables.EDITOR = "nvim";
