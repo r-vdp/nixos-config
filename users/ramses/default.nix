@@ -20,12 +20,7 @@ in
     ++ optional config.services.pipewire.enable "audio"
     ++ optional config.networking.networkmanager.enable "networkmanager");
     passwordFile = config.sops.secrets."${username}-user-password".path;
-    openssh.authorizedKeys.keys = [
-      (concatStringsSep " " [
-        "ssh-ed25519"
-        "AAAAC3NzaC1lZDI1NTE5AAAAIIXvTazOvC1ajjkN7Iq+qHrofOp8iXBI7TMwwHnsrm58"
-      ])
-    ];
+    openssh.authorizedKeys.keyFiles = [ ./authorized_keys ];
   };
 
   home-manager = {

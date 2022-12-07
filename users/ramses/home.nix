@@ -23,16 +23,15 @@ in
         userEmail = "141248+R-VdP@users.noreply.github.com";
         # TODO do we really want all of these?
         # Should we add valid-before on the old key?
-        signerKeys =
-          osConfig.users.users.${config.home.username}.openssh.authorizedKeys.keys ++
-          [
-            # Old id_ec key
-            (concatStringsSep " " [
-              ''valid-before="20221201"''
-              "ssh-ed25519"
-              "AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K"
-            ])
-          ];
+        signerKeys = [
+          (readFile ./authorized_keys)
+          # Old id_ec key
+          (concatStringsSep " " [
+            ''valid-before="20221201"''
+            "ssh-ed25519"
+            "AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K"
+          ])
+        ];
       };
     };
 
