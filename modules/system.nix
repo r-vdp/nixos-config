@@ -104,6 +104,7 @@ in
       # Disable the root user
       users.root.hashedPassword = "!";
     };
+    environment.shells = [ pkgs.zsh ];
 
     zramSwap = {
       enable = true;

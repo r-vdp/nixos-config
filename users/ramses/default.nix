@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -12,6 +12,7 @@ in
   users.users.${username} = {
     uid = 1000;
     isNormalUser = true;
+    shell = pkgs.zsh;
     description = username;
     extraGroups = map (group: group_cfg.${group}.name) ([
       "keys"

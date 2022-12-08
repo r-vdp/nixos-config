@@ -62,8 +62,18 @@ in
   };
 
   programs = {
-    exa.enable = true;
     bash.enable = true;
+    zsh = {
+      enable = true;
+      enableSyntaxHighlighting = true;
+      enableVteIntegration = true;
+      oh-my-zsh = {
+        enable = true;
+        theme = "robbyrussell";
+      };
+    };
+
+    exa.enable = true;
     starship.enable = true;
   };
 }
