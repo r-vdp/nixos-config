@@ -7,7 +7,7 @@ with lib;
     ./hardware-configuration.nix
   ];
 
-  time.timeZone = "Africa/Cairo";
+  time.timeZone = "Europe/Brussels";
 
   settings.system.isHeadless = false;
 
