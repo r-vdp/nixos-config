@@ -1,11 +1,9 @@
 {
   nixConfig = {
     extra-substituters = [
-      "https://nixpkgs-unfree.cachix.org"
       "https://devenv.cachix.org"
     ];
     extra-trusted-public-keys = [
-      "nixpkgs-unfree.cachix.org-1:hqvoInulhbV4nJ9yJOEr+4wxhDV4xq2d1DK7S6Nj6rs="
       "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
     ];
   };
@@ -13,10 +11,6 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-unfree = {
-      url = "github:numtide/nixpkgs-unfree";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs = {
@@ -46,7 +40,6 @@
     { self
     , flake-utils
     , nixpkgs
-    , nixpkgs-unfree
     , home-manager
     , sops-nix
     , ...
@@ -63,7 +56,7 @@
       nixosConfigurations =
         let
           mkStandardHost = hostname:
-            nixpkgs-unfree.lib.nixosSystem {
+            nixpkgs.lib.nixosSystem {
               specialArgs = { inherit inputs; };
               modules = [
                 self.nixosModules.default
@@ -97,7 +90,7 @@
                 else systemMapping.default;
             in
             home-manager.lib.homeManagerConfiguration {
-              pkgs = nixpkgs-unfree.legacyPackages.${system};
+              pkgs = nixpkgs.legacyPackages.${system};
               extraSpecialArgs = { inputs = inputs // { inherit username; }; };
               modules = [
                 ./home-modules
