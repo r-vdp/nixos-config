@@ -93,7 +93,10 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
 -- Strip trailing whitespace on save
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   group = general_augroup,
-  command = [[:%s/\s\+$//e]]
+  command = [[
+    :%s/\s\+$//e
+    :nohl
+  ]]
 })
 
 -- Match systemd files in the nix store
