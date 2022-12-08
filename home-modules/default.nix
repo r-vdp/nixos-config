@@ -1,35 +1,44 @@
-{ osConfig, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
+let
+  inherit (lib.hm) dag;
+in
 {
   imports = import ../import-dir.nix { inherit lib; fromDir = ./.; };
 
   options = {
     home.settings = {
       keys = {
-        privateKeyFiles = mkOption {
-          type = with types; attrsOf str;
+        privateKeyFiles = {
+          current = mkOption {
+            type = types.str;
+          };
+          id_ec = mkOption {
+            type = types.str;
+          };
         };
+      };
+
+      extraSshConfig = mkOption {
+        type = with types; attrsOf str;
+        default = { };
       };
 
       isHeadless = mkOption {
         type = types.bool;
-        default = osConfig.settings.system.isHeadless;
       };
 
       tmux_term = mkOption {
         type = types.str;
-        default = osConfig.settings.system.tmux_term;
+        default = "tmux-256color";
       };
     };
   };
 
   config = {
     home = {
-      inherit (osConfig.system) stateVersion;
-      homeDirectory = mkDefault osConfig.users.users.${config.home.username}.home;
-
       packages = with pkgs; [
         acl
         bind # For the dig command
@@ -44,6 +53,24 @@ with lib;
         sysfsutils
         tcptrack
       ];
+
+      activation.extra-ssh-config =
+        let
+          ssh_dir = "${config.home.homeDirectory}/.ssh/";
+          config_dir = "${ssh_dir}/.config.d/";
+          out_file = "${config_dir}/ssh-extra-config";
+
+          mkConfigFile = source: ''
+            ''${DRY_RUN_CMD} rm ''${VERBOSE_ARG} --force --recursive ${config_dir}
+            ''${DRY_RUN_CMD} mkdir ''${VERBOSE_ARG} --parents ${config_dir}
+            ''${DRY_RUN_CMD} ln ''${VERBOSE_ARG} --symbolic ${source} ${out_file}
+            ''${DRY_RUN_CMD} chmod ''${VERBOSE_ARG} --recursive u=rwX,g=,o= ${config_dir}
+          '';
+        in
+        dag.entryAfter [ "writeBoundary" ] (
+          concatStringsSep "\n" (
+            mapAttrsToList (_: mkConfigFile) config.home.settings.extraSshConfig)
+        );
     };
 
     xdg.enable = true;

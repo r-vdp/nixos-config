@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 
 with lib;
 
@@ -37,7 +37,7 @@ with lib;
         };
       };
     in
-    {
+    mkIf (! config.home.settings.isHeadless) {
       "org/gnome/Console" = {
         font-scale = 1.3000000000000003;
       };

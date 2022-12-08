@@ -1,9 +1,8 @@
-{ osConfig, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
-  inherit (lib.hm) dag;
   isHeadless = config.home.settings.isHeadless;
 in
 {
@@ -11,18 +10,9 @@ in
 
   home = {
     settings = {
-      keys = {
-        privateKeyFiles = {
-          id_ec = osConfig.sops.secrets."${config.home.username}-ssh-priv-key".path;
-          current = osConfig.sops.secrets."${config.home.username}-2-ssh-priv-key".path;
-        };
-      };
-
       git = {
         userName = "R-VdP";
         userEmail = "141248+R-VdP@users.noreply.github.com";
-        # TODO do we really want all of these?
-        # Should we add valid-before on the old key?
         signerKeys = [
           (readFile ./authorized_keys)
           # Old id_ec key
@@ -34,20 +24,6 @@ in
         ];
       };
     };
-
-    activation.ssh-extra-config =
-      let
-        ssh_dir = "${config.home.homeDirectory}/.ssh/";
-        config_dir = "${ssh_dir}/.config.d/";
-        out_file = "${config_dir}/ssh-extra-config";
-        source = osConfig.sops.secrets."ssh-extra-config".path;
-      in
-      dag.entryAfter [ "writeBoundary" ] ''
-        ''${DRY_RUN_CMD} rm ''${VERBOSE_ARG} --force --recursive ${config_dir}
-        ''${DRY_RUN_CMD} mkdir ''${VERBOSE_ARG} --parents ${config_dir}
-        ''${DRY_RUN_CMD} ln ''${VERBOSE_ARG} --symbolic ${source} ${out_file}
-        ''${DRY_RUN_CMD} chmod ''${VERBOSE_ARG} --recursive u=rwX,g=,o= ${config_dir}
-      '';
 
     packages = with pkgs; [
       jq
