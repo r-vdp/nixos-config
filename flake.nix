@@ -69,6 +69,11 @@
           "starbook"
         ];
 
+      rescue-iso = (nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [ ./hosts/iso ];
+      }).config.system.build.isoImage;
+
       homeConfigurations =
         let
           systemMapping = {
@@ -84,10 +89,7 @@
                 if length splitted > 1
                 then elemAt splitted 1
                 else "default";
-              system =
-                if systemMapping ? hostname
-                then systemMapping.${hostname}
-                else systemMapping.default;
+              system = attrByPath [ hostname ] systemMapping.default systemMapping;
             in
             home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgs.legacyPackages.${system};
