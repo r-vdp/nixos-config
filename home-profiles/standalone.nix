@@ -19,7 +19,7 @@
 
   # FIXME: we are repeating modules/nix.nix here
   nix = {
-    packages = pkgs.nix;
+    package = pkgs.nix;
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       fallback = true;
