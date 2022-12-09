@@ -9,9 +9,10 @@ in
   programs.ssh = {
     enable = true;
     compression = true;
+    serverAliveInterval = 5;
+    serverAliveCountMax = 3;
     extraConfig = ''
       Port 22
-      TCPKeepAlive yes
       PreferredAuthentications publickey,keyboard-interactive,password
       HostKeyAlgorithms -ssh-rsa
       ForwardX11 no
