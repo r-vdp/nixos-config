@@ -7,7 +7,7 @@
       isDefault = true;
       settings =
         let
-          quad9 = "https://quad9.net/dns-query";
+          quad9 = "https://dns.quad9.net/dns-query";
         in
         {
           "browser.ctrlTab.sortByRecentlyUsed" = true;
@@ -15,11 +15,13 @@
           "browser.search.region" = "BE";
           "browser.tabs.warnOnClose" = true;
           "dom.security.https_only_mode" = true;
+          "network.dns.skipTRR-when-parental-control-enabled" = false;
           "network.proxy.type" = 0;
           "network.trr.custom_uri" = quad9;
           "network.trr.default_provider_uri" = quad9;
-          "network.trr.uri" = quad9;
           "network.trr.mode" = 2;
+          "network.trr.strict_native_fallback" = true;
+          "network.trr.uri" = quad9;
           "network.trr.wait-for-portal" = true;
           "privacy.donottrackheader.enabled" = true;
           "spellchecker.dictionary" = "en-GB";
