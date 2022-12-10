@@ -37,6 +37,9 @@ with lib;
       custom_name = "ramses-rescue-iso";
     in
     {
+      # Faster build by compressing less
+      squashfsCompression = "gzip -Xcompression-level 1";
+
       isoName = mkForce (
         (concatStringsSep "-" [
           custom_name
