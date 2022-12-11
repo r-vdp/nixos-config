@@ -73,14 +73,14 @@
         specialArgs = { inherit inputs; };
         modules = [ ./hosts/iso ];
       }).config.system.build.isoImage;
-
-      homeConfigurations =
+    }
+    //
+    # As a temporary workaround, we put the homeConfigurations under packages
+    # so that we do not need to hard code the value for system.
+    # See https://github.com/nix-community/home-manager/issues/3075
+    flake-utils.lib.eachDefaultSystem (system: {
+      packages.homeConfigurations =
         let
-          systemMapping = {
-            # Add any systems with a different system architecture here and
-            # in the mapping below.
-            "default" = flake-utils.lib.system.x86_64-linux;
-          };
           mkHomeConfig = entryName:
             let
               splitted = splitString "@" entryName;
@@ -88,24 +88,30 @@
               hostname =
                 if length splitted > 1
                 then elemAt splitted 1
-                else "default";
-              system = attrByPath [ hostname ] systemMapping.default systemMapping;
+                else error "No hostname provided!";
             in
             home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgs.legacyPackages.${system};
-              extraSpecialArgs = { inputs = inputs // { inherit username; }; };
+              extraSpecialArgs = { inherit inputs; };
               modules = [
+                ./hosts/${hostname}
                 ./home-modules
                 ./home-profiles/standalone.nix
                 ./users/ramses/home.nix
+                ({ config, ... }: {
+                  home = {
+                    inherit username;
+                    homeDirectory = mkDefault "/home/${config.home.username}";
+                  };
+                })
               ];
             };
         in
+        # TODO make this better typed by taking an attrset as input and
+          # transforming it into "user@host" = { ... }
         flip genAttrs mkHomeConfig [
-          # Add any systems with a different system architecture here and
-          # in the mapping above.
-          "ramses"
+          "ramses@dev1"
         ];
-    };
+    });
 }
 
