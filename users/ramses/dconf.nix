@@ -84,6 +84,12 @@ with lib;
         switch-windows = mkArray type.string [ "<Alt>Tab" ];
         switch-windows-backward = mkArray type.string [ "<Shift><Alt>Tab" ];
       };
+      "org/gnome/settings-daemon/plugins/media-keys" = {
+        mic-mute = mkArray type.string [ "<Control><Super>m" ];
+        volume-down = mkArray type.string [ "<Control><Super>Down" ];
+        volume-mute = mkArray type.string [ "<Control><Super>v" ];
+        volume-up = mkArray type.string [ "<Control><Super>Up" ];
+      };
       "org/gnome/nautilus/preferences" = {
         click-policy = "single";
         default-folder-viewer = "icon-view";
