@@ -75,6 +75,13 @@ in
 
     exa.enable = true;
     starship.enable = true;
+
+    alacritty = {
+      enable = true;
+      settings = {
+        font.size = 9;
+      };
+    };
   };
 }
 
