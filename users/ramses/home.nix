@@ -67,6 +67,10 @@ in
       enable = true;
       enableSyntaxHighlighting = true;
       enableVteIntegration = true;
+      # This option is relative to the home dir, so we cannot use the value of
+      # config.xdg.configHome. We should file an issue for this.
+      dotDir = ".config/zsh/";
+      history.path = "${config.xdg.dataHome}/zsh/zsh_history";
       oh-my-zsh = {
         enable = true;
         theme = "robbyrussell";
