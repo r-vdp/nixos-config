@@ -47,6 +47,25 @@ vim.opt.backupdir = { xdg_state_home .. "/nvim/backup//" }
 vim.opt.undodir = { xdg_state_home .. "/nvim/undo//" }
 vim.opt.directory = { xdg_state_home .. "/nvim/swp//" }
 
+-- Copy paste over SSH
+-- See https://rumpelsepp.org/blog/nvim-clipboard-through-ssh/
+if vim.env.TMUX then
+  vim.g.clipboard = {
+    name = "tmux",
+    copy = {
+      ["+"] = { "tmux", "load-buffer", "-w", "-" },
+      ["*"] = { "tmux", "load-buffer", "-w", "-" },
+    },
+    paste = {
+      ["+"] = { "bash", "-c",
+        "tmux refresh-client -l && sleep 0.2 && tmux save-buffer -" },
+      ["*"] = { "bash", "-c",
+        "tmux refresh-client -l && sleep 0.2 && tmux save-buffer -" },
+    },
+    cache_enabled = false,
+  }
+end
+
 -- Set up spell checking
 vim.opt.spelllang = "en_gb"
 local spell_augroup = "spell_augroup"

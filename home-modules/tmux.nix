@@ -11,6 +11,7 @@
     keyMode = "vi";
     extraConfig = ''
       set -g mouse on
+      set -g clipboard on
       set-option -g focus-events on
       set-option -sa terminal-overrides ',xterm-256color:RGB'
     '';
