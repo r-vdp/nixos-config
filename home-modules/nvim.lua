@@ -337,6 +337,7 @@ local servers = {
   "pylsp",
   "rnix",
   "rust_analyzer",
+  "sumneko_lua",
   "yamlls",
 }
 for _, lsp in ipairs(servers) do
@@ -386,6 +387,19 @@ for _, lsp in ipairs(servers) do
         },
         procMacro = {
           enable = true,
+        },
+      },
+      Lua = {
+        diagnostics = {
+          globals = { "vim" },
+        },
+        format = {
+          defaultConfig = {
+            quote_style = "double",
+          },
+        },
+        telemetry = {
+          enable = false,
         },
       },
       yaml = {

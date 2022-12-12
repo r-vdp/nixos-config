@@ -51,6 +51,9 @@ with lib;
         elmPackages.elm-format
         elmPackages.elm-review
 
+        # Lua
+        sumneko-lua-language-server
+
         # YAML
         nodePackages.yaml-language-server
 
