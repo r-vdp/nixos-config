@@ -1,6 +1,10 @@
 # Config used for standalone home-manager profiles, not integrated into NixOS.
-{ lib, inputs, config, pkgs, ... }: {
+{ lib, inputs, config, pkgs, ... }:
+
+{
   home = {
+    homeDirectory = mkDefault "/home/${config.home.username}";
+
     settings = {
       nix.enable = lib.mkDefault true;
 

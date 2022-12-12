@@ -98,12 +98,11 @@
                 ./home-modules
                 ./home-profiles/standalone.nix
                 ./users/ramses/home.nix
-                ({ config, ... }: {
+                {
                   home = {
                     inherit username;
-                    homeDirectory = mkDefault "/home/${config.home.username}";
                   };
-                })
+                }
               ];
             };
         in
