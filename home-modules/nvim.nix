@@ -2,9 +2,6 @@
 
 with lib;
 
-let
-  EDITOR = "nvim";
-in
 {
   home = {
     packages = with pkgs; [
@@ -20,12 +17,17 @@ in
       wl-clipboard
     ];
 
-    sessionVariables = { inherit EDITOR; };
+    sessionVariables.EDITOR = "nvim";
   };
 
-  systemd.user.sessionVariables = { inherit EDITOR; };
-
   programs = {
+    # The EDITOR env var gets overriden somehow by the value in /etc/profile...
+    # Not clear yet why or where.
+    # We set it again here to avoid being dropped in nano.
+    zsh.initExtra = ''
+      export EDITOR="nvim"
+    '';
+
     direnv.enable = true;
 
     neovim = {
