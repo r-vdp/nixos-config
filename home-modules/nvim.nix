@@ -2,6 +2,9 @@
 
 with lib;
 
+let
+  EDITOR = "nvim";
+in
 {
   home = {
     packages = with pkgs; [
@@ -17,8 +20,10 @@ with lib;
       wl-clipboard
     ];
 
-    sessionVariables.EDITOR = "nvim";
+    sessionVariables = { inherit EDITOR; };
   };
+
+  systemd.user.sessionVariables = { inherit EDITOR; };
 
   programs = {
     direnv.enable = true;

@@ -105,6 +105,10 @@ in
       users.root.hashedPassword = "!";
     };
     environment.shells = [ pkgs.zsh ];
+    # Seems like /etc/profile gets loaded after our personal shell config,
+    # so we override this variable here again... *sigh*
+    # Is there a better solution??
+    environment.variables.EDITOR = "nvim";
 
     zramSwap = {
       enable = true;
