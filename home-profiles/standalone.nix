@@ -3,7 +3,7 @@
 
 {
   home = {
-    homeDirectory = mkDefault "/home/${config.home.username}";
+    homeDirectory = lib.mkDefault "/home/${config.home.username}";
 
     settings = {
       nix.enable = lib.mkDefault true;
