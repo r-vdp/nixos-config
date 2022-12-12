@@ -90,11 +90,7 @@
                 ./home-modules
                 ./home-profiles/standalone.nix
                 ./users/ramses/home.nix
-                {
-                  home = {
-                    inherit username;
-                  };
-                }
+                { home = { inherit username; }; }
               ];
             };
 
