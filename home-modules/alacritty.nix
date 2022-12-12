@@ -4,7 +4,7 @@
   programs.alacritty = {
     enable = ! config.home.settings.isHeadless;
     settings = {
-      font.size = 9;
+      font.size = 12;
       draw_bold_text_with_bright_colors = true;
 
       # See https://github.com/leifmetcalf/alacritty-gnome-theme/

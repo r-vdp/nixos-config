@@ -54,7 +54,7 @@ with lib;
         clock-show-seconds = false;
         clock-show-weekday = false;
         font-antialiasing = "rgba";
-        font-hinting = "full";
+        font-hinting = "none";
         text-scaling-factor = 1.0;
       };
       "org/gnome/desktop/peripherals/mouse" = {
