@@ -81,15 +81,7 @@
     flake-utils.lib.eachDefaultSystem (system: {
       packages.homeConfigurations =
         let
-          mkHomeConfig = entryName:
-            let
-              splitted = splitString "@" entryName;
-              username = elemAt splitted 0;
-              hostname =
-                if length splitted > 1
-                then elemAt splitted 1
-                else error "No hostname provided!";
-            in
+          mkHomeConfig = username: hostname:
             home-manager.lib.homeManagerConfiguration {
               pkgs = nixpkgs.legacyPackages.${system};
               extraSpecialArgs = { inherit inputs; };
@@ -105,12 +97,16 @@
                 }
               ];
             };
+
+          mkHomeConfigEntry = { username, hostname }:
+            nameValuePair "${username}@${hostname}"
+              (mkHomeConfig username hostname);
         in
-        # TODO make this better typed by taking an attrset as input and
-          # transforming it into "user@host" = { ... }
-        flip genAttrs mkHomeConfig [
-          "ramses@dev1"
-        ];
+        listToAttrs (
+          map mkHomeConfigEntry [
+            { username = "ramses"; hostname = "dev1"; }
+          ]
+        );
     });
 }
 
