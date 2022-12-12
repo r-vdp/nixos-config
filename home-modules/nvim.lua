@@ -5,7 +5,7 @@ vim.opt.list = true
 vim.opt.listchars = { tab = "▸ ", trail = "·", nbsp = "+" } -- , eol = "¬"
 -- Do not consider '=' to be part of filenames,
 -- so we can use gf in systemd unit files.
-vim.opt.isfname:remove('=')
+vim.opt.isfname:remove("=")
 vim.opt.termguicolors = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -33,7 +33,7 @@ vim.opt.colorcolumn = "80"
 vim.opt.cmdheight = 0
 -- get bash-like tab completions
 vim.opt.wildmode = { longest = "full", "full" }
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 -- using system clipboard
 vim.opt.clipboard = "unnamedplus"
 vim.opt.updatetime = 150
@@ -50,8 +50,7 @@ vim.opt.directory = { xdg_state_home .. "/nvim/swp//" }
 -- Set up spell checking
 vim.opt.spelllang = "en_gb"
 local spell_augroup = "spell_augroup"
-vim.api.nvim_create_augroup(spell_augroup, { clear = false })
-vim.api.nvim_clear_autocmds({ buffer = bufnr, group = spell_augroup })
+vim.api.nvim_create_augroup(spell_augroup, { clear = true })
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   group = spell_augroup,
   pattern = { "*.md" },
@@ -59,7 +58,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 })
 -- Autocommands for terminal buffers
 local term_augroup = "term_augroup"
-vim.api.nvim_create_augroup(term_augroup, { clear = false })
+vim.api.nvim_create_augroup(term_augroup, { clear = true })
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
   group = term_augroup,
   callback = function()
@@ -101,22 +100,23 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 
 -- Match systemd files in the nix store
 local function systemd_patterns()
-  local systemd_prefix = '/nix/store/.*/.*%.'
-  local systemd_exts = { 'automount', 'mount', 'path', 'service', 'socket',
-                         'swap', 'target', 'timer' }
+  local systemd_prefix = "/nix/store/.*/.*%."
+  local systemd_exts = { "automount", "mount", "path", "service", "socket",
+    "swap", "target", "timer" }
   local patterns = {}
   for _, ext in ipairs(systemd_exts) do
-    patterns[systemd_prefix .. ext] = 'systemd'
+    patterns[systemd_prefix .. ext] = "systemd"
   end
   return patterns
 end
+
 vim.filetype.add({
   pattern = systemd_patterns()
 })
 
 vim.cmd([[colorscheme jellybeans]])
 
-vim.g.mapleader = ','
+vim.g.mapleader = ","
 
 -- Suggestion from :checkhealth
 vim.g.loaded_perl_provider = 0
@@ -127,57 +127,57 @@ vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldenable = false
 vim.opt.foldlevel = 99
 vim.opt.foldtext =
-  [[ substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g') . ]] ..
-  [[ ' ¬ (' . (v:foldend - v:foldstart + 1) . ' lines) ¬ ' . ]] ..
-  [[ trim(getline(v:foldend)) ]]
+[[ substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g') . ]] ..
+    [[ ' ¬ (' . (v:foldend - v:foldstart + 1) . ' lines) ¬ ' . ]] ..
+    [[ trim(getline(v:foldend)) ]]
 
 local silent_opts = { silent = true }
-vim.keymap.set('n', '<F1>', ':NERDTreeToggle<CR>', silent_opts)
-vim.keymap.set('n', '<Space><Space>', ':silent w<CR>', silent_opts)
-vim.keymap.set('i', 'jj', '<Esc>', silent_opts)
-vim.keymap.set('n', '<Leader><Space>', ':nohl<CR>', silent_opts)
-vim.keymap.set({'n', 'v'}, '<Tab>', '%', silent_opts)
+vim.keymap.set("n", "<F1>", ":NERDTreeToggle<CR>", silent_opts)
+vim.keymap.set("n", "<Space><Space>", ":silent w<CR>", silent_opts)
+vim.keymap.set("i", "jj", "<Esc>", silent_opts)
+vim.keymap.set("n", "<Leader><Space>", ":nohl<CR>", silent_opts)
+vim.keymap.set({ "n", "v" }, "<Tab>", "%", silent_opts)
 -- Move between buffers
-vim.keymap.set('n', '<C-PageDown>', ':bprevious<CR>', silent_opts)
-vim.keymap.set('n', '<C-PageUp>', ':bnext<CR>', silent_opts)
-vim.keymap.set('n', '<C-h>', ':bprevious<CR>', silent_opts)
-vim.keymap.set('n', '<C-l>', ':bnext<CR>', silent_opts)
+vim.keymap.set("n", "<C-PageDown>", ":bprevious<CR>", silent_opts)
+vim.keymap.set("n", "<C-PageUp>", ":bnext<CR>", silent_opts)
+vim.keymap.set("n", "<C-h>", ":bprevious<CR>", silent_opts)
+vim.keymap.set("n", "<C-l>", ":bnext<CR>", silent_opts)
 -- Center the cursor on movement in normal mode
-vim.keymap.set({'n', 'v'}, '<Up>', 'kzz', silent_opts)
-vim.keymap.set({'n', 'v'}, '<Down>', 'jzz', silent_opts)
-vim.keymap.set({'n', 'v'}, '<PageUp>', '<PageUp>zz', silent_opts)
-vim.keymap.set({'n', 'v'}, '<PageDown>', '<PageDown>zz', silent_opts)
-vim.keymap.set({'n', 'v'}, 'k', 'kzz', silent_opts)
-vim.keymap.set({'n', 'v'}, 'j', 'jzz', silent_opts)
-vim.keymap.set({'n', 'v'}, '<C-u>', '<C-u>zz', silent_opts)
-vim.keymap.set({'n', 'v'}, '<C-d>', '<C-d>zz', silent_opts)
+vim.keymap.set({ "n", "v" }, "<Up>", "kzz", silent_opts)
+vim.keymap.set({ "n", "v" }, "<Down>", "jzz", silent_opts)
+vim.keymap.set({ "n", "v" }, "<PageUp>", "<PageUp>zz", silent_opts)
+vim.keymap.set({ "n", "v" }, "<PageDown>", "<PageDown>zz", silent_opts)
+vim.keymap.set({ "n", "v" }, "k", "kzz", silent_opts)
+vim.keymap.set({ "n", "v" }, "j", "jzz", silent_opts)
+vim.keymap.set({ "n", "v" }, "<C-u>", "<C-u>zz", silent_opts)
+vim.keymap.set({ "n", "v" }, "<C-d>", "<C-d>zz", silent_opts)
 
-local telescope_builtin = require('telescope.builtin')
-vim.keymap.set('n', '<Leader>ff', telescope_builtin.find_files, silent_opts)
-vim.keymap.set('n', '<Leader>fb', telescope_builtin.buffers, silent_opts)
-vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers, silent_opts)
-vim.keymap.set('n', '<Leader>fg', telescope_builtin.live_grep, silent_opts)
-vim.keymap.set('n', '<Leader>fc', telescope_builtin.command_history, silent_opts)
-vim.keymap.set('n', '<Leader>fm', telescope_builtin.man_pages, silent_opts)
-vim.keymap.set('n', '<Leader>ft', telescope_builtin.treesitter, silent_opts)
-vim.keymap.set('n', '<Leader>fd', telescope_builtin.diagnostics, silent_opts)
-vim.keymap.set('n', '<Leader>fws', telescope_builtin.lsp_workspace_symbols, silent_opts)
+local telescope_builtin = require("telescope.builtin")
+vim.keymap.set("n", "<Leader>ff", telescope_builtin.find_files, silent_opts)
+vim.keymap.set("n", "<Leader>fb", telescope_builtin.buffers, silent_opts)
+vim.keymap.set("n", "<Leader>b", telescope_builtin.buffers, silent_opts)
+vim.keymap.set("n", "<Leader>fg", telescope_builtin.live_grep, silent_opts)
+vim.keymap.set("n", "<Leader>fc", telescope_builtin.command_history, silent_opts)
+vim.keymap.set("n", "<Leader>fm", telescope_builtin.man_pages, silent_opts)
+vim.keymap.set("n", "<Leader>ft", telescope_builtin.treesitter, silent_opts)
+vim.keymap.set("n", "<Leader>fd", telescope_builtin.diagnostics, silent_opts)
+vim.keymap.set("n", "<Leader>fws", telescope_builtin.lsp_workspace_symbols, silent_opts)
 
 -- Go back to normal mode in a terminal buffer
-vim.keymap.set('t', '<C-Space>', '<C-\\><C-n>', silent_opts)
-vim.keymap.set('n', '<Leader>t', ':vsplit +term<CR>', silent_opts)
-vim.keymap.set('n', '<Leader>T', ':split +term<CR>', silent_opts)
+vim.keymap.set("t", "<C-Space>", "<C-\\><C-n>", silent_opts)
+vim.keymap.set("n", "<Leader>t", ":vsplit +term<CR>", silent_opts)
+vim.keymap.set("n", "<Leader>T", ":split +term<CR>", silent_opts)
 
 local function num_of_lines()
-  return vim.fn.line('$')
+  return vim.fn.line("$")
 end
 
-require('lualine').setup {
+require("lualine").setup {
   options = {
     icons_enabled = true,
-    theme = 'auto',
-    component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
+    theme = "auto",
+    component_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
     disabled_filetypes = {
       statusline = {},
       winbar = {},
@@ -192,56 +192,42 @@ require('lualine').setup {
     }
   },
   sections = {
-    lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff', 'diagnostics'},
-    lualine_c = {{'filename', path = 1}},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
-    lualine_y = {'progress'},
-    lualine_z = {'location', num_of_lines}
+    lualine_a = { "mode" },
+    lualine_b = { "branch", "diff", "diagnostics" },
+    lualine_c = { { "filename", path = 1 } },
+    lualine_x = { "encoding", "fileformat", "filetype" },
+    lualine_y = { "progress" },
+    lualine_z = { "location", num_of_lines }
   },
   inactive_sections = {
     lualine_a = {},
-    lualine_b = {},
-    lualine_c = {{'filename', path = 1}},
-    lualine_x = {},
-    lualine_y = {'progress'},
-    lualine_z = {'location', num_of_lines}
+    lualine_b = { "branch", "diff", "diagnostics" },
+    lualine_c = { { "filename", path = 1 } },
+    lualine_x = { "encoding", "fileformat", "filetype" },
+    lualine_y = { "progress" },
+    lualine_z = { "location", num_of_lines }
   },
-  tabline = {},
-  winbar = {
+  tabline = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = {{
-      'buffers',
+    lualine_c = { {
+      "buffers",
       mode = 4,
       buffers_color = {
-        active = { fg = 'white', gui = 'italic,bold' },
-        inactive = { fg = '#8197bf' }
+        active = { fg = "white", gui = "italic,bold" },
+        inactive = { fg = "#8197bf" }
       }
-    }},
+    } },
     lualine_x = {},
     lualine_y = {},
     lualine_z = {}
   },
-  inactive_winbar = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {{
-      'buffers',
-      mode = 4,
-      buffers_color = {
-        active = { fg = '#8197bf', gui = 'italic' },
-        inactive = { fg = 'grey' }
-      }
-    }},
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = {}
-  },
+  winbar = {},
+  inactive_winbar = {},
   extensions = {}
 }
 
-local nvim_lsp = require('lspconfig')
+local nvim_lsp = require("lspconfig")
 
 local config = {
   virtual_text = true,
@@ -266,28 +252,24 @@ local config = {
 vim.diagnostic.config(config)
 
 local on_attach = function(client, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  local function buf_set_option(...)
-    vim.api.nvim_buf_set_option(bufnr, ...)
-  end
+  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   local opts = { silent = true, buffer = bufnr }
 
-  vim.keymap.set('n', 'K',  function() vim.lsp.buf.hover() end,           opts)
-  vim.keymap.set('n', 'ga', function() vim.lsp.buf.code_action() end,     opts)
-  vim.keymap.set('n', 'gL', function() vim.lsp.codelens.run() end,        opts)
-  vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end,      opts)
-  vim.keymap.set('n', 'gD', function() vim.lsp.buf.type_definition() end, opts)
-  vim.keymap.set('n', 'gi', function() vim.lsp.buf.implementation() end,  opts)
-  vim.keymap.set('n', 'g[', function() vim.diagnostic.goto_prev() end,    opts)
-  vim.keymap.set('n', 'g]', function() vim.diagnostic.goto_next() end,    opts)
-  vim.keymap.set('n', 'gl', function() vim.diagnostic.setloclist() end,   opts)
-  vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end,      opts)
-  vim.keymap.set('n', 'gR', function() vim.lsp.buf.rename() end,          opts)
-  vim.keymap.set('n', 'gF', function() vim.lsp.buf.format() end, opts)
-  vim.keymap.set('n', '<leader>fs', function() vim.lsp.buf.workspace_symbol() end, opts)
-  vim.keymap.set('n', '<leader>e', function() vim.diagnostic.open_float() end, opts)
+  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+  vim.keymap.set("n", "ga", function() vim.lsp.buf.code_action() end, opts)
+  vim.keymap.set("n", "gL", function() vim.lsp.codelens.run() end, opts)
+  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+  vim.keymap.set("n", "gD", function() vim.lsp.buf.type_definition() end, opts)
+  vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
+  vim.keymap.set("n", "g[", function() vim.diagnostic.goto_prev() end, opts)
+  vim.keymap.set("n", "g]", function() vim.diagnostic.goto_next() end, opts)
+  vim.keymap.set("n", "gl", function() vim.diagnostic.setloclist() end, opts)
+  vim.keymap.set("n", "gr", function() vim.lsp.buf.references() end, opts)
+  vim.keymap.set("n", "gR", function() vim.lsp.buf.rename() end, opts)
+  vim.keymap.set("n", "gF", function() vim.lsp.buf.format() end, opts)
+  vim.keymap.set("n", "<leader>fs", function() vim.lsp.buf.workspace_symbol() end, opts)
+  vim.keymap.set("n", "<leader>e", function() vim.diagnostic.open_float() end, opts)
 
   -- Mappings
   -- vim.api.nvim_buf_set_keymap(0, 'n', 'gd',
@@ -328,7 +310,7 @@ end
 
 -- nvim-cmp supports additional completion capabilities.
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 local servers = {
   "elmls",
@@ -368,7 +350,7 @@ for _, lsp in ipairs(servers) do
           },
           pycodestyle = {
             -- W503: deprecated in favour of W504
-            ignore = {'W503'},
+            ignore = { "W503" },
             maxLineLength = 100
           }
         }
@@ -416,7 +398,7 @@ for _, lsp in ipairs(servers) do
   })
 end
 
-local cmp = require('cmp')
+local cmp = require("cmp")
 
 cmp.setup({
   preselect = cmp.PreselectMode.None,
@@ -424,7 +406,7 @@ cmp.setup({
     -- REQUIRED - you must specify a snippet engine
     expand = function(args)
       -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-      require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
       -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
       -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
@@ -439,23 +421,23 @@ cmp.setup({
     -- Add tab support
     ["<S-Tab>"] = cmp.mapping.select_prev_item(),
     ["<Tab>"] = cmp.mapping.select_next_item(),
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm({
+    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.close(),
+    ["<CR>"] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Insert,
       select = true
     }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
+    { name = "nvim_lsp" },
     -- { name = 'vsnip' }, -- For vsnip users.
-    { name = 'luasnip' }, -- For luasnip users.
+    { name = "luasnip" }, -- For luasnip users.
     -- { name = 'ultisnips' }, -- For ultisnips users.
     -- { name = 'snippy' }, -- For snippy users.
-    { name = 'path' },
-    { name = 'buffer' },
+    { name = "path" },
+    { name = "buffer" },
   }),
   --formatting = {
   --  format = lspkind.cmp_format {
@@ -471,4 +453,3 @@ cmp.setup({
     ghost_text = true
   }
 })
-
