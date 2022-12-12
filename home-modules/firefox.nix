@@ -2,7 +2,7 @@
 {
   programs.firefox = {
     enable = ! config.home.settings.isHeadless;
-    package = pkgs.firefox-wayland;
+    package = pkgs.firefox;
     profiles.${config.home.username} = {
       isDefault = true;
       settings =
