@@ -24,6 +24,8 @@ in
     openssh.authorizedKeys.keyFiles = [ ./authorized_keys ];
   };
 
+  programs.zsh.enable = true;
+
   home-manager = {
     users.${username} = {
       imports = [ ./home.nix ];
