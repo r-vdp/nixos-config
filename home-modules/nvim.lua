@@ -247,9 +247,7 @@ local nvim_lsp = require("lspconfig")
 local config = {
   virtual_text = true,
   -- show signs
-  --signs = {
-  --  active = signs,
-  --},
+  signs = true,
   update_in_insert = true,
   underline = true,
   severity_sort = true,
@@ -266,7 +264,35 @@ local config = {
 
 vim.diagnostic.config(config)
 
-local on_attach = function(client, bufnr)
+-- Ignore hints labelled as "Unnecessary", eg unused variables prefixed with "_".
+-- See https://github.com/neovim/neovim/issues/17757
+local unnecessary_hints_ns = vim.api.nvim_create_namespace("unnecessary_hints_ns")
+vim.lsp.handlers["textDocument/publishDiagnostics"] = function(_, result, ctx, _config)
+  local bufnr = vim.uri_to_bufnr(result.uri)
+  if not bufnr then
+    return
+  end
+  vim.api.nvim_buf_clear_namespace(bufnr, unnecessary_hints_ns, 0, -1)
+  local real_diags = {}
+  for _, diag in pairs(result.diagnostics) do
+    if diag.severity == vim.lsp.protocol.DiagnosticSeverity.Hint
+        and diag.tags ~= nil
+        and vim.tbl_contains(diag.tags, vim.lsp.protocol.DiagnosticTag.Unnecessary) then
+      pcall(vim.api.nvim_buf_set_extmark, bufnr, unnecessary_hints_ns,
+        diag.range.start.line, diag.range.start.character, {
+        end_row = diag.range["end"].line,
+        end_col = diag.range["end"].character,
+        hl_group = "Dim",
+      })
+    else
+      table.insert(real_diags, diag)
+    end
+  end
+  result.diagnostics = real_diags
+  vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
+end
+
+local on_attach = function(_client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   local opts = { silent = true, buffer = bufnr }
