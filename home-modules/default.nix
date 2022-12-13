@@ -73,6 +73,10 @@ in
         );
     };
 
+    # Make sure that fonts enabled through home-manager
+    # are available to the system.
+    fonts.fontconfig.enable = true;
+
     xdg.enable = true;
     programs = {
       home-manager.enable = true;
