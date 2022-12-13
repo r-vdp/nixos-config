@@ -227,15 +227,11 @@ require("lualine").setup {
     lualine_z = { "location", num_of_lines }
   },
   tabline = {
-    lualine_a = {},
+    lualine_c = {},
     lualine_b = {},
-    lualine_c = { {
+    lualine_a = { {
       "buffers",
       mode = 4,
-      buffers_color = {
-        active = { fg = "white", gui = "italic,bold" },
-        inactive = { fg = "#8197bf" }
-      }
     } },
     lualine_x = {},
     lualine_y = {},
