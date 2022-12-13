@@ -4,7 +4,36 @@
   programs.alacritty = {
     enable = ! config.home.settings.isHeadless;
     settings = {
-      font.size = 12;
+      font =
+        let
+          # Tricky to find the right name, we can check the font picker of
+          # any GUI program like Firefox and write exactly what is shown there.
+          family = "FiraCode Nerd Font Mono";
+        in
+        {
+          normal = {
+            inherit family;
+            style = "Regular";
+          };
+
+          bold = {
+            inherit family;
+            style = "Bold";
+          };
+
+          italic = {
+            inherit family;
+            style = "Italic";
+          };
+
+          bold_italic = {
+            inherit family;
+            style = "Bold Italic";
+          };
+
+          size = 11;
+        };
+
       draw_bold_text_with_bright_colors = true;
 
       # See https://github.com/leifmetcalf/alacritty-gnome-theme/
