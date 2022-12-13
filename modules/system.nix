@@ -170,6 +170,14 @@ in
       printing.enable = ! cfg.isHeadless;
     };
 
+    fonts.fontconfig = {
+      hinting = {
+        enable = true;
+        style = "hintnone"; #"hintfull";
+      };
+      subpixel.lcdfilter = "default";
+    };
+
     environment.gnome.excludePackages =
       (with pkgs; [
         gnome-text-editor
