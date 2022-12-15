@@ -227,15 +227,18 @@ require("lualine").setup {
     lualine_z = { "location", num_of_lines }
   },
   tabline = {
-    lualine_c = {},
-    lualine_b = {},
     lualine_a = { {
       "buffers",
       mode = 4,
     } },
+    lualine_b = {},
+    lualine_c = {},
     lualine_x = {},
     lualine_y = {},
-    lualine_z = {}
+    lualine_z = { {
+      "tabs",
+      mode = 3,
+    } }
   },
   winbar = {},
   inactive_winbar = {},
