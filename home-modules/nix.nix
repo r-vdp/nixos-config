@@ -1,13 +1,13 @@
 { lib, config, pkgs, ... }:
 
 {
-  options.home.settings.nix = {
-    enable = lib.mkEnableOption "the home-module to manage nix settings.";
+  options.home.settings.nixSettings = {
+    enable = lib.mkEnableOption "our custom nix settings.";
   };
 
-  config = lib.mkIf config.home.settings.nix.enable {
+  config = {
     # FIXME: we are repeating modules/nix.nix here
-    nix = {
+    nix = lib.mkIf config.home.settings.nixSettings.enable {
       package = pkgs.nix;
       settings = {
         experimental-features = [ "nix-command" "flakes" ];

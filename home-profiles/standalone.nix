@@ -6,7 +6,7 @@
     homeDirectory = lib.mkDefault "/home/${config.home.username}";
 
     settings = {
-      nix.enable = lib.mkDefault true;
+      nixSettings.enable = lib.mkDefault true;
 
       keys.privateKeyFiles =
         let
