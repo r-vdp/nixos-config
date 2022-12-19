@@ -46,6 +46,7 @@ in
         git
         gptfdisk
         lsof
+        nix-tree
         parted
         pciutils
         sops
