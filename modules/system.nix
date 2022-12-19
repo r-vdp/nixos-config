@@ -173,7 +173,7 @@ in
     fonts.fontconfig = {
       hinting = {
         enable = true;
-        style = "hintnone"; #"hintfull";
+        style = "hintfull";
       };
       subpixel.lcdfilter = "default";
     };
