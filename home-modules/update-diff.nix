@@ -2,7 +2,7 @@
 
 {
   home.activation.diff = ''
-    if [[ -e /run/current-system ]]; then
+    if [[ -n "$oldGenPath" && -n "$newGenPath" ]]; then
       echo "Home manager closure diff:"
       $DRY_RUN_CMD ${pkgs.nix}/bin/nix store diff-closures "$oldGenPath" "$newGenPath"
     fi
