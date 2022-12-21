@@ -109,13 +109,13 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
   ]]
 })
 -- Strip trailing whitespace on save
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-  group = general_augroup,
-  command = [[
-    :%s/\s\+$//e
-    :nohl
-  ]]
-})
+--vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+--  group = general_augroup,
+--  command = [[
+--    :%s/\s\+$//e
+--    :nohl
+--  ]]
+--})
 
 -- Match systemd files in the nix store
 local function systemd_patterns()
@@ -295,7 +295,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = function(_, result, ctx, _
   vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
 end
 
-local on_attach = function(_client, bufnr)
+local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   local opts = { silent = true, buffer = bufnr }
@@ -327,9 +327,8 @@ local on_attach = function(_client, bufnr)
   vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     group = lsp_augroup,
     buffer = bufnr,
-    -- Set a max timeout of 10000 to give the formatter a bit more time.
     callback = function()
-      vim.lsp.buf.formatting_sync(nil, 10000)
+      vim.lsp.buf.format()
     end
   })
   -- Show diagnostic popup on cursor hover
@@ -340,8 +339,12 @@ local on_attach = function(_client, bufnr)
       vim.diagnostic.open_float(nil, { focusable = false })
     end
   })
-  if (vim.bo.filetype == "haskell" or vim.bo.filetype == "rust") then
-    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "InsertLeave" }, {
+  -- TODO: are we potentially creating multiple autocommands that will each fire
+  --       if multiple clients support code lenses?
+  -- Elm code actions are useless and distracting
+  if (client.supports_method("textDocument/codeLens") and
+      vim.bo.filetype ~= "elm") then
+    vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "InsertLeave" }, {
       group = lsp_augroup,
       buffer = bufnr,
       -- automatically refresh codelenses, which can then be run with gL
@@ -441,6 +444,28 @@ for _, lsp in ipairs(servers) do
     }
   })
 end
+
+local null_ls = require("null-ls")
+
+null_ls.setup({
+  on_attach = on_attach,
+  sources = {
+    --null_ls.builtins.formatting.stylua,
+    null_ls.builtins.completion.spell,
+    null_ls.builtins.completion.luasnip,
+
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.code_actions.shellcheck,
+
+    null_ls.builtins.diagnostics.deadnix,
+    null_ls.builtins.diagnostics.statix,
+    null_ls.builtins.code_actions.statix,
+
+    null_ls.builtins.diagnostics.todo_comments,
+
+    null_ls.builtins.formatting.trim_whitespace,
+  },
+})
 
 local cmp = require("cmp")
 

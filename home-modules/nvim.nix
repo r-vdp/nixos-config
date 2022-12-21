@@ -33,6 +33,9 @@ with lib;
       withRuby = false;
       extraConfig = ''luafile ${./nvim.lua}'';
       extraPackages = with pkgs; [
+        # Bash
+        shellcheck
+
         # Haskell
         haskell-language-server
 
@@ -58,7 +61,9 @@ with lib;
         nodePackages.yaml-language-server
 
         # Nix
+        deadnix
         rnix-lsp
+        statix
 
         # Rust
         cargo
@@ -91,6 +96,7 @@ with lib;
           nvim-cmp
           nvim-lspconfig
           nvim-ts-rainbow
+          null-ls-nvim
           telescope-nvim
           vim-nix
           vim-markdown
