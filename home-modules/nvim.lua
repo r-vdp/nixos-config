@@ -108,20 +108,13 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
     endif
   ]]
 })
--- Strip trailing whitespace on save
---vim.api.nvim_create_autocmd({ "BufWritePre" }, {
---  group = general_augroup,
---  command = [[
---    :%s/\s\+$//e
---    :nohl
---  ]]
---})
 
 -- Match systemd files in the nix store
 local function systemd_patterns()
   local systemd_prefix = "/nix/store/.*/.*%."
-  local systemd_exts = { "automount", "mount", "path", "service", "socket",
-    "swap", "target", "timer" }
+  local systemd_exts = {
+    "automount", "mount", "path", "service", "socket", "swap", "target", "timer",
+  }
   local patterns = {}
   for _, ext in ipairs(systemd_exts) do
     patterns[systemd_prefix .. ext] = "systemd"
