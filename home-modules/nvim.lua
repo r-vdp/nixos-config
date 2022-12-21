@@ -84,6 +84,7 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
     vim.wo.spell = false
     vim.wo.number = false
     vim.wo.relativenumber = false
+    vim.opt.signcolumn = "no"
   end
 })
 -- Restore line numbers if we're not in a term
