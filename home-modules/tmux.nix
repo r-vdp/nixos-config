@@ -11,11 +11,10 @@
     keyMode = "vi";
     extraConfig = ''
       set -g mouse on
-      set -g clipboard on
+      set -s set-clipboard on
       set-option -g focus-events on
       set-option -sa terminal-overrides ',alacritty:RGB,xterm-256color:RGB,gnome*:RGB'
     '';
   };
 }
-
 
