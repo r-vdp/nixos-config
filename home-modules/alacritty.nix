@@ -4,6 +4,8 @@
   programs.alacritty = {
     enable = ! config.home.settings.isHeadless;
     settings = {
+      window.decorations = "none";
+
       font =
         let
           # Tricky to find the right name, we can check the font picker of
