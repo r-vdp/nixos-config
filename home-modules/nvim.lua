@@ -288,6 +288,9 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = function(_, result, ctx, _
 end
 
 local on_attach = function(client, bufnr)
+  -- Always keep the sign column visible to avoid stuff jumping around
+  vim.opt.signcolumn = "yes"
+
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   local opts = { silent = true, buffer = bufnr }
