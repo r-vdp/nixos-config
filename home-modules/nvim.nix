@@ -88,6 +88,7 @@ with lib;
           dracula-vim
           editorconfig-nvim
           elm-vim
+          gitsigns-nvim
           haskell-vim
           indent-blankline-nvim
           lualine-nvim
@@ -105,4 +106,3 @@ with lib;
     };
   };
 }
-

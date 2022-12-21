@@ -257,7 +257,6 @@ local config = {
     prefix = "",
   },
 }
-
 vim.diagnostic.config(config)
 
 -- Ignore hints labelled as "Unnecessary", eg unused variables prefixed with "_".
@@ -439,11 +438,9 @@ for _, lsp in ipairs(servers) do
 end
 
 local null_ls = require("null-ls")
-
 null_ls.setup({
   on_attach = on_attach,
   sources = {
-    --null_ls.builtins.formatting.stylua,
     null_ls.builtins.completion.spell,
     null_ls.builtins.completion.luasnip,
 
@@ -454,14 +451,14 @@ null_ls.setup({
     null_ls.builtins.diagnostics.statix,
     null_ls.builtins.code_actions.statix,
 
-    null_ls.builtins.diagnostics.todo_comments,
+    null_ls.builtins.code_actions.gitsigns,
 
+    null_ls.builtins.diagnostics.todo_comments,
     null_ls.builtins.formatting.trim_whitespace,
   },
 })
 
 local cmp = require("cmp")
-
 cmp.setup({
   preselect = cmp.PreselectMode.None,
   snippet = {
@@ -530,3 +527,5 @@ require("nvim-treesitter.configs").setup {
     -- termcolors = {} -- table of colour name strings
   }
 }
+
+require("gitsigns").setup()
