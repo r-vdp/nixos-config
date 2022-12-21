@@ -90,6 +90,7 @@ with lib;
           nerdtree
           nvim-cmp
           nvim-lspconfig
+          nvim-ts-rainbow
           telescope-nvim
           vim-nix
           vim-markdown
