@@ -29,8 +29,8 @@
     devenv = {
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
-      # FIXME: enable this line once the bug in Nix is fixed
-      # TODO: add issue reference
+      # FIXME: enable this line once the below issue in Nix is fixed
+      # See https://github.com/NixOS/nix/issues/5790
       #inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     };
     nix-index-database.url = "github:Mic92/nix-index-database";
@@ -105,4 +105,3 @@
         );
     });
 }
-
