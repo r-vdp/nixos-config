@@ -16,7 +16,7 @@ in
       PreferredAuthentications publickey,keyboard-interactive,password
       HostKeyAlgorithms -ssh-rsa
       ForwardX11 no
-      StrictHostKeyChecking ask
+      StrictHostKeyChecking accept-new
       UpdateHostKeys yes
       GSSAPIAuthentication no
       User = ${config.home.username}
@@ -30,7 +30,7 @@ in
     matchBlocks =
       let
         needs_tmux = dag.entryBefore [ "tmux" ];
-        id_ec = config.home.settings.keys.privateKeyFiles.id_ec;
+        inherit (config.home.settings.keys.privateKeyFiles) id_ec;
 
         with_tmux = name: ''${name} ${name}-tmux'';
       in
@@ -118,4 +118,3 @@ in
       };
   };
 }
-
