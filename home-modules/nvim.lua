@@ -444,6 +444,7 @@ end
 local null_ls = require("null-ls")
 null_ls.setup({
   on_attach = on_attach,
+  -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md
   sources = {
     null_ls.builtins.completion.spell,
     null_ls.builtins.completion.luasnip,
@@ -451,13 +452,28 @@ null_ls.setup({
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.code_actions.shellcheck,
 
-    null_ls.builtins.diagnostics.deadnix,
+    null_ls.builtins.diagnostics.deadnix.with({
+      extra_args = { "--no-lambda-pattern-names", },
+    }),
     null_ls.builtins.diagnostics.statix,
     null_ls.builtins.code_actions.statix,
 
     null_ls.builtins.code_actions.gitsigns,
 
-    null_ls.builtins.diagnostics.todo_comments,
+    null_ls.builtins.diagnostics.editorconfig_checker.with({
+      command = "editorconfig-checker",
+    }),
+
+    null_ls.builtins.diagnostics.todo_comments.with({
+      diagnostic_config = {
+        -- see :help vim.diagnostic.config()
+        underline = true,
+        virtual_text = false,
+        signs = true,
+        update_in_insert = true,
+        severity_sort = true,
+      },
+    }),
     null_ls.builtins.formatting.trim_whitespace,
   },
 })

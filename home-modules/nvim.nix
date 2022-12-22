@@ -76,6 +76,7 @@ with lib;
         go
         gopls
 
+        editorconfig-checker
         # Needed for telescope-nvim
         fd
       ];
