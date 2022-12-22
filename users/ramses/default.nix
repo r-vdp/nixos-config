@@ -35,9 +35,9 @@ in
 
   sops.secrets =
     let
-      sopsFile = ../../secrets/${username}-secrets.yaml;
+      sopsFile = ../../secrets + "/${username}-secrets.yaml";
       owner = user_cfg.${username}.name;
-      group = user_cfg.${username}.group;
+      inherit (user_cfg.${username}) group;
       mode = "0600";
     in
     {
@@ -59,4 +59,3 @@ in
       };
     };
 }
-

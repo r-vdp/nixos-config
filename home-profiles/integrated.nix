@@ -12,7 +12,7 @@ in
       lib.mkDefault osConfig.users.users.${config.home.username}.home;
 
     settings = {
-      isHeadless = osConfig.settings.system.isHeadless;
+      inherit (osConfig.settings.system) isHeadless tmux_term;
 
       keys = {
         privateKeyFiles = {
@@ -25,9 +25,6 @@ in
       extraSshConfig = {
         extra-ssh-config = osConfig.sops.secrets."ssh-extra-config".path;
       };
-
-      tmux_term = osConfig.settings.system.tmux_term;
     };
   };
 }
-

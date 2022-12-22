@@ -3,7 +3,7 @@
 with lib;
 
 let
-  settings = config.home.settings;
+  inherit (config.home) settings;
 in
 
 {
@@ -53,4 +53,3 @@ in
     };
   };
 }
-

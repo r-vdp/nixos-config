@@ -10,11 +10,7 @@ with lib;
 */
 let
   # compose [ f g h ] x == f (g (h x))
-  compose =
-    let
-      apply = f: x: f x;
-    in
-    flip (foldr apply);
+  compose = flip (foldr id);
 
   applyN = n: f: compose (genList (const f) n);
 
@@ -222,4 +218,3 @@ in
       reset_git clone_and_reset_git;
   };
 }
-

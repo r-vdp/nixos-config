@@ -3,7 +3,7 @@
 with lib;
 
 let
-  isHeadless = config.home.settings.isHeadless;
+  inherit (config.home.settings) isHeadless;
 in
 {
   imports = [ ./dconf.nix ];
@@ -88,4 +88,3 @@ in
     starship.enable = true;
   };
 }
-
