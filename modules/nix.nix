@@ -22,7 +22,8 @@ in
     };
     gc = {
       automatic = true;
-      dates = "Tue,Fri 12:00";
+      dates = "Tue,Fri 04:00";
+      persistent = true;
       options = "--delete-older-than 15d";
     };
     # https://dataswamp.org/~solene/2022-07-20-nixos-flakes-command-sync-with-system.html
