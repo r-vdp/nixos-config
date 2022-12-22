@@ -7,10 +7,19 @@ with lib;
     "${modulesPath}/installer/cd-dvd/iso-image.nix"
   ];
 
-  networking.hostName = "rescue-iso";
+  networking = {
+    hostName = "rescue-iso";
+    wireless.enable = mkOverride 10 false;
+  };
 
   nixpkgs.hostPlatform = inputs.flake-utils.lib.system.x86_64-linux;
-  system.stateVersion = "22.05"; # Did you read the comment?
+
+  system = {
+    extraDependencies = mkOverride 10 [ ];
+    stateVersion = "22.05"; # Did you read the comment?
+  };
+
+  security.sudo.wheelNeedsPassword = mkForce false;
 
   settings.system = {
     isHeadless = true;
@@ -27,10 +36,6 @@ with lib;
     enable = mkOverride 10 false;
     nixos.enable = mkOverride 10 false;
   };
-
-  networking.wireless.enable = mkOverride 10 false;
-
-  system.extraDependencies = mkOverride 10 [ ];
 
   boot.supportedFilesystems = mkOverride 10 [
     "vfat"
