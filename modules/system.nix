@@ -37,7 +37,10 @@ in
   config = {
     # Populate the man-db cache so that apropos works.
     # Also needed for manpage searching using telescope in neovim.
-    documentation.man.generateCaches = true;
+    documentation = {
+      man.generateCaches = true;
+      info.enable = false;
+    };
 
     programs = {
       # We use nix-index instead, setup with home-manager
@@ -292,4 +295,3 @@ in
     nixpkgs.config.allowUnfree = true;
   };
 }
-
