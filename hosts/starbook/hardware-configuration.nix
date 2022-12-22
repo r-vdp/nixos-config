@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ inputs, config, lib, pkgs, modulesPath, ... }:
 
 {
   imports =
@@ -19,7 +19,7 @@
   # networking.interfaces.enp0s31f6.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  nixpkgs.hostPlatform = inputs.flake-utils.lib.system.x86_64-linux;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -32,4 +32,3 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
 }
-

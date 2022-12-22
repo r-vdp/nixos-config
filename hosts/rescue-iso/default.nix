@@ -4,11 +4,20 @@ with lib;
 
 {
   imports = [
-    "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
-    "${modulesPath}/installer/cd-dvd/channel.nix"
+    "${modulesPath}/installer/cd-dvd/iso-image.nix"
   ];
 
+  networking.hostName = "rescue-iso";
+
   nixpkgs.hostPlatform = inputs.flake-utils.lib.system.x86_64-linux;
+  system.stateVersion = "22.05"; # Did you read the comment?
+
+  settings.system = {
+    isHeadless = true;
+    isISO = true;
+  };
+
+  fileSystems = mkForce config.lib.isoFileSystems;
 
   systemd.services.sshd.wantedBy = mkOverride 10 [ "multi-user.target" ];
 
@@ -37,6 +46,9 @@ with lib;
       custom_name = "ramses-rescue-iso";
     in
     {
+      makeEfiBootable = true;
+      makeUsbBootable = true;
+
       # Faster build by compressing less
       squashfsCompression = "gzip -Xcompression-level 1";
 
@@ -51,4 +63,3 @@ with lib;
       appendToMenuLabel = " ${custom_name}";
     };
 }
-

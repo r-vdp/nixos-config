@@ -12,6 +12,11 @@ in
       type = types.bool;
     };
 
+    isISO = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
     nameservers = mkOption {
       type = with types; listOf str;
       default =
@@ -66,7 +71,7 @@ in
     };
 
     boot = {
-      loader = {
+      loader = mkIf (! cfg.isISO) {
         systemd-boot = {
           enable = true;
           editor = false;

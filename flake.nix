@@ -67,11 +67,15 @@
         flip genAttrs mkStandardHost [
           "nixer"
           "starbook"
+          "rescue-iso"
         ];
 
       rescue-iso = (nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
-        modules = [ ./hosts/iso ];
+        modules = [
+          self.nixosModules.default
+          ./hosts/rescue-iso
+        ];
       }).config.system.build.isoImage;
     }
     //
