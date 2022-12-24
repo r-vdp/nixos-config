@@ -19,7 +19,7 @@ vim.opt.shiftwidth = 2
 -- indent a new line the same amount as the line just typed
 vim.opt.autoindent = true
 -- Use conceal in MarkDown to format inline
-vim.opt.conceallevel = 3
+--vim.opt.conceallevel = 1
 -- Split right and below
 vim.opt.splitright = true
 vim.opt.splitbelow = true
