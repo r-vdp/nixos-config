@@ -66,6 +66,7 @@
         in
         flip genAttrs mkStandardHost [
           "nixer"
+          "nuke"
           "starbook"
           "rescue-iso"
         ];
