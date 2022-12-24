@@ -4,13 +4,16 @@
 #   done
 #
 # Age keys are obtained from SSH keys by running
-#   nix run nixpkgs#ssh-to-age -- --input <pub_key>
+#   nix run nixpkgs#ssh-to-age -- -i <pub_key>
+# or
+#   nix run nixpkgs#ssh-to-age -- -i <(echo "ssh-ed25519 ...")
 keys:
   # users
   - &ramses age1wm7aec0vd5trqqvk6n97kh8r3x0jpue9gne9enr92kdjk63f5e8s9gjy0x
   # servers
   - &starbook age1lkddy5f6duxxgdf92eng0x8juqm492klzu4ffcyrsh6y8ywlzcnsw8a6j4
   - &nixer    age1e4larxc5ydy4kar30ar2x4uzg4u2lchjhcefnzvxmx7a9rs3hygswqrmez
+  - &nuke     age1ztmgmhauuaxca9vjl4csr80lt26m47tqh8nk252vytxjtc3pze5s6s56m5
 creation_rules:
   - path_regex: 'secrets/github-secrets\.yaml$'
     key_groups:
@@ -18,20 +21,16 @@ creation_rules:
       - *ramses
       - *starbook
       - *nixer
+      - *nuke
   - path_regex: 'secrets/ramses-secrets\.yaml$'
     key_groups:
     - age:
       - *ramses
       - *starbook
       - *nixer
-  - path_regex: 'secrets/starbook-secrets\.yaml$'
-    key_groups:
-    - age:
-      - *ramses
-      - *starbook
+      - *nuke
   - path_regex: 'secrets/nixer-secrets\.yaml$'
     key_groups:
     - age:
       - *ramses
       - *nixer
-
