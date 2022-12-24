@@ -59,6 +59,12 @@ in
       sudo = "sudo ";
       whereami = "curl ipinfo.io";
     };
+
+    pointerCursor = {
+      name = "Vanilla-DMZ";
+      package = pkgs.vanilla-dmz;
+      size = 24;
+    };
   };
 
   programs = {
