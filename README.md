@@ -47,5 +47,5 @@ sudo mount /dev/disk/by-label/ESP /mnt/boot
 
 sudo btrfs subvolume snapshot /mnt/ /mnt/snapshots/empty-root
 
-sudo nixos-instal ...
+sudo nixos-instal --no-root-passwd --root /mnt --flake 'github:R-VdP/nixos-config#<hostname>'
 ```
