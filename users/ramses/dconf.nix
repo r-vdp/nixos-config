@@ -50,9 +50,10 @@ with lib;
       };
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";
+        enable-hot-corners = false;
         show-battery-percentage = true;
         clock-show-seconds = false;
-        clock-show-weekday = false;
+        clock-show-weekday = true;
         font-antialiasing = "rgba";
         font-hinting = "full";
         text-scaling-factor = 1.0;
@@ -113,7 +114,7 @@ with lib;
           "appindicatorsupport@rgcjonas.gmail.com"
         ];
         favorite-apps = mkArray type.string [
-          "org.gnome.Console.desktop"
+          "Alacritty.desktop"
           "firefox.desktop"
           "signal-desktop.desktop"
           "slack.desktop"
@@ -145,4 +146,3 @@ with lib;
       };
     };
 }
-
