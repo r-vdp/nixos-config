@@ -61,6 +61,12 @@ with lib;
         };
     };
 
+  services.btrfs.autoScrub = {
+    enable = true;
+    # Only scrub one of the subvolumes, it will scrub the whole FS.
+    fileSystems = [ "/" ];
+  };
+
   swapDevices = [
     { device = "/dev/disk/by-label/swap"; }
   ];
