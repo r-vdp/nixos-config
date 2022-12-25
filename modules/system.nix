@@ -156,18 +156,14 @@ in
         '';
       };
 
-      # Enable the X11 windowing system.
       xserver = {
         enable = ! cfg.isHeadless;
         # Enable the GNOME Desktop Environment.
         displayManager.gdm.enable = ! cfg.isHeadless;
         desktopManager.gnome.enable = ! cfg.isHeadless;
-        # Configure keymap in X11
         layout = "us";
         xkbVariant = "intl";
-        # Enable touchpad support (enabled default in most desktopManagers).
-        # libinput.enable = true;
-
+        excludePackages = with pkgs; [ xterm ];
       };
 
       # https://nixos.wiki/wiki/GNOME
