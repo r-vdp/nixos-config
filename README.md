@@ -40,9 +40,9 @@ sudo umount /mnt
 
 sudo mount -o compressed=zstd,noatime,subvol=root /dev/volgroup /mnt
 mkdir /mnt/{boot,home,nix,snapshots}
-sudo mount -o compressed=zstd,relatime,subvol=home /dev/volgroup /mnt/home
+sudo mount -o compressed=zstd,noatime,subvol=home /dev/volgroup /mnt/home
 sudo mount -o compressed=zstd,noatime,subvol=nix /dev/volgroup /mnt/nix
-sudo mount -o compressed=zstd,noatime,subvol=nix /dev/volgroup /mnt/snapshots
+sudo mount -o compressed=zstd,noatime,subvol=snapshots /dev/volgroup /mnt/snapshots
 sudo mount /dev/disk/by-label/ESP /mnt/boot
 
 sudo btrfs subvolume snapshot /mnt/ /mnt/snapshots/empty-root

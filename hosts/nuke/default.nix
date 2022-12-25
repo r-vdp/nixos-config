@@ -21,37 +21,45 @@ with lib;
     };
   };
 
-  fileSystems = {
-    "/" =
-      {
-        device = "/dev/volgroup/nixos";
-        fsType = "btrfs";
-        options = [ "defaults" "noatime" "acl" "compress=zstd" "subvol=root" ];
-      };
-    "/home" =
-      {
-        device = "/dev/volgroup/nixos";
-        fsType = "btrfs";
-        options = [ "defaults" "relatime" "acl" "compress=zstd" "subvol=home" ];
-      };
-    "/nix" =
-      {
-        device = "/dev/volgroup/nixos";
-        fsType = "btrfs";
-        options = [ "defaults" "noatime" "compress=zstd" "subvol=nix" ];
-      };
-    "/snapshots" =
-      {
-        device = "/dev/volgroup/nixos";
-        fsType = "btrfs";
-        options = [ "defaults" "noatime" "compress=zstd" "subvol=snapshots" ];
-      };
-    "/boot" =
-      {
-        device = "/dev/disk/by-label/ESP";
-        fsType = "vfat";
-      };
-  };
+  fileSystems =
+    let
+      # We do not enable discard here, it is taken care of by an fstrim timer,
+      # as recommended by the btrfs manpage.
+      # ACL is enabled by default.
+      btrfsCommonOpts = [ "defaults" "noatime" "compress=zstd" "autodefrag" ];
+    in
+    {
+      "/" =
+        {
+          device = "/dev/volgroup/nixos";
+          fsType = "btrfs";
+          options = btrfsCommonOpts ++ [ "subvol=root" ];
+        };
+      "/home" =
+        {
+          device = "/dev/volgroup/nixos";
+          fsType = "btrfs";
+          options = btrfsCommonOpts ++ [ "subvol=home" ];
+        };
+      "/nix" =
+        {
+          device = "/dev/volgroup/nixos";
+          fsType = "btrfs";
+          options = btrfsCommonOpts ++ [ "subvol=nix" ];
+        };
+      "/snapshots" =
+        {
+          device = "/dev/volgroup/nixos";
+          fsType = "btrfs";
+          options = btrfsCommonOpts ++ [ "subvol=snapshots" ];
+        };
+      "/boot" =
+        {
+          device = "/dev/disk/by-label/ESP";
+          fsType = "vfat";
+          options = [ "defaults" "relatime" ];
+        };
+    };
 
   swapDevices = [
     { device = "/dev/disk/by-label/swap"; }
