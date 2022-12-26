@@ -100,7 +100,7 @@ in
         {
           # NetworkManager insist on setting per-interface DNS settings.
           # Since we always want to use the global settings, we reset these.
-          source = pkgs.writeText "99_resolved" ''
+          source = pkgs.writeText "networkmanager-dispatcher-reset-dns" ''
             interface="$1"
             action="$2"
 
