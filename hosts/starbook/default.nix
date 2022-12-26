@@ -48,14 +48,7 @@ with lib;
 
   networking = {
     hostName = "starbook";
-    networkmanager = {
-      enable = true;
-      # Do not take DNS servers from DHCP
-      dns = mkForce "none";
-      wifi = {
-        macAddress = "preserve";
-      };
-    };
+    networkmanager.enable = true;
     extraHosts = ''
       # I hate captive portals
       41.128.153.50 ezxcess.antlabs.com

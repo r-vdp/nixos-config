@@ -73,14 +73,7 @@ with lib;
 
   networking = {
     hostName = "nuke";
-    networkmanager = {
-      enable = true;
-      # Do not take DNS servers from DHCP
-      dns = mkForce "none";
-      wifi = {
-        macAddress = "preserve";
-      };
-    };
+    networkmanager.enable = true;
   };
 
   nixpkgs.config = {

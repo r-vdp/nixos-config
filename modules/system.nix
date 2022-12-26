@@ -89,6 +89,32 @@ in
       };
     };
 
+    networking.networkmanager = mkIf config.networking.networkmanager.enable {
+      # Do not take DNS servers from DHCP
+      dns = mkForce "none";
+      wifi = {
+        macAddress = "preserve";
+      };
+      # See https://developer-old.gnome.org/NetworkManager/stable/NetworkManager.html
+      dispatcherScripts = [
+        {
+          # NetworkManager insist on setting per-interface DNS settings.
+          # Since we always want to use the global settings, we reset these.
+          source = pkgs.writeText "99_resolved" ''
+            interface="$1"
+            action="$2"
+
+            if [ "$action" = "up" ] || [ "$action" = "dhcp4-change" ]; then
+              echo "Configuring resolved for interface $1"
+              ${pkgs.systemd}/bin/resolvectl revert "$interface"
+              ${pkgs.systemd}/bin/resolvectl mdns "$interface" on
+            fi
+          '';
+          type = "basic";
+        }
+      ];
+    };
+
     security = {
       sudo = {
         enable = true;
@@ -153,6 +179,7 @@ in
         extraConfig = ''
           DNS=${concatStringsSep " " cfg.nameservers}
           DNSOverTLS=true
+          MulticastDNS=true
         '';
       };
 
