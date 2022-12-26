@@ -156,6 +156,16 @@ in
         '';
       };
 
+      avahi = {
+        enable = true;
+        nssmdns = true;
+        publish = {
+          enable = true;
+          addresses = true;
+        };
+        openFirewall = true;
+      };
+
       xserver = {
         enable = ! cfg.isHeadless;
         # Enable the GNOME Desktop Environment.
