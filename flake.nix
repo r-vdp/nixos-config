@@ -33,7 +33,10 @@
       # See https://github.com/NixOS/nix/issues/5790
       #inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     };
-    nix-index-database.url = "github:Mic92/nix-index-database";
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -80,7 +83,7 @@
       }).config.system.build.isoImage;
     }
     //
-    # As a temporary workaround, we put the homeConfigurations under packages
+    # As a temporary workaround, we put the home configurations under packages
     # so that we do not need to hard code the value for system.
     # See https://github.com/nix-community/home-manager/issues/3075
     flake-utils.lib.eachDefaultSystem (system: {
