@@ -446,7 +446,6 @@ null_ls.setup({
   on_attach = on_attach,
   -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md
   sources = {
-    null_ls.builtins.completion.spell,
     null_ls.builtins.completion.luasnip,
 
     null_ls.builtins.diagnostics.shellcheck,
