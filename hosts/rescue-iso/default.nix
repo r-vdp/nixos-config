@@ -3,10 +3,6 @@
 with lib;
 
 {
-  imports = [
-    "${modulesPath}/installer/cd-dvd/iso-image.nix"
-  ];
-
   networking = {
     hostName = "rescue-iso";
     wireless.enable = mkOverride 10 false;
@@ -51,9 +47,6 @@ with lib;
       custom_name = "ramses-rescue-iso";
     in
     {
-      makeEfiBootable = true;
-      makeUsbBootable = true;
-
       # Faster build by compressing less
       squashfsCompression = "gzip -Xcompression-level 1";
 

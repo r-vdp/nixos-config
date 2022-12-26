@@ -26,6 +26,10 @@
         nixpkgs-stable.follows = "devenv/pre-commit-hooks/nixpkgs-stable";
       };
     };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     devenv = {
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,6 +49,7 @@
     , nixpkgs
     , home-manager
     , sops-nix
+    , nixos-generators
     , ...
     }@inputs: with nixpkgs.lib; {
       nixosModules.default = {
@@ -73,43 +78,48 @@
           "starbook"
           "rescue-iso"
         ];
-
-      rescue-iso = (nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          self.nixosModules.default
-          ./hosts/rescue-iso
-        ];
-      }).config.system.build.isoImage;
     }
     //
-    # As a temporary workaround, we put the home configurations under packages
-    # so that we do not need to hard code the value for system.
-    # See https://github.com/nix-community/home-manager/issues/3075
     flake-utils.lib.eachDefaultSystem (system: {
-      packages.homeConfigurations =
-        let
-          mkHomeConfig = username: hostname:
-            home-manager.lib.homeManagerConfiguration {
-              pkgs = nixpkgs.legacyPackages.${system};
-              extraSpecialArgs = { inherit inputs; };
-              modules = [
-                ./hosts/${hostname}
-                ./home-modules
-                ./home-profiles/standalone.nix
-                ./users/ramses/home.nix
-                { home = { inherit username; }; }
-              ];
-            };
+      packages = {
+        # Build with "nix build '.#rescue-iso'
+        rescue-iso = nixos-generators.nixosGenerate {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = [
+            self.nixosModules.default
+            ./hosts/rescue-iso
+          ];
+          format = "iso";
+        };
 
-          mkHomeConfigEntry = { username, hostname }:
-            nameValuePair "${username}@${hostname}"
-              (mkHomeConfig username hostname);
-        in
-        listToAttrs (
-          map mkHomeConfigEntry [
-            { username = "ramses"; hostname = "dev1"; }
-          ]
-        );
+        # As a temporary workaround, we put the home configurations under packages
+        # so that we do not need to hard code the value for system.
+        # See https://github.com/nix-community/home-manager/issues/3075
+        homeConfigurations =
+          let
+            mkHomeConfig = username: hostname:
+              home-manager.lib.homeManagerConfiguration {
+                pkgs = nixpkgs.legacyPackages.${system};
+                extraSpecialArgs = { inherit inputs; };
+                modules = [
+                  ./hosts/${hostname}
+                  ./home-modules
+                  ./home-profiles/standalone.nix
+                  ./users/ramses/home.nix
+                  { home = { inherit username; }; }
+                ];
+              };
+
+            mkHomeConfigEntry = { username, hostname }:
+              nameValuePair "${username}@${hostname}"
+                (mkHomeConfig username hostname);
+          in
+          listToAttrs (
+            map mkHomeConfigEntry [
+              { username = "ramses"; hostname = "dev1"; }
+            ]
+          );
+      };
     });
 }
