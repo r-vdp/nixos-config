@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -6,7 +6,8 @@ let
   inherit (lib.hm) dag;
 in
 {
-  imports = import ../import-dir.nix { inherit lib; fromDir = ./.; };
+  imports = import ../import-dir.nix { inherit lib; fromDir = ./.; } ++
+    [ inputs.nix-index-database.hmModules.nix-index ];
 
   options = {
     home.settings = {
@@ -85,4 +86,3 @@ in
     };
   };
 }
-
