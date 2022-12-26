@@ -97,4 +97,6 @@ with lib;
       libvdpau-va-gl
     ];
   };
+
+  powerManagement.cpuFreqGovernor = "schedutil";
 }
