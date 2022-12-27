@@ -17,6 +17,11 @@ in
       default = false;
     };
 
+    isVM = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
     nameservers = mkOption {
       type = with types; listOf str;
       default =
@@ -43,8 +48,13 @@ in
     # Populate the man-db cache so that apropos works.
     # Also needed for manpage searching using telescope in neovim.
     documentation = {
-      man.generateCaches = true;
+      man = {
+        enable = ! (cfg.isISO || cfg.isVM);
+        generateCaches = true;
+      };
+      dev.enable = ! (cfg.isISO || cfg.isVM);
       info.enable = false;
+      doc.enable = false;
     };
 
     programs = {
@@ -71,7 +81,7 @@ in
     };
 
     boot = {
-      loader = mkIf (! cfg.isISO) {
+      loader = mkIf (! (cfg.isISO || cfg.isVM)) {
         systemd-boot = {
           enable = true;
           editor = false;
@@ -161,7 +171,7 @@ in
       nscd.enableNsncd = true;
 
       timesyncd = {
-        enable = true;
+        enable = ! cfg.isVM;
         servers = mkDefault [
           "0.nixos.pool.ntp.org"
           "1.nixos.pool.ntp.org"
@@ -332,5 +342,29 @@ in
     };
 
     nixpkgs.config.allowUnfree = true;
+
+    # Adapt some settings in case we are building the config as a QEMU VM
+    virtualisation.vmVariant = { lib, ... }: with lib; {
+      settings.system.isVM = true;
+      # Needed to get the keyboard to work
+      boot.kernelParams = [ "console=ttyS0" ];
+      virtualisation = {
+        # Set to true to get a GUI
+        graphics = false;
+        qemu.guestAgent.enable = true;
+      };
+      # The VM cannot decrypt our secrets...
+      users.users.ramses = {
+        password = mkForce "";
+        passwordFile = mkForce null;
+      };
+      security.sudo.wheelNeedsPassword = mkForce false;
+      users.mutableUsers = mkForce false;
+      # Avoid delays on boot of the VM
+      networking.interfaces = mkForce { };
+      documentation = {
+        nixos.enable = false;
+      };
+    };
   };
 }
