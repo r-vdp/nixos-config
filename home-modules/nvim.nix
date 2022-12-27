@@ -86,7 +86,6 @@ with lib;
           cmp-buffer
           cmp_luasnip
           cmp-nvim-lsp
-          dracula-vim
           editorconfig-nvim
           elm-vim
           gitsigns-nvim
