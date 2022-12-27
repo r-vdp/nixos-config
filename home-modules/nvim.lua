@@ -66,15 +66,9 @@ if vim.env.TMUX then
   }
 end
 
--- Set up spell checking
+-- Set up spell checking, enable for a buffer with `set spell`
 vim.opt.spelllang = "en_gb"
-local spell_augroup = "spell_augroup"
-vim.api.nvim_create_augroup(spell_augroup, { clear = true })
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  group = spell_augroup,
-  pattern = { "*.md" },
-  callback = function() vim.wo.spell = true end
-})
+
 -- Autocommands for terminal buffers
 local term_augroup = "term_augroup"
 vim.api.nvim_create_augroup(term_augroup, { clear = true })
