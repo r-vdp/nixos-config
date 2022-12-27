@@ -345,19 +345,32 @@ in
 
     # Adapt some settings in case we are building the config as a QEMU VM
     virtualisation.vmVariant = { lib, ... }: with lib; {
-      settings.system.isVM = true;
+      settings.system = {
+        isVM = true;
+        isHeadless = mkForce true;
+      };
       # Needed to get the keyboard to work
       boot.kernelParams = [ "console=ttyS0" ];
       virtualisation = {
+        cores = 2;
+        memorySize = 4 * 1024;
+        diskSize = 20 * 1024;
+        writableStoreUseTmpfs = false;
         # Set to true to get a GUI
         graphics = false;
-        qemu.guestAgent.enable = true;
+        qemu = {
+          options = [
+            "-machine accel=kvm"
+          ];
+          guestAgent.enable = true;
+        };
       };
       # The VM cannot decrypt our secrets...
       users.users.ramses = {
         password = mkForce "";
         passwordFile = mkForce null;
       };
+      services.getty.autologinUser = "ramses";
       security.sudo.wheelNeedsPassword = mkForce false;
       users.mutableUsers = mkForce false;
       # Avoid delays on boot of the VM
