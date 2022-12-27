@@ -9,10 +9,12 @@ with lib;
         stack
       ]))
 
+      # Needed for telescope-nvim, modern `find` alternative
+      fd
       inputs.devenv.packages.${pkgs.system}.devenv
       python3
+      # Needed for telescope-nvim, modern grep alternative
       ripgrep
-
       # Allow Neovim to sync the unnamed register with the Wayland clipboard.
       wl-clipboard
     ];
@@ -77,8 +79,6 @@ with lib;
         gopls
 
         editorconfig-checker
-        # Needed for telescope-nvim
-        fd
       ];
       plugins = with pkgs.vimPlugins;
         [
