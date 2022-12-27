@@ -23,7 +23,11 @@ with lib;
   };
 
   programs = {
-    direnv.enable = true;
+    direnv = {
+      enable = true;
+      # devenv can be slow to load, we don't need a warning every time
+      config.global.warn_timeout = "3m";
+    };
 
     neovim = {
       enable = true;
@@ -90,6 +94,7 @@ with lib;
           elm-vim
           gitsigns-nvim
           haskell-vim
+          impatient-nvim
           indent-blankline-nvim
           lualine-nvim
           luasnip

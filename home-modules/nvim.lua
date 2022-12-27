@@ -1,3 +1,5 @@
+require("impatient")
+
 local xdg_state_home = vim.env.XDG_STATE_HOME or (vim.env.HOME .. "/.local/state/")
 
 vim.opt.scrolloff = 3
