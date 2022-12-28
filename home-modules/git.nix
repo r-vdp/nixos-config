@@ -51,5 +51,9 @@ in
       commit.gpgsign = true;
       tag.gpgsign = true;
     };
+    difftastic = {
+      enable = true;
+      background = "dark";
+    };
   };
 }
