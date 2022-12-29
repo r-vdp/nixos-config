@@ -84,31 +84,31 @@ with lib;
 
         editorconfig-checker
       ];
-      plugins = with pkgs.vimPlugins;
-        [
-          (nvim-treesitter.withPlugins (const pkgs.tree-sitter.allGrammars))
-          cmp-buffer
-          cmp_luasnip
-          cmp-nvim-lsp
-          editorconfig-nvim
-          elm-vim
-          gitsigns-nvim
-          haskell-vim
-          impatient-nvim
-          indent-blankline-nvim
-          lualine-nvim
-          luasnip
-          nvim-cmp
-          nvim-lspconfig
-          nvim-tree-lua
-          nvim-ts-rainbow
-          nvim-web-devicons
-          null-ls-nvim
-          telescope-nvim
-          vim-nix
-          vim-markdown
-          vim-colorschemes
-        ];
+      plugins = with pkgs.vimPlugins; [
+        (nvim-treesitter.withPlugins (const pkgs.tree-sitter.allGrammars))
+        cmp-buffer
+        cmp_luasnip
+        cmp-nvim-lsp
+        diffview-nvim
+        editorconfig-nvim
+        elm-vim
+        gitsigns-nvim
+        haskell-vim
+        impatient-nvim
+        indent-blankline-nvim
+        lualine-nvim
+        luasnip
+        nvim-cmp
+        nvim-lspconfig
+        nvim-tree-lua
+        nvim-ts-rainbow
+        nvim-web-devicons
+        null-ls-nvim
+        telescope-nvim
+        vim-nix
+        vim-markdown
+        vim-colorschemes
+      ];
     };
   };
 }
