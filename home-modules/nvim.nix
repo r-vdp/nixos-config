@@ -98,10 +98,11 @@ with lib;
           indent-blankline-nvim
           lualine-nvim
           luasnip
-          nerdtree
           nvim-cmp
           nvim-lspconfig
+          nvim-tree-lua
           nvim-ts-rainbow
+          nvim-web-devicons
           null-ls-nvim
           telescope-nvim
           vim-nix

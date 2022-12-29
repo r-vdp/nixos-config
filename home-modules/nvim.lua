@@ -2,6 +2,10 @@ require("impatient")
 
 local xdg_state_home = vim.env.XDG_STATE_HOME or (vim.env.HOME .. "/.local/state/")
 
+-- Disable netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.opt.scrolloff = 3
 vim.opt.list = true
 vim.opt.listchars = { tab = "▸ ", trail = "·", nbsp = "+" } -- , eol = "¬"
@@ -141,7 +145,7 @@ vim.opt.foldtext =
     [[ trim(getline(v:foldend)) ]]
 
 local silent_opts = { silent = true }
-vim.keymap.set("n", "<F1>", ":NERDTreeToggle<CR>", silent_opts)
+vim.keymap.set("n", "<F1>", "::NvimTreeToggle<CR>", silent_opts)
 vim.keymap.set("n", "<Space><Space>", ":silent w<CR>", silent_opts)
 vim.keymap.set("i", "jj", "<Esc>", silent_opts)
 vim.keymap.set("n", "<Leader><Space>", ":nohl<CR>", silent_opts)
@@ -234,6 +238,8 @@ require("lualine").setup {
   inactive_winbar = {},
   extensions = {}
 }
+
+require("nvim-tree").setup()
 
 local nvim_lsp = require("lspconfig")
 
