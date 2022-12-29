@@ -310,16 +310,16 @@ local on_attach = function(client, bufnr)
   local opts = { silent = true, buffer = bufnr }
 
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "ga", vim.lsp.buf.code_action, opts)
-  vim.keymap.set("n", "gL", vim.lsp.codelens.run, opts)
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
   vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-  vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
   vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
   vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-  vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+  vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
+  vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+  vim.keymap.set("n", "<leader>cl", vim.lsp.codelens.run, opts)
   vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
   vim.keymap.set("n", "<leader>fs", vim.lsp.buf.workspace_symbol, opts)
+  vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 
   -- Mappings
   -- vim.api.nvim_buf_set_keymap(0, 'n', 'gd',
@@ -353,7 +353,7 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "InsertLeave" }, {
       group = lsp_augroup,
       buffer = bufnr,
-      -- automatically refresh codelenses, which can then be run with gL
+      -- automatically refresh codelenses, which can then be run
       callback = function()
         vim.lsp.codelens.refresh()
       end
