@@ -44,7 +44,7 @@ vim.opt.mouse = "a"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.updatetime = 150
 
-vim.opt.completeopt = "menuone,noinsert,noselect"
+vim.opt.completeopt = "menu,menuone,noinsert,noselect"
 vim.opt.shortmess = vim.opt.shortmess + "c"
 
 -- persistent undo history
@@ -262,6 +262,17 @@ local config = {
 }
 vim.diagnostic.config(config)
 
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { silent = true })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { silent = true })
+vim.keymap.set("n", "gl", vim.diagnostic.setloclist, { silent = true })
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { silent = true })
+
+local diagnostic_signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(diagnostic_signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
 -- Ignore hints labelled as "Unnecessary", eg unused variables prefixed with "_".
 -- See https://github.com/neovim/neovim/issues/17757
 local unnecessary_hints_ns = vim.api.nvim_create_namespace("unnecessary_hints_ns")
@@ -298,20 +309,17 @@ local on_attach = function(client, bufnr)
 
   local opts = { silent = true, buffer = bufnr }
 
-  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-  vim.keymap.set("n", "ga", function() vim.lsp.buf.code_action() end, opts)
-  vim.keymap.set("n", "gL", function() vim.lsp.codelens.run() end, opts)
-  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-  vim.keymap.set("n", "gD", function() vim.lsp.buf.type_definition() end, opts)
-  vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
-  vim.keymap.set("n", "g[", function() vim.diagnostic.goto_prev() end, opts)
-  vim.keymap.set("n", "g]", function() vim.diagnostic.goto_next() end, opts)
-  vim.keymap.set("n", "gl", function() vim.diagnostic.setloclist() end, opts)
-  vim.keymap.set("n", "gr", function() vim.lsp.buf.references() end, opts)
-  vim.keymap.set("n", "gR", function() vim.lsp.buf.rename() end, opts)
-  vim.keymap.set("n", "gF", function() vim.lsp.buf.format() end, opts)
-  vim.keymap.set("n", "<leader>fs", function() vim.lsp.buf.workspace_symbol() end, opts)
-  vim.keymap.set("n", "<leader>e", function() vim.diagnostic.open_float() end, opts)
+  vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+  vim.keymap.set("n", "ga", vim.lsp.buf.code_action, opts)
+  vim.keymap.set("n", "gL", vim.lsp.codelens.run, opts)
+  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+  vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+  vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
+  vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+  vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+  vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+  vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
+  vim.keymap.set("n", "<leader>fs", vim.lsp.buf.workspace_symbol, opts)
 
   -- Mappings
   -- vim.api.nvim_buf_set_keymap(0, 'n', 'gd',
@@ -480,42 +488,73 @@ null_ls.setup({
 })
 
 local cmp = require("cmp")
+local luasnip = require("luasnip")
+local select_opts = { behavior = cmp.SelectBehavior.Select }
 cmp.setup({
   preselect = cmp.PreselectMode.None,
   snippet = {
     -- REQUIRED - you must specify a snippet engine
     expand = function(args)
-      -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-      require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
-      -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-      -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      luasnip.lsp_expand(args.body)
     end,
+  },
+  completion = {
+    completeopt = "menu,menuone,noselect,noinsert",
   },
   window = {
     -- completion = cmp.config.window.bordered(),
     -- documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
-    ["<C-p>"] = cmp.mapping.select_prev_item(),
-    ["<C-n>"] = cmp.mapping.select_next_item(),
-    -- Add tab support
-    ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-    ["<Tab>"] = cmp.mapping.select_next_item(),
-    ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-    ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-Space>"] = cmp.mapping.complete(),
+    -- Navigate through completion menu
+    ["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
+    ["<C-n>"] = cmp.mapping.select_next_item(select_opts),
+
+    -- If a completion menu is open, then Tab selects the next item.
+    -- If we are in a luasnip snippet and can jump to a following placeholder,
+    --   then Tab does so.
+    -- Otherwise Tab triggers completion.
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item(select_opts)
+      elseif luasnip.jumpable(1) then
+        luasnip.jump(1)
+      else
+        cmp.complete()
+      end
+    end),
+    -- If a completion menu is open, then Shift-Tab selects the previous item.
+    -- If we are in a luasnip snippet and can jump to a previous placeholder,
+    --   then Shift-Tab does so.
+    -- Otherwise we fall back to the default keybind.
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item(select_opts)
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end),
+
+    -- Scroll docs
+    ["<C-b>"] = cmp.mapping.scroll_docs(-5),
+    ["<C-f>"] = cmp.mapping.scroll_docs(5),
+
+    -- Abort completion
     ["<C-e>"] = cmp.mapping.close(),
+
+    -- Accept completion
+    ["<C-Space>"] = cmp.mapping.complete(),
     ["<CR>"] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Insert,
-      select = true
-    }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      -- Set `select` to `false` to only confirm explicitly selected items.
+      select = false
+    }),
   }),
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
-    -- { name = 'vsnip' }, -- For vsnip users.
-    { name = "luasnip" }, -- For luasnip users.
-    -- { name = 'ultisnips' }, -- For ultisnips users.
-    -- { name = 'snippy' }, -- For snippy users.
+    { name = "luasnip" },
     { name = "path" },
     { name = "buffer" },
   }),
