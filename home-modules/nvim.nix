@@ -18,8 +18,6 @@ with lib;
       # Allow Neovim to sync the unnamed register with the Wayland clipboard.
       wl-clipboard
     ];
-
-    sessionVariables.EDITOR = "nvim";
   };
 
   programs = {
@@ -31,6 +29,7 @@ with lib;
 
     neovim = {
       enable = true;
+      defaultEditor = true;
       viAlias = true;
       vimAlias = true;
       vimdiffAlias = true;
