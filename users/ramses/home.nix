@@ -80,10 +80,10 @@ in
       # The env vars somehow get overriden again by the values in /etc/(z)profile...
       # Not clear yet why or where.
       # We set them again here to avoid e.g. being dropped in nano.
-      initExtra = ''
-        unset __HM_SESS_VARS_SOURCED
-        . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
-      '';
+      #initExtra = ''
+      #  unset __HM_SESS_VARS_SOURCED
+      #  . "${config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
+      #'';
       oh-my-zsh = {
         enable = true;
         theme = "robbyrussell";
