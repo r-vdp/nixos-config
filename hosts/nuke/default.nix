@@ -19,6 +19,12 @@ with lib;
         preLVM = true;
       };
     };
+    # Force our display to its native 1440p resolution
+    # The right connector type can be found with the following command:
+    #   for p in /sys/class/drm/*/status; do con=${p%/status}; echo -n "${con#*/card?-}: "; cat $p; done
+    kernelParams = [
+      "video=HDMI-A-1:2560x1440"
+    ];
   };
 
   fileSystems =
@@ -91,5 +97,9 @@ with lib;
     ];
   };
 
-  powerManagement.cpuFreqGovernor = "schedutil";
+  # On CPUs using the intel_pstate scaling driver, there is no schedutil governor.
+  # Only powersave and performance are available.
+  # The powersave governor is in this case similar to schedutil.
+  # https://www.kernel.org/doc/html/v4.12/admin-guide/pm/intel_pstate.html
+  powerManagement.cpuFreqGovernor = "powersave";
 }
