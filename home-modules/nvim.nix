@@ -86,8 +86,11 @@ with lib;
       plugins = with pkgs.vimPlugins; [
         (nvim-treesitter.withPlugins (const pkgs.tree-sitter.allGrammars))
         cmp-buffer
+        cmp-cmdline
+        cmp-latex-symbols
         cmp_luasnip
         cmp-nvim-lsp
+        cmp-path
         diffview-nvim
         editorconfig-nvim
         elm-vim
