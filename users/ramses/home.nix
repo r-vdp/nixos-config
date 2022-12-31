@@ -33,6 +33,7 @@ in
       gimp
       gparted
       keepassxc
+      libreoffice-fresh
       nerdfonts
       pavucontrol
       pcloud
