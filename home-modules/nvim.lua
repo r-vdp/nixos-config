@@ -146,7 +146,7 @@ vim.opt.foldtext =
 
 local silent_opts = { silent = true }
 vim.keymap.set("n", "<F1>", "::NvimTreeToggle<CR>", silent_opts)
-vim.keymap.set("n", "<Space><Space>", ":silent w<CR>", silent_opts)
+vim.keymap.set("n", "<Space><Space>", ":w<CR>", silent_opts)
 vim.keymap.set("i", "jj", "<Esc>", silent_opts)
 vim.keymap.set("n", "<Leader><Space>", ":nohl<CR>", silent_opts)
 vim.keymap.set({ "n", "v" }, "<Tab>", "%", silent_opts)
@@ -205,7 +205,7 @@ require("lualine").setup {
     }
   },
   sections = {
-    lualine_a = { "mode" },
+    lualine_a = { { "mode", icon = "", } },
     lualine_b = { "branch", "diff", "diagnostics" },
     lualine_c = { { "filename", path = 1 } },
     lualine_x = { "encoding", "fileformat", "filetype" },
@@ -265,7 +265,7 @@ vim.diagnostic.config(config)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { silent = true })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { silent = true })
 vim.keymap.set("n", "gl", vim.diagnostic.setloclist, { silent = true })
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { silent = true })
+vim.keymap.set("n", "<Leader>e", vim.diagnostic.open_float, { silent = true })
 
 local diagnostic_signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(diagnostic_signs) do
@@ -315,11 +315,11 @@ local on_attach = function(client, bufnr)
   vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
   vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
   vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
-  vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, opts)
-  vim.keymap.set("n", "<leader>cl", vim.lsp.codelens.run, opts)
-  vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
-  vim.keymap.set("n", "<leader>fs", vim.lsp.buf.workspace_symbol, opts)
-  vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+  vim.keymap.set("n", "<Leader>a", vim.lsp.buf.code_action, opts)
+  vim.keymap.set("n", "<Leader>cl", vim.lsp.codelens.run, opts)
+  vim.keymap.set("n", "<Leader>f", vim.lsp.buf.format, opts)
+  vim.keymap.set("n", "<Leader>fs", vim.lsp.buf.workspace_symbol, opts)
+  vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename, opts)
 
   -- Mappings
   -- vim.api.nvim_buf_set_keymap(0, 'n', 'gd',
