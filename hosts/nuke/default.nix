@@ -12,6 +12,9 @@ with lib;
   settings.system.isHeadless = false;
 
   boot = {
+    extraModprobeConfig = ''
+      options snd-hda-intel power_save=1
+    '';
     initrd.luks.devices = {
       decrypted = {
         device = "/dev/disk/by-partuuid/4cd65b64-7917-4e11-8b8c-e178ef8c53bf";
@@ -19,6 +22,7 @@ with lib;
         preLVM = true;
       };
     };
+    kernelModules = [ "i915" ];
     # Force our display to its native 1440p resolution
     # The right connector type can be found with the following command:
     #   for p in /sys/class/drm/*/status; do con=${p%/status}; echo -n "${con#*/card?-}: "; cat $p; done
@@ -96,6 +100,8 @@ with lib;
       libvdpau-va-gl
     ];
   };
+  environment.variables.VDPAU_DRIVER =
+    lib.mkIf config.hardware.opengl.enable "va_gl";
 
   # On CPUs using the intel_pstate scaling driver, there is no schedutil governor.
   # Only powersave and performance are available.
