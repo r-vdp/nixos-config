@@ -62,6 +62,9 @@ with lib;
         # Lua
         sumneko-lua-language-server
 
+        # Perl
+        perlPackages.PLS
+
         # YAML
         nodePackages.yaml-language-server
 

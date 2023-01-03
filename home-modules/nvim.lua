@@ -369,6 +369,7 @@ local servers = {
   "elmls",
   "gopls",
   "hls",
+  "perlpls",
   "pylsp",
   "rnix",
   "rust_analyzer",
@@ -395,6 +396,10 @@ for _, lsp in ipairs(servers) do
       haskell = {
         hlintOn = true,
         formattingProvider = "ormolu"
+      },
+      pls = {
+        cmd = { "pls", },
+        syntax = { enabled = true, },
       },
       pylsp = {
         plugins = {
