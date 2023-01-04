@@ -12,6 +12,11 @@
         error_symbol = "[➜](bold red)";
       };
 
+      shell = {
+        disabled = false;
+        bash_indicator = "bash";
+      };
+
       # Show a refresh symbol when the kernel changed and we need to reboot.
       custom.kernel-version = {
         when =
