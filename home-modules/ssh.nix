@@ -114,6 +114,7 @@ in
         dev1 = {
           host = with_tmux "dev1";
           hostname = "dev1.numtide.com";
+          dynamicForwards = [{ port = 60600; }];
         };
       };
   };
