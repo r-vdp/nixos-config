@@ -110,12 +110,20 @@ in
         {
           # NetworkManager insist on setting per-interface DNS settings.
           # Since we always want to use the global settings, we reset these.
+          # TODO: something seems to still reset these DNS settings without
+          # retriggering this script...
+          # TODO: is this still needed? Does resolved correctly use the global
+          # settings only now due to them having Domains=~. ?
           source = pkgs.writeText "networkmanager-dispatcher-reset-dns" ''
             interface="$1"
             action="$2"
 
-            if [ "$action" = "up" ] || [ "$action" = "dhcp4-change" ]; then
-              echo "Configuring resolved for interface $1"
+            echo "networkmanager-dispatcher-reset-dns: action=$action"
+            if [ "$action" = "up" ] || \
+               [ "$action" = "dhcp4-change" ] || \
+               [ "$action" = "dhcp6-change" ] || \
+               [ "$action" = "connectivity-change" ]; then
+              echo "networkmanager-dispatcher-reset-dns: configuring resolved for interface $1"
               ${pkgs.systemd}/bin/resolvectl revert "$interface"
               ${pkgs.systemd}/bin/resolvectl mdns "$interface" on
             fi
@@ -184,6 +192,7 @@ in
 
       resolved = {
         enable = true;
+        # Make the global config the preferred one for all domains.
         domains = [ "~." ];
         dnssec = "false";
         extraConfig = ''
