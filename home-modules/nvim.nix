@@ -69,9 +69,11 @@ with lib;
         nodePackages.yaml-language-server
 
         # Nix
-        deadnix
-        rnix-lsp
-        statix
+        #deadnix
+        #rnix-lsp
+        #statix
+        nil
+        nixpkgs-fmt
 
         # Rust
         cargo

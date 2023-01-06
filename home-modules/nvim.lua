@@ -369,9 +369,10 @@ local servers = {
   "elmls",
   "gopls",
   "hls",
+  "nil_ls",
   "perlpls",
   "pylsp",
-  "rnix",
+  --"rnix",
   "rust_analyzer",
   "sumneko_lua",
   "yamlls",
@@ -412,6 +413,11 @@ for _, lsp in ipairs(servers) do
             maxLineLength = 100
           }
         }
+      },
+      ["nil"] = {
+        formatting = {
+          command = { "nixpkgs-fmt" },
+        },
       },
       ["rust-analyzer"] = {
         imports = {
