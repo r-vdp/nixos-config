@@ -1,4 +1,8 @@
 # Config used for standalone home-manager profiles, not integrated into NixOS.
+# Build and activate a new generation with:
+#   nix run nixpkgs#home-manager -- --flake 'github:R-VdP/nixos-config' switch
+# To forcefully refresh the cached flake in the nix store, run:
+#   nix flake show --refresh 'github:R-VdP/nixos-config'
 { lib, inputs, config, pkgs, ... }:
 
 {
