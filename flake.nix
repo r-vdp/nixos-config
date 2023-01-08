@@ -76,7 +76,6 @@
           "nixer"
           "nuke"
           "starbook"
-          "rescue-iso"
         ];
     }
     //
