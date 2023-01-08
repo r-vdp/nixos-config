@@ -472,11 +472,11 @@ null_ls.setup({
     null_ls.builtins.diagnostics.shellcheck,
     null_ls.builtins.code_actions.shellcheck,
 
-    null_ls.builtins.diagnostics.deadnix.with({
-      extra_args = { "--no-lambda-pattern-names", },
-    }),
-    null_ls.builtins.diagnostics.statix,
-    null_ls.builtins.code_actions.statix,
+    --null_ls.builtins.diagnostics.deadnix.with({
+    --  extra_args = { "--no-lambda-pattern-names", },
+    --}),
+    --null_ls.builtins.diagnostics.statix,
+    --null_ls.builtins.code_actions.statix,
 
     null_ls.builtins.code_actions.gitsigns,
 
