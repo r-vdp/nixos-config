@@ -111,7 +111,11 @@ in
             RemoteCommand = "tmux attach";
           };
         };
-        dev1 = {
+        # Separate entry without dynamic forwards to be used as a jump host.
+        dev1-jumphost = {
+          hostname = "dev1.numtide.com";
+        };
+        dev1 = needs_tmux {
           host = with_tmux "dev1";
           hostname = "dev1.numtide.com";
           dynamicForwards = [{ port = 60600; }];
