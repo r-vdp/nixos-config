@@ -59,7 +59,7 @@ in
       activation.extra-ssh-config =
         let
           ssh_dir = "${config.home.homeDirectory}/.ssh/";
-          config_dir = "${ssh_dir}/.config.d/";
+          config_dir = "${ssh_dir}/config.d/";
           out_file = "${config_dir}/ssh-extra-config";
 
           mkConfigFile = source: ''
