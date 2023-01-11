@@ -89,7 +89,7 @@ with lib;
         editorconfig-checker
       ];
       plugins = with pkgs.vimPlugins; [
-        (nvim-treesitter.withPlugins (const pkgs.tree-sitter.allGrammars))
+        #(nvim-treesitter.withPlugins (const pkgs.tree-sitter.allGrammars))
         cmp-buffer
         cmp-cmdline
         cmp-latex-symbols
