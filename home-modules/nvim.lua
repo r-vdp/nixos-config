@@ -134,16 +134,6 @@ vim.g.mapleader = ","
 -- Suggestion from :checkhealth
 vim.g.loaded_perl_provider = 0
 
--- https://essais.co/better-folding-in-neovim/
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldenable = false
-vim.opt.foldlevel = 99
-vim.opt.foldtext =
-[[ substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g') . ]] ..
-    [[ ' ¬ (' . (v:foldend - v:foldstart + 1) . ' lines) ¬ ' . ]] ..
-    [[ trim(getline(v:foldend)) ]]
-
 local silent_opts = { silent = true }
 vim.keymap.set("n", "<F1>", "::NvimTreeToggle<CR>", silent_opts)
 vim.keymap.set("n", "<Space><Space>", ":w<CR>", silent_opts)
@@ -607,19 +597,38 @@ cmp.setup.cmdline(":", {
   })
 })
 
-require("nvim-treesitter.configs").setup {
-  highlight = {},
-
-  rainbow = {
-    enable = true,
-    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-    -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    extended_mode = true,
-    -- Do not enable for files with more than n lines, int
-    max_file_lines = nil,
-    -- colors = {}, -- table of hex strings
-    -- termcolors = {} -- table of colour name strings
-  }
-}
+-- TreeSitter crashes on big files like pkgs/top-level/all-packages.nix in nixpkgs...
+-- require("nvim-treesitter.configs").setup {
+--   highlight = {
+--     enable = true,
+--     disable = function(lang, buf)
+--       local max_filesize = 100 * 1024 -- 100 KB
+--       local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+--       if ok and stats and stats.size > max_filesize then
+--         return true
+--       end
+--     end,
+--   },
+--
+--   rainbow = {
+--     enable = true,
+--     -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+--     -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+--     extended_mode = true,
+--     -- Do not enable for files with more than n lines, int
+--     max_file_lines = 20000,
+--     -- colors = {}, -- table of hex strings
+--     -- termcolors = {} -- table of colour name strings
+--   }
+-- }
+-- https://essais.co/better-folding-in-neovim/
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.opt.foldenable = false
+-- vim.opt.foldlevel = 99
+-- vim.opt.foldtext =
+-- [[ substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g') . ]] ..
+--     [[ ' ¬ (' . (v:foldend - v:foldstart + 1) . ' lines) ¬ ' . ]] ..
+--     [[ trim(getline(v:foldend)) ]]
 
 require("gitsigns").setup()

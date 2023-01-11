@@ -108,7 +108,7 @@ with lib;
         nvim-cmp
         nvim-lspconfig
         nvim-tree-lua
-        nvim-ts-rainbow
+        #nvim-ts-rainbow
         nvim-web-devicons
         null-ls-nvim
         telescope-nvim
