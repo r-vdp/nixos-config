@@ -10,11 +10,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1673522518,
-        "narHash": "sha256-dnx3rqIPWlKXtmMpgJt0IYVW993NE3hFQbmkTOqF31Q=",
+        "lastModified": 1673613496,
+        "narHash": "sha256-0P9qy6sj8Zfx1by+J4qB7MWUKFDzHl8ghjxneZGLHYg=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "5ad17277d94133e015307f3dbc2f30f5fe693464",
+        "rev": "3e9cdaec46ab6327e79bd5a57175835b68960a80",
         "type": "github"
       },
       "original": {
@@ -211,18 +211,22 @@
       }
     },
     "nixpkgs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
       "locked": {
-        "lastModified": 1673450908,
-        "narHash": "sha256-b8em+kwrNtnB7gR8SyVf6WuTyQ+6tHS6dzt9D9wgKF0=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "6c8644fc37b6e141cbfa6c7dc8d98846c4ff0c2e",
+        "lastModified": 1673400599,
+        "narHash": "sha256-EnDVDsQ/uoCdO1UMPTSHelJLjJTR794yp370a89n3y4=",
+        "owner": "numtide",
+        "repo": "nixpkgs-unfree",
+        "rev": "7331a9526557393edc2ff86d04ecd74b107f1b81",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
+        "owner": "numtide",
+        "repo": "nixpkgs-unfree",
         "type": "github"
       }
     },
@@ -254,6 +258,22 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixos-22.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1673450908,
+        "narHash": "sha256-b8em+kwrNtnB7gR8SyVf6WuTyQ+6tHS6dzt9D9wgKF0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6c8644fc37b6e141cbfa6c7dc8d98846c4ff0c2e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -294,6 +314,7 @@
         "nix-index-database": "nix-index-database",
         "nixos-generators": "nixos-generators",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "sops-nix": "sops-nix"
       }
     },
