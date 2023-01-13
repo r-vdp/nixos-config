@@ -57,5 +57,8 @@ in
       "ssh-extra-config" = {
         inherit sopsFile owner group mode;
       };
+      "harvest-env" = {
+        inherit sopsFile owner group mode;
+      };
     };
 }
