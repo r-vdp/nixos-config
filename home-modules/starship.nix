@@ -12,9 +12,30 @@
         error_symbol = "[➜](bold red)";
       };
 
+      directory = {
+        fish_style_pwd_dir_length = 1;
+        before_repo_root_style = "cyan";
+        repo_root_style = "bold cyan underline";
+        truncate_to_repo = false;
+      };
+
+      git_branch = {
+        symbol = " ";
+      };
+
       shell = {
         disabled = false;
         bash_indicator = "bash";
+      };
+
+      memory_usage = {
+        disabled = false;
+        threshold = 60;
+      };
+
+      shlvl = {
+        disabled = true;
+        symbol = "";
       };
 
       # Show a refresh symbol when the kernel changed and we need to reboot.
