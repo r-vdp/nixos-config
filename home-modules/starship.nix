@@ -19,6 +19,11 @@
         truncate_to_repo = false;
       };
 
+      hostname = {
+        # This symbol has some right padding, so we do not include an extra space.
+        ssh_symbol = "🌐";
+      };
+
       git_branch = {
         symbol = " ";
       };
