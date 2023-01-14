@@ -303,7 +303,7 @@ in
       ];
       dates = "Fri 20:00";
       allowReboot = cfg.isHeadless;
-      rebootWindow = mkForce { lower = "12:00"; upper = "21:00"; };
+      rebootWindow = { lower = "12:00"; upper = "21:00"; };
     };
 
     systemd = mkMerge [
