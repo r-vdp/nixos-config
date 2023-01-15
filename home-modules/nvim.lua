@@ -229,7 +229,9 @@ require("lualine").setup {
   extensions = {}
 }
 
-require("nvim-tree").setup()
+require("nvim-tree").setup({
+  respect_buf_cwd = true,
+})
 
 local nvim_lsp = require("lspconfig")
 
@@ -337,7 +339,7 @@ local on_attach = function(client, bufnr)
   })
   -- TODO: are we potentially creating multiple autocommands that will each fire
   --       if multiple clients support code lenses?
-  -- Elm code actions are useless and distracting
+  -- Elm code lenses are useless and distracting
   if (client.supports_method("textDocument/codeLens") and
       vim.bo.filetype ~= "elm") then
     vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "InsertLeave" }, {
