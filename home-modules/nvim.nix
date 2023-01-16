@@ -11,6 +11,7 @@ with lib;
 
       # Needed for telescope-nvim, modern `find` alternative
       fd
+      fzf
       inputs.devenv.packages.${pkgs.system}.devenv
       python3
       # Needed for telescope-nvim, modern grep alternative
