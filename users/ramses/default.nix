@@ -12,7 +12,7 @@ in
   users.users.${username} = {
     uid = 1000;
     isNormalUser = true;
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     description = username;
     extraGroups = map (group: group_cfg.${group}.name) ([
       "keys"
@@ -23,8 +23,6 @@ in
     passwordFile = config.sops.secrets."${username}-user-password".path;
     openssh.authorizedKeys.keyFiles = [ ./authorized_keys ];
   };
-
-  programs.zsh.enable = true;
 
   home-manager = {
     users.${username} = {
