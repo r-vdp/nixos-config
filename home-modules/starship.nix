@@ -31,6 +31,7 @@
       shell = {
         disabled = false;
         bash_indicator = "bash";
+        fish_indicator = "";
       };
 
       memory_usage = {
