@@ -91,9 +91,11 @@
           ];
           format = "iso";
         };
+      };
 
-        # As a temporary workaround, we put the home configurations under packages
-        # so that we do not need to hard code the value for system.
+      legacyPackages = {
+        # As a temporary workaround, we put the home configurations under
+        # legacyPackages so that we do not need to hard code the value for system.
         # See https://github.com/nix-community/home-manager/issues/3075
         homeConfigurations =
           let
