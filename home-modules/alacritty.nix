@@ -10,7 +10,7 @@
         let
           # Tricky to find the right name, we can check the font picker of
           # any GUI program like Firefox and write exactly what is shown there.
-          family = "FiraCode Nerd Font Mono";
+          family = "FiraCode Nerd Font";
         in
         {
           normal = {
