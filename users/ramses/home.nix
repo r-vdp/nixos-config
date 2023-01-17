@@ -39,7 +39,6 @@ in
       pcloud
       signal-desktop
       slack
-      teams
       vlc
 
       gnome-extension-manager
