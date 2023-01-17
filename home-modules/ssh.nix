@@ -1,7 +1,5 @@
 { config, lib, ... }:
 
-with lib;
-
 let
   inherit (lib.hm) dag;
 in
