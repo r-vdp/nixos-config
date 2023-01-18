@@ -48,6 +48,7 @@ with lib;
         # Python
         (pkgs.python3.withPackages (pyPkgs: with pyPkgs; [
           python-lsp-server
+          python-lsp-black
           pylsp-mypy
           mypy
           pyflakes

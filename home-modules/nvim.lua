@@ -396,6 +396,9 @@ for _, lsp in ipairs(servers) do
       },
       pylsp = {
         plugins = {
+          black = {
+            enable = true
+          },
           pylsp_mypy = {
             enable = true
           },
