@@ -36,6 +36,18 @@ with lib;
           dblVal3 = -1.3860823201099277;
         };
       };
+
+      dictionaryTypeOf = keyType: valueType:
+        type.arrayOf (type.dictionaryEntryOf [ keyType valueType ]);
+
+      mkDictionary = keyType: valueType: entries:
+        mkArray (type.dictionaryEntryOf [ keyType valueType ])
+          (map ({ key, value }: mkDictionaryEntry [ key value ]) entries);
+
+      varDictionaryType = dictionaryTypeOf type.string type.variant;
+
+      mkVarDictionary = kvPairs:
+        mkDictionary type.string type.variant kvPairs;
     in
     mkIf (! config.home.settings.isHeadless) {
       "org/gnome/Console" = {
@@ -164,9 +176,21 @@ with lib;
       };
       "org/gnome/shell/weather" = {
         automatic-location = true;
+        locations = mkArray type.variant (attrValues locations);
+      };
+      "org/gnome/Weather" = {
+        locations = mkArray type.variant (attrValues locations);
       };
       "org/gnome/shell/world-clocks" = {
         locations = mkArray type.variant (attrValues locations);
+      };
+      "org/gnome/clocks" = {
+        world-clocks = mkArray varDictionaryType (
+          map
+            (location: mkVarDictionary [
+              { key = "location"; value = location; }
+            ])
+            (attrValues locations));
       };
     };
 }
