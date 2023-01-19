@@ -169,6 +169,7 @@ in
       fwupd.enable = true;
       fstrim.enable = true;
       gvfs.enable = ! cfg.isHeadless;
+      thermald.enable = true;
 
       # for dconf in home-manager
       dbus.packages = with pkgs; optionals (! cfg.isHeadless) [
