@@ -128,15 +128,32 @@ with lib;
       };
       "org/gnome/shell/extensions/system-monitor" = {
         compact-display = false;
-        cpu-individual-cores = false;
+        move-clock = false;
+
         cpu-show-text = false;
-        freq-display = false;
+        cpu-individual-cores = false;
+        cpu-refresh-time = 2000;
+
+        freq-display = true;
         freq-freq-color = "#c061cbff";
+        freq-refresh-time = 2000;
         freq-show-menu = true;
         freq-show-text = false;
+
+        memory-display = true;
+        memory-refresh-time = 5000;
         memory-show-text = false;
-        move-clock = false;
+
+        disk-display = true;
+        disk-refresh-time = 2000;
+        disk-show-text = false;
+
+        net-display = true;
+        net-refresh-time = 2000;
         net-show-text = false;
+
+        swap-display = false;
+        thermal-display = false;
       };
       "org/gnome/shell/weather" = {
         automatic-location = true;
