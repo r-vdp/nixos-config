@@ -41,7 +41,8 @@ in
       slack
       vlc
 
-      gnome-extension-manager
+      gnome.gnome-tweaks
+      gnomeExtensions.bluetooth-quick-connect
       gnomeExtensions.appindicator
       gnomeExtensions.system-monitor
     ];

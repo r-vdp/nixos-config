@@ -110,6 +110,7 @@ with lib;
       "org/gnome/shell" = {
         disable-user-extensions = false;
         enabled-extensions = mkArray type.string [
+          "bluetooth-quick-connect@bjarosze.gmail.com"
           "system-monitor@paradoxxx.zero.gmail.com"
           "appindicatorsupport@rgcjonas.gmail.com"
         ];
@@ -125,6 +126,12 @@ with lib;
       };
       "org/gnome/shell/extensions/appindicator" = {
         tray-pos = "right";
+      };
+      "org/gnome/shell/extensions/bluetooth-quick-connect" = {
+        bluetooth-auto-power-on = false;
+        keep-menu-on-toggle = true;
+        refresh-button-on = true;
+        show-battery-value-on = true;
       };
       "org/gnome/shell/extensions/system-monitor" = {
         compact-display = false;
