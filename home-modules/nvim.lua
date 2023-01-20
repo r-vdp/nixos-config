@@ -326,7 +326,11 @@ local on_attach = function(client, bufnr)
     group = lsp_augroup,
     buffer = bufnr,
     callback = function()
-      vim.lsp.buf.format()
+      -- Allow to disable auto-formatting with
+      --   :lua vim.g.no_auto_format = true
+      if vim.g.no_auto_format ~= true then
+        vim.lsp.buf.format()
+      end
     end
   })
   -- Show diagnostic popup on cursor hover
