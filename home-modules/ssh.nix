@@ -106,7 +106,7 @@ in
           host = "*-tmux";
           extraOptions = {
             RequestTTY = "Force";
-            RemoteCommand = "tmux attach";
+            RemoteCommand = "exec tmux attach";
           };
         };
         # Separate entry without dynamic forwards to be used as a jump host.
