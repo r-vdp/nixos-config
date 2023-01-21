@@ -2,11 +2,6 @@
   programs.starship = {
     enable = true;
     settings = {
-      # Increase the timeout for commands, the default is 500ms.
-      # E.g. git commands in nixpkgs need more time.
-      # https://starship.rs/config/#prompt
-      command_timeout = 1500;
-
       character = {
         success_symbol = "[➜](bold green)";
         error_symbol = "[➜](bold red)";
