@@ -5,14 +5,18 @@ with lib;
 {
   services.openssh = {
     enable = true;
+    startWhenNeeded = true;
+    openFirewall = true;
 
     # Ignore the authorized_keys files in the users' home directories,
     # keys should be added through the config.
     authorizedKeysFiles = mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
-    permitRootLogin = "no";
+    settings = {
+      kbdInteractiveAuthentication = false;
+      passwordAuthentication = false;
+      permitRootLogin = "no";
+    };
     forwardX11 = false;
-    passwordAuthentication = false;
-    kbdInteractiveAuthentication = false;
     allowSFTP = true;
     kexAlgorithms = [
       "sntrup761x25519-sha512@openssh.com"
@@ -38,4 +42,3 @@ with lib;
     '';
   };
 }
-
