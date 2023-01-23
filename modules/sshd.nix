@@ -12,9 +12,9 @@ with lib;
     # keys should be added through the config.
     authorizedKeysFiles = mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
     settings = {
-      kbdInteractiveAuthentication = false;
-      passwordAuthentication = false;
-      permitRootLogin = "no";
+      KbdInteractiveAuthentication = false;
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
     };
     forwardX11 = false;
     allowSFTP = true;
