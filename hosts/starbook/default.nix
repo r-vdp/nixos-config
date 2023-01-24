@@ -12,12 +12,6 @@ with lib;
   settings.system.isHeadless = false;
 
   boot = {
-    # Get sound working, but no microphone...
-    # https://thesofproject.github.io/latest/getting_started/intel_debug/introduction.html#pci-devices-introduced-after-2016
-    extraModprobeConfig = ''
-      options snd-intel-dspcfg dsp_driver=1
-    '';
-
     initrd.luks.devices = {
       decrypted = {
         device = "/dev/disk/by-partuuid/07065c4d-825f-4a68-a388-8660c1dfed4a";
@@ -69,5 +63,4 @@ with lib;
       libvdpau-va-gl
     ];
   };
-  powerManagement.cpuFreqGovernor = "schedutil";
 }
