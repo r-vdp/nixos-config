@@ -11,7 +11,7 @@ keys:
   # users
   - &ramses age1wm7aec0vd5trqqvk6n97kh8r3x0jpue9gne9enr92kdjk63f5e8s9gjy0x
   # servers
-  - &starbook age1lkddy5f6duxxgdf92eng0x8juqm492klzu4ffcyrsh6y8ywlzcnsw8a6j4
+  - &starbook age144q0q3ws7mxtuxrc6sm95e7skfx9cw5sypr46ku86hqaq3ha6vdqzduy0u
   - &nixer    age1e4larxc5ydy4kar30ar2x4uzg4u2lchjhcefnzvxmx7a9rs3hygswqrmez
   - &nuke     age1ztmgmhauuaxca9vjl4csr80lt26m47tqh8nk252vytxjtc3pze5s6s56m5
 creation_rules:
