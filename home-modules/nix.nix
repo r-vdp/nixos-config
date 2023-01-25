@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, inputs, ... }:
 
 {
   options.home.settings.nixSettings = {
@@ -9,6 +9,7 @@
     # FIXME: we are repeating modules/nix.nix here
     nix = lib.mkIf config.home.settings.nixSettings.enable {
       package = pkgs.nix;
+      registry = inputs.nixpkgs;
       settings = {
         experimental-features = [ "nix-command" "flakes" ];
         fallback = true;
@@ -23,4 +24,3 @@
     nixpkgs.config.allowUnfree = true;
   };
 }
-
