@@ -1,10 +1,12 @@
 #! /usr/bin/env bash
 
-device="${1}"
+set -eou pipefail
 
-if [ ! -b "${device}" ]; then
+if [ ! -v "1" ] || [ ! -b "${1}" ]; then
   echo "Please give the block device to install on as a paramter."
 fi
+
+device="${1}"
 
 function wait_for_devices() {
   local -a devs=("${@}")
@@ -73,11 +75,11 @@ sudo btrfs subvolume create /mnt/snapshots
 
 sudo umount /mnt
 
-sudo mount -o compressed=zstd,noatime,subvol=root /dev/by-label/nixos /mnt
+sudo mount -o compress=zstd,noatime,subvol=root /dev/disk/by-label/nixos /mnt
 mkdir /mnt/{boot,home,nix,snapshots}
-sudo mount -o compressed=zstd,noatime,subvol=home /dev/by-label/nixos /mnt/home
-sudo mount -o compressed=zstd,noatime,subvol=nix /dev/by-label/nixos /mnt/nix
-sudo mount -o compressed=zstd,noatime,subvol=snapshots /dev/by-label/nixos /mnt/snapshots
+sudo mount -o compress=zstd,noatime,subvol=home /dev/disk/by-label/nixos /mnt/home
+sudo mount -o compress=zstd,noatime,subvol=nix /dev/disk/by-label/nixos /mnt/nix
+sudo mount -o compress=zstd,noatime,subvol=snapshots /dev/disk/by-label/nixos /mnt/snapshots
 sudo mount /dev/disk/by-label/ESP /mnt/boot
 
 sudo btrfs subvolume snapshot /mnt/ /mnt/snapshots/empty-root
