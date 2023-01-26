@@ -12,6 +12,8 @@
       kernelModules = [ "dm-snapshot" ];
     };
     kernelModules = [ "kvm-intel" ];
+    # Allow flashrom to work
+    kernelParams = [ "iomem=relaxed" ];
     extraModulePackages = [ ];
   };
 
