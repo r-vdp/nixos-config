@@ -9,7 +9,7 @@ with lib;
 
   nixpkgs.overlays = [
     (final: prev: {
-      fwupd = final.callPackage ../../overrides/fwupd { };
+      fwupd = final.callPackage ../../overrides/fwupd { enableFlashrom = true; };
 
       flashrom = prev.flashrom.overrideAttrs (prevAttrs: rec {
         version = "1.3.0-rc2";

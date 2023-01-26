@@ -54,6 +54,7 @@
 , libmbim
 , libcbor
 , xz
+, enableFlashrom ? false
 }:
 
 let
@@ -74,9 +75,7 @@ let
   haveMSR = isx86;
 
   # # Currently broken on Aarch64
-  # haveFlashrom = isx86;
-  # Experimental
-  haveFlashrom = true;
+  haveFlashrom = isx86 && enableFlashrom;
 
   runPythonCommand = name: buildCommandPython: runCommand name
     {
