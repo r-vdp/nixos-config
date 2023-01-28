@@ -57,6 +57,11 @@ in
       doc.enable = false;
     };
 
+    # We don't want a nix channel for root.
+    system.activationScripts.no-nix-channel = lib.stringAfter [ "nix" ] ''
+      echo "" > /root/.nix-channels
+    '';
+
     programs = {
       # We use nix-index instead, setup with home-manager
       command-not-found.enable = false;
