@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   programs.starship = {
     enable = true;
@@ -48,7 +49,12 @@
             comparePaths = path:
               ''test "$(realpath ${curr-sys}/${path})" != "$(realpath ${boot-sys}/${path})"'';
           in
-          ''${comparePaths "kernel"} && ${comparePaths "kernel-modules"}'';
+          lib.concatMapStringsSep " || " comparePaths [
+            "kernel"
+            "kernel-modules"
+            "kernel-params"
+            "initrd"
+          ];
         command = "echo ''";
         style = "bold red";
       };
