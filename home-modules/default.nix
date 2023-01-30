@@ -6,8 +6,10 @@ let
   inherit (lib.hm) dag;
 in
 {
-  imports = import ../import-dir.nix { inherit lib; fromDir = ./.; } ++
-    [ inputs.nix-index-database.hmModules.nix-index ];
+  imports = import ../import-dir.nix { inherit lib; fromDir = ./.; } ++ [
+    ../shared-modules
+    inputs.nix-index-database.hmModules.nix-index
+  ];
 
   options = {
     home.settings = {

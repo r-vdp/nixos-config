@@ -22,4 +22,6 @@
         };
     };
   };
+
+  nix.package = pkgs.nix;
 }

@@ -1,5 +1,6 @@
 { lib, ... }:
 {
-  imports = import ../import-dir.nix { inherit lib; fromDir = ./.; };
+  imports = import ../import-dir.nix { inherit lib; fromDir = ./.; } ++ [
+    ../shared-modules
+  ];
 }
-

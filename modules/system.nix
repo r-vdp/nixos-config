@@ -356,8 +356,6 @@ in
       enableAllFirmware = true;
     };
 
-    nixpkgs.config.allowUnfree = true;
-
     # Adapt some settings in case we are building the config as a QEMU VM
     virtualisation.vmVariant = { lib, ... }: with lib; {
       settings.system = {

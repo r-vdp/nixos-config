@@ -26,6 +26,8 @@ with lib;
       enable = true;
       # devenv can be slow to load, we don't need a warning every time
       config.global.warn_timeout = "3m";
+
+      nix-direnv.enable = true;
     };
 
     neovim = {
