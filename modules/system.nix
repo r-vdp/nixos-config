@@ -104,38 +104,44 @@ in
       };
     };
 
-    networking.networkmanager = mkIf config.networking.networkmanager.enable {
-      # Do not take DNS servers from DHCP
-      dns = mkForce "none";
-      wifi = {
-        macAddress = "preserve";
-      };
-      # See https://developer-old.gnome.org/NetworkManager/stable/NetworkManager.html
-      dispatcherScripts = [
-        {
-          # NetworkManager insist on setting per-interface DNS settings.
-          # Since we always want to use the global settings, we reset these.
-          # TODO: something seems to still reset these DNS settings without
-          # retriggering this script...
-          # TODO: is this still needed? Does resolved correctly use the global
-          # settings only now due to them having Domains=~. ?
-          source = pkgs.writeText "networkmanager-dispatcher-reset-dns" ''
-            interface="$1"
-            action="$2"
-
-            echo "networkmanager-dispatcher-reset-dns: action=$action"
-            if [ "$action" = "up" ] || \
-               [ "$action" = "dhcp4-change" ] || \
-               [ "$action" = "dhcp6-change" ] || \
-               [ "$action" = "connectivity-change" ]; then
-              echo "networkmanager-dispatcher-reset-dns: configuring resolved for interface $1"
-              ${pkgs.systemd}/bin/resolvectl revert "$interface"
-              ${pkgs.systemd}/bin/resolvectl mdns "$interface" on
-            fi
-          '';
-          type = "basic";
-        }
+    networking = {
+      useNetworkd = true;
+      firewall.allowedUDPPorts = [
+        5353 # mDNS
       ];
+      networkmanager = mkIf config.networking.networkmanager.enable {
+        # Do not take DNS servers from DHCP
+        dns = mkForce "none";
+        wifi = {
+          macAddress = "preserve";
+        };
+        # See https://developer-old.gnome.org/NetworkManager/stable/NetworkManager.html
+        dispatcherScripts = [
+          {
+            # NetworkManager insist on setting per-interface DNS settings.
+            # Since we always want to use the global settings, we reset these.
+            # TODO: something seems to still reset these DNS settings without
+            # retriggering this script...
+            # TODO: is this still needed? Does resolved correctly use the global
+            # settings only now due to them having Domains=~. ?
+            source = pkgs.writeText "networkmanager-dispatcher-reset-dns" ''
+              interface="$1"
+              action="$2"
+
+              echo "networkmanager-dispatcher-reset-dns: action=$action"
+              if [ "$action" = "up" ] || \
+                 [ "$action" = "dhcp4-change" ] || \
+                 [ "$action" = "dhcp6-change" ] || \
+                 [ "$action" = "connectivity-change" ]; then
+                echo "networkmanager-dispatcher-reset-dns: configuring resolved for interface $1"
+                ${pkgs.systemd}/bin/resolvectl revert "$interface"
+                ${pkgs.systemd}/bin/resolvectl mdns "$interface" on
+              fi
+            '';
+            type = "basic";
+          }
+        ];
+      };
     };
 
     security = {
@@ -209,7 +215,7 @@ in
       };
 
       avahi = {
-        enable = true;
+        enable = false;
         nssmdns = true;
         publish = {
           enable = true;
@@ -349,6 +355,21 @@ in
             "-o StrictHostKeyChecking=yes"
           ];
       })
+      {
+        # The notion of "online" is a broken concept
+        # https://github.com/systemd/systemd/blob/e1b45a756f71deac8c1aa9a008bd0dab47f64777/NEWS#L13
+        services.NetworkManager-wait-online.enable = false;
+        network.wait-online.enable = false;
+
+        # FIXME: Maybe upstream?
+        # Do not take down the network for too long when upgrading,
+        # This also prevents failures of services that are restarted instead of stopped.
+        # It will use `systemctl restart` rather than stopping it with `systemctl stop`
+        # followed by a delayed `systemctl start`.
+        services.systemd-networkd.stopIfChanged = false;
+        # Services that are only restarted might be not able to resolve when resolved is stopped before
+        services.systemd-resolved.stopIfChanged = false;
+      }
     ];
 
     hardware = {
