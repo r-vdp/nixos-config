@@ -9,6 +9,8 @@ with lib;
         stack
       ]))
 
+      cargo
+
       # Needed for telescope-nvim, modern `find` alternative
       fd
       fzf
@@ -80,7 +82,6 @@ with lib;
         nixpkgs-fmt
 
         # Rust
-        cargo
         gcc
         rustc
         rustfmt
