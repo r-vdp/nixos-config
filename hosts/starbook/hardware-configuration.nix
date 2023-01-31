@@ -12,8 +12,13 @@
       kernelModules = [ "dm-snapshot" ];
     };
     kernelModules = [ "kvm-intel" ];
-    # Allow flashrom to work
-    kernelParams = [ "iomem=relaxed" ];
+    kernelParams = [
+      # Allow flashrom to work
+      "iomem=relaxed"
+      # See `modinfo -p i915`
+      "i915.enable_fbc=1"
+      "i915.enable_psr=2"
+    ];
     extraModulePackages = [ ];
   };
 
