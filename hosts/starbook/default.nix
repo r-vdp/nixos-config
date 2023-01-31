@@ -7,29 +7,47 @@ with lib;
     ./hardware-configuration.nix
   ];
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      fwupd = final.callPackage ../../overrides/fwupd { enableFlashrom = true; };
+  environment.systemPackages = with pkgs; [
+    coreboot-configurator
+  ];
 
-      flashrom = prev.flashrom.overrideAttrs (prevAttrs: rec {
+  services.fwupd = {
+    enable = true;
+    package = pkgs.fwupd.override {
+      enableFlashrom = true;
+      flashrom = config.programs.flashrom.package;
+    };
+  };
+
+  programs.flashrom = {
+    enable = true;
+    package =
+      let
         version = "1.3.0-rc2";
+        hash = "sha256-s69mJfTk1Y1TUV5etXc0A1vcHYH6cn2Nx56KirU1j+s=";
+      in
+      pkgs.flashrom.overrideAttrs (prevAttrs: {
+        inherit version;
 
-        src = final.fetchFromGitHub {
+        src = pkgs.fetchFromGitHub {
           owner = prevAttrs.pname;
           repo = prevAttrs.pname;
           rev = "v${version}";
-          hash = "sha256-s69mJfTk1Y1TUV5etXc0A1vcHYH6cn2Nx56KirU1j+s=";
+          inherit hash;
         };
 
-        nativeBuildInputs = prevAttrs.nativeBuildInputs ++ (with final.pkgs; [
+        nativeBuildInputs = prevAttrs.nativeBuildInputs ++ (with pkgs; [
           meson
           ninja
         ]);
 
-        buildInputs = prevAttrs.buildInputs ++ (with final.pkgs; [
-          #  libjaylink
+        buildInputs = prevAttrs.buildInputs ++ (with pkgs; [
           cmocka
         ]);
+
+        postPatch = ''
+          substituteInPlace util/flashrom_udev.rules --replace "plugdev" "flashrom"
+        '';
 
         mesonFlags = [
           "-Dprogrammer=auto"
@@ -37,28 +55,9 @@ with lib;
 
         postInstall = ''
           install -Dm644 $src/util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
-          substituteInPlace $out/lib/udev/rules.d/flashrom.rules \
-            --replace "plugdev" "flashrom"
         '';
-
-        postPatch = "";
       });
-    })
-  ];
-
-  # Issue with fwupd since it cannot write in the fwupd directory in /etc
-  # https://github.com/NixOS/nixpkgs/pull/212440
-  environment.etc."fwupd/uefi_capsule.conf" = lib.mkForce { text = ""; };
-
-  services.fwupd.daemonSettings = {
-    EspLocation = config.boot.loader.efi.efiSysMountPoint;
   };
-
-  environment.systemPackages = with pkgs; [
-    coreboot-configurator
-  ];
-
-  programs.flashrom.enable = true;
 
   time.timeZone = "Europe/Brussels";
 
