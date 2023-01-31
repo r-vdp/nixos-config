@@ -9,6 +9,11 @@
   home = {
     homeDirectory = lib.mkDefault "/home/${config.home.username}";
 
+    # Add the nix package to the path, to get the one from our nixpkgs
+    packages = [
+      config.nix.package
+    ];
+
     settings = {
       nixSettings.enable = lib.mkDefault true;
 
