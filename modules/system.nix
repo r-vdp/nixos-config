@@ -358,17 +358,19 @@ in
       {
         # The notion of "online" is a broken concept
         # https://github.com/systemd/systemd/blob/e1b45a756f71deac8c1aa9a008bd0dab47f64777/NEWS#L13
-        services.NetworkManager-wait-online.enable = false;
         network.wait-online.enable = false;
-
-        # FIXME: Maybe upstream?
-        # Do not take down the network for too long when upgrading,
-        # This also prevents failures of services that are restarted instead of stopped.
-        # It will use `systemctl restart` rather than stopping it with `systemctl stop`
+        services.NetworkManager-wait-online.enable = false;
+      }
+      {
+        # Use `systemctl restart` rather than stopping with `systemctl stop`
         # followed by a delayed `systemctl start`.
-        services.systemd-networkd.stopIfChanged = false;
-        # Services that are only restarted might be not able to resolve when resolved is stopped before
-        services.systemd-resolved.stopIfChanged = false;
+        services = {
+          # Do not take down the network for too long when upgrading,
+          # This also prevents failures of services that are restarted instead of stopped.
+          systemd-networkd.stopIfChanged = false;
+          # Services that are only restarted might not be able to resolve when resolved is stopped
+          systemd-resolved.stopIfChanged = false;
+        };
       }
     ];
 
