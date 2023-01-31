@@ -41,19 +41,33 @@
       };
 
       # Show a refresh symbol when the kernel changed and we need to reboot.
-      custom.kernel-version = {
+      custom.needs-reboot = {
         when =
           let
             curr-sys = "/run/current-system/";
             boot-sys = "/run/booted-system/";
-            comparePaths = path:
-              ''test "$(realpath ${curr-sys}/${path})" != "$(realpath ${boot-sys}/${path})"'';
+            comparePaths = { filename, compareContents ? false }:
+              let
+                pathToValue = path:
+                  if compareContents
+                  then
+                    "sha256sum ${path} | cut -d' ' -f1"
+                  else
+                    "realpath ${path}";
+
+                currentValue = pathToValue "${curr-sys}/${filename}";
+                bootedValue = pathToValue "${boot-sys}/${filename}";
+              in
+              ''test "$(${currentValue})" != "$(${bootedValue})"'';
           in
           lib.concatMapStringsSep " || " comparePaths [
-            "kernel"
-            "kernel-modules"
-            "kernel-params"
-            "initrd"
+            { filename = "kernel"; }
+            { filename = "kernel-modules"; }
+            # This file is part of the top-level system path, and so the realpath
+            # changes every time we get a new system path.
+            # We thus need to look at the actual contents to know if it changed.
+            { filename = "kernel-params"; compareContents = true; }
+            { filename = "initrd"; }
           ];
         command = "echo ''";
         style = "bold red";
