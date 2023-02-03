@@ -102,6 +102,7 @@ with lib;
         cmp-nvim-lsp
         cmp-path
         diffview-nvim
+        direnv-vim
         editorconfig-nvim
         elm-vim
         gitsigns-nvim
