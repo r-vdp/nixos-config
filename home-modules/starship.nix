@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   programs.starship = {
     enable = true;
@@ -38,6 +38,12 @@
       shlvl = {
         disabled = true;
         symbol = "";
+      };
+
+      custom.mullvad = {
+        when = ''${pkgs.mullvad}/bin/mullvad status | ${pkgs.ripgrep}/bin/rg "Connected"'';
+        command = "echo '󰦝'";
+        style = "bold green";
       };
 
       # Show a refresh symbol when the kernel changed and we need to reboot.
