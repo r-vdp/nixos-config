@@ -84,7 +84,7 @@ in
         };
         wireguard = {
           mtu = null;
-          use_pq_safe_psk = false;
+          use_pq_safe_psk = true;
           rotation_interval = null;
         };
         generic = {
