@@ -72,6 +72,14 @@
     };
 
     exa.enable = true;
-  };
 
+    atuin = {
+      enable = true;
+      settings = {
+        dialect = "uk";
+        search_mode = "fuzzy";
+        filter_mode = "directory";
+      };
+    };
+  };
 }
