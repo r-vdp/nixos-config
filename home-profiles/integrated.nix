@@ -14,6 +14,8 @@ in
     settings = {
       inherit (osConfig.settings.system) isHeadless tmux_term;
 
+      profile = config.home.settings.profileValues.integrated;
+
       keys = {
         privateKeyFiles = {
           id_ec = secrets."${config.home.username}-ssh-priv-key".path;

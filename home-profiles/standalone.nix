@@ -15,6 +15,8 @@
     ];
 
     settings = {
+      profile = config.home.settings.profileValues.standalone;
+
       nixSettings.enable = lib.mkDefault true;
 
       keys.privateKeyFiles =

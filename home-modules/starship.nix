@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 {
   programs.starship = {
     enable = true;
@@ -40,7 +40,9 @@
         symbol = "";
       };
 
-      custom.mullvad = {
+      # We currently only have the mullvad on integrated set-ups, so we don't want
+      # to pull in the mullvad package on standalone ones.
+      custom.mullvad = lib.mkIf (config.home.settings.profile == config.home.settings.profileValues.integrated) {
         when = ''${pkgs.mullvad}/bin/mullvad status | ${pkgs.ripgrep}/bin/rg "Connected"'';
         command = "echo '󰦝'";
         style = "bold green";

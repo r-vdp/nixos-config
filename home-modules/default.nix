@@ -13,6 +13,19 @@ in
 
   options = {
     home.settings = {
+      profile = mkOption {
+        type = with types; enum (attrValues config.home.settings.profileValues);
+      };
+
+      profileValues = mkOption {
+        type = with types; attrsOf str;
+        default = {
+          standalone = "standalone";
+          integrated = "integrated";
+        };
+        readOnly = true;
+      };
+
       keys = {
         privateKeyFiles = {
           current = mkOption {
