@@ -1,39 +1,37 @@
 { inputs, config, pkgs, lib, modulesPath, ... }:
 
-with lib;
-
 {
   networking = {
     hostName = "rescue-iso";
-    wireless.enable = mkOverride 10 false;
+    wireless.enable = lib.mkOverride 10 false;
   };
 
   nixpkgs.hostPlatform = inputs.flake-utils.lib.system.x86_64-linux;
 
   system = {
-    extraDependencies = mkOverride 10 [ ];
+    extraDependencies = lib.mkOverride 10 [ ];
     stateVersion = "22.05"; # Did you read the comment?
   };
 
-  security.sudo.wheelNeedsPassword = mkForce false;
+  security.sudo.wheelNeedsPassword = lib.mkForce false;
 
   settings.system = {
     isHeadless = true;
     isISO = true;
   };
 
-  fileSystems = mkForce config.lib.isoFileSystems;
+  fileSystems = lib.mkForce config.lib.isoFileSystems;
 
-  systemd.services.sshd.wantedBy = mkOverride 10 [ "multi-user.target" ];
+  systemd.services.sshd.wantedBy = lib.mkOverride 10 [ "multi-user.target" ];
 
-  services.getty.helpLine = mkForce "";
+  services.getty.helpLine = lib.mkForce "";
 
   documentation = {
-    enable = mkOverride 10 false;
-    nixos.enable = mkOverride 10 false;
+    enable = lib.mkOverride 10 false;
+    nixos.enable = lib.mkOverride 10 false;
   };
 
-  boot.supportedFilesystems = mkOverride 10 [
+  boot.supportedFilesystems = lib.mkOverride 10 [
     "vfat"
     "tmpfs"
     "auto"
@@ -50,8 +48,8 @@ with lib;
       # Faster build by compressing less
       squashfsCompression = "gzip -Xcompression-level 1";
 
-      isoName = mkForce (
-        (concatStringsSep "-" [
+      isoName = lib.mkForce (
+        (lib.concatStringsSep "-" [
           custom_name
           config.isoImage.isoBaseName
           config.system.nixos.label

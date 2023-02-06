@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   inherit (config.home.settings) isHeadless;
 in
@@ -14,9 +12,9 @@ in
         userName = "R-VdP";
         userEmail = "141248+R-VdP@users.noreply.github.com";
         signerKeys = [
-          (readFile ./authorized_keys)
+          (lib.readFile ./authorized_keys)
           # Old id_ec key
-          (concatStringsSep " " [
+          (lib.concatStringsSep " " [
             ''valid-before="20221201"''
             "ssh-ed25519"
             "AAAAC3NzaC1lZDI1NTE5AAAAIFDyV+zVbtGMdiRwSBnnkcHtZAe2F/zmBUDUqMY4Sr+K"
@@ -28,7 +26,7 @@ in
     packages = with pkgs; [
       jq
     ] ++
-    optionals (! isHeadless) [
+    lib.optionals (! isHeadless) [
       authy
       gimp
       gparted

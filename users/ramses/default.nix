@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   group_cfg = config.users.groups;
   user_cfg = config.users.users;
@@ -18,8 +16,8 @@ in
       "keys"
       "wheel"
     ]
-    ++ optional config.services.pipewire.enable "audio"
-    ++ optional config.networking.networkmanager.enable "networkmanager");
+    ++ lib.optional config.services.pipewire.enable "audio"
+    ++ lib.optional config.networking.networkmanager.enable "networkmanager");
     passwordFile = config.sops.secrets."${username}-user-password".path;
     openssh.authorizedKeys.keyFiles = [ ./authorized_keys ];
   };
@@ -33,7 +31,7 @@ in
     mode = "0400";
     user = "root";
     group = "root";
-    text = generators.toJSON { } {
+    text = lib.generators.toJSON { } {
       relay_settings = {
         normal = {
           location = {

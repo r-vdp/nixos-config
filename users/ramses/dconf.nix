@@ -1,7 +1,5 @@
 { lib, config, ... }:
 
-with lib;
-
 {
   dconf.settings = with lib.hm.gvariant;
     let
@@ -49,7 +47,7 @@ with lib;
       mkVarDictionary = kvPairs:
         mkDictionary type.string type.variant kvPairs;
     in
-    mkIf (! config.home.settings.isHeadless) {
+    lib.mkIf (! config.home.settings.isHeadless) {
       "org/gnome/Console" = {
         font-scale = 1.3000000000000003;
       };
@@ -176,13 +174,13 @@ with lib;
       };
       "org/gnome/shell/weather" = {
         automatic-location = true;
-        locations = mkArray type.variant (attrValues locations);
+        locations = mkArray type.variant (lib.attrValues locations);
       };
       "org/gnome/Weather" = {
-        locations = mkArray type.variant (attrValues locations);
+        locations = mkArray type.variant (lib.attrValues locations);
       };
       "org/gnome/shell/world-clocks" = {
-        locations = mkArray type.variant (attrValues locations);
+        locations = mkArray type.variant (lib.attrValues locations);
       };
       "org/gnome/clocks" = {
         world-clocks = mkArray varDictionaryType (
@@ -190,7 +188,7 @@ with lib;
             (location: mkVarDictionary [
               { key = "location"; value = location; }
             ])
-            (attrValues locations));
+            (lib.attrValues locations));
       };
     };
 }

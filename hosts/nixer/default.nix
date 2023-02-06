@@ -1,7 +1,5 @@
 { lib, config, pkgs, ... }:
 
-with lib;
-
 let
   bridge_interface = "br0";
   lan1_interface = "enp1s0";
@@ -21,7 +19,7 @@ in
   settings.system.isHeadless = true;
 
   boot.kernel.sysctl = {
-    "net.ipv6.conf.${bridge_interface}.use_tempaddr" = mkForce "2";
+    "net.ipv6.conf.${bridge_interface}.use_tempaddr" = lib.mkForce "2";
   };
 
   fileSystems = {
@@ -261,4 +259,3 @@ in
     };
   };
 }
-

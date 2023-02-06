@@ -1,55 +1,52 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   inherit (config.lib) ext_lib;
 
   cfg = config.settings.reverse_tunnel;
-  sys_cfg = config.settings.system;
 
   relayServerOpts = { name, ... }: {
     options = {
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
       };
 
-      addresses = mkOption {
-        type = with types; listOf str;
+      addresses = lib.mkOption {
+        type = with lib.types; listOf str;
       };
 
-      public_key = mkOption {
+      public_key = lib.mkOption {
         type = ext_lib.pub_key_type;
       };
 
-      ports = mkOption {
-        type = with types; listOf port;
+      ports = lib.mkOption {
+        type = with lib.types; listOf port;
         default = [ 22 80 443 ];
       };
     };
 
     config = {
-      name = mkDefault name;
+      name = lib.mkDefault name;
     };
   };
 in
 {
   options = {
     settings.reverse_tunnel = {
-      enable = mkEnableOption "the reverse tunnel services";
+      enable = lib.mkEnableOption "the reverse tunnel services";
 
-      remote_forward_port = mkOption {
-        type = types.port;
+      remote_forward_port = lib.mkOption {
+        type = lib.types.port;
         description = "The port used for this server on the relay servers.";
       };
 
-      relay_servers = mkOption {
-        type = with types; attrsOf (submodule relayServerOpts);
+      relay_servers = lib.mkOption {
+        type = with lib.types; attrsOf (submodule relayServerOpts);
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users = {
       users.tunnel = {
         isSystemUser = true;
@@ -65,7 +62,7 @@ in
     # This line is very important, it ensures that the remote hosts can
     # set up their reverse tunnels without any issues with host keys
     programs.ssh.knownHosts =
-      mapAttrs
+      lib.mapAttrs
         (_: conf: {
           hostNames = conf.addresses;
           publicKey = conf.public_key;
@@ -93,8 +90,8 @@ in
             RestartSec = "10min";
           };
           script = ''
-            for host in ${concatStringsSep " " relay.addresses}; do
-              for port in ${concatMapStringsSep " " toString relay.ports}; do
+            for host in ${lib.concatStringsSep " " relay.addresses}; do
+              for port in ${lib.concatMapStringsSep " " toString relay.ports}; do
                 echo "Attempting to connect to ''${host} on port ''${port}"
                 ${pkgs.autossh}/bin/autossh \
                   -T -N \
@@ -119,11 +116,10 @@ in
         };
 
         make_tunnel_services =
-          mapAttrs' (_: relay: nameValuePair
+          lib.mapAttrs' (_: relay: lib.nameValuePair
             "autossh-reverse-tunnel-${relay.name}"
             (make_tunnel_service relay));
       in
       make_tunnel_services cfg.relay_servers;
   };
 }
-

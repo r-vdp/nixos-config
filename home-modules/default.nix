@@ -1,7 +1,5 @@
 { inputs, config, lib, pkgs, ... }:
 
-with lib;
-
 let
   inherit (lib.hm) dag;
 in
@@ -13,12 +11,12 @@ in
 
   options = {
     home.settings = {
-      profile = mkOption {
-        type = with types; enum (attrValues config.home.settings.profileValues);
+      profile = lib.mkOption {
+        type = with lib.types; enum (lib.attrValues config.home.settings.profileValues);
       };
 
-      profileValues = mkOption {
-        type = with types; attrsOf str;
+      profileValues = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = {
           standalone = "standalone";
           integrated = "integrated";
@@ -28,26 +26,26 @@ in
 
       keys = {
         privateKeyFiles = {
-          current = mkOption {
-            type = types.str;
+          current = lib.mkOption {
+            type = lib.types.str;
           };
-          id_ec = mkOption {
-            type = types.str;
+          id_ec = lib.mkOption {
+            type = lib.types.str;
           };
         };
       };
 
-      extraSshConfig = mkOption {
-        type = with types; attrsOf str;
+      extraSshConfig = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = { };
       };
 
-      isHeadless = mkOption {
-        type = types.bool;
+      isHeadless = lib.mkOption {
+        type = lib.types.bool;
       };
 
-      tmux_term = mkOption {
-        type = types.str;
+      tmux_term = lib.mkOption {
+        type = lib.types.str;
         default = "tmux-256color";
       };
     };
@@ -85,8 +83,8 @@ in
           '';
         in
         dag.entryAfter [ "writeBoundary" ] (
-          concatStringsSep "\n" (
-            mapAttrsToList (_: mkConfigFile) config.home.settings.extraSshConfig)
+          lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (_: mkConfigFile) config.home.settings.extraSshConfig)
         );
     };
 

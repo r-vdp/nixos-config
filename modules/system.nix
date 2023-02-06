@@ -1,29 +1,27 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.settings.system;
 in
 
 {
   options.settings.system = {
-    isHeadless = mkOption {
-      type = types.bool;
+    isHeadless = lib.mkOption {
+      type = lib.types.bool;
     };
 
-    isISO = mkOption {
-      type = types.bool;
+    isISO = lib.mkOption {
+      type = lib.types.bool;
       default = false;
     };
 
-    isVM = mkOption {
-      type = types.bool;
+    isVM = lib.mkOption {
+      type = lib.types.bool;
       default = false;
     };
 
-    nameservers = mkOption {
-      type = with types; listOf str;
+    nameservers = lib.mkOption {
+      type = with lib.types; listOf str;
       default =
         let
           quad9 = "dns.quad9.net";
@@ -37,8 +35,8 @@ in
       readOnly = true;
     };
 
-    tmux_term = mkOption {
-      type = types.str;
+    tmux_term = lib.mkOption {
+      type = lib.types.str;
       default = "tmux-256color";
       readOnly = true;
     };
@@ -86,7 +84,7 @@ in
     };
 
     boot = {
-      loader = mkIf (! (cfg.isISO || cfg.isVM)) {
+      loader = lib.mkIf (! (cfg.isISO || cfg.isVM)) {
         systemd-boot = {
           enable = true;
           editor = false;
@@ -109,9 +107,9 @@ in
       firewall.allowedUDPPorts = [
         5353 # mDNS
       ];
-      networkmanager = mkIf config.networking.networkmanager.enable {
+      networkmanager = lib.mkIf config.networking.networkmanager.enable {
         # Do not take DNS servers from DHCP
-        dns = mkForce "none";
+        dns = lib.mkForce "none";
         wifi = {
           macAddress = "preserve";
         };
@@ -183,7 +181,7 @@ in
       thermald.enable = true;
 
       # for dconf in home-manager
-      dbus.packages = with pkgs; optionals (! cfg.isHeadless) [
+      dbus.packages = with pkgs; lib.optionals (! cfg.isHeadless) [
         dconf
       ];
 
@@ -192,7 +190,7 @@ in
 
       timesyncd = {
         enable = ! cfg.isVM;
-        servers = mkDefault [
+        servers = lib.mkDefault [
           "0.nixos.pool.ntp.org"
           "1.nixos.pool.ntp.org"
           "2.nixos.pool.ntp.org"
@@ -208,7 +206,7 @@ in
         domains = [ "~." ];
         dnssec = "false";
         extraConfig = ''
-          DNS=${concatStringsSep " " cfg.nameservers}
+          DNS=${lib.concatStringsSep " " cfg.nameservers}
           DNSOverTLS=true
           MulticastDNS=true
         '';
@@ -235,7 +233,7 @@ in
       };
 
       # https://nixos.wiki/wiki/GNOME
-      udev.packages = with pkgs; optionals (! cfg.isHeadless) [
+      udev.packages = with pkgs; lib.optionals (! cfg.isHeadless) [
         gnome.gnome-settings-daemon
       ];
 
@@ -318,8 +316,8 @@ in
       rebootWindow = { lower = "12:00"; upper = "21:00"; };
     };
 
-    systemd = mkMerge [
-      (mkIf cfg.isHeadless {
+    systemd = lib.mkMerge [
+      (lib.mkIf cfg.isHeadless {
         # Given that our systems are headless, emergency mode is useless.
         # We prefer the system to attempt to continue booting so
         # that we can hopefully still access it remotely.
@@ -345,9 +343,9 @@ in
           AllowHibernation=no
         '';
       })
-      (mkIf config.system.autoUpgrade.enable {
+      (lib.mkIf config.system.autoUpgrade.enable {
         services.nixos-upgrade.environment.GIT_SSH_COMMAND =
-          concatStringsSep " " [
+          lib.concatStringsSep " " [
             "${pkgs.openssh}/bin/ssh"
             "-F /etc/ssh/ssh_config"
             "-i ${config.sops.secrets.nixos-config-deploy-key.path}"
@@ -380,10 +378,10 @@ in
     };
 
     # Adapt some settings in case we are building the config as a QEMU VM
-    virtualisation.vmVariant = { lib, ... }: with lib; {
+    virtualisation.vmVariant = { lib, ... }: {
       settings.system = {
         isVM = true;
-        isHeadless = mkForce true;
+        isHeadless = lib.mkForce true;
       };
       # Needed to get the keyboard to work
       boot.kernelParams = [ "console=ttyS0" ];
@@ -403,14 +401,14 @@ in
       };
       # The VM cannot decrypt our secrets...
       users.users.ramses = {
-        password = mkForce "";
-        passwordFile = mkForce null;
+        password = lib.mkForce "";
+        passwordFile = lib.mkForce null;
       };
       services.getty.autologinUser = "ramses";
-      security.sudo.wheelNeedsPassword = mkForce false;
-      users.mutableUsers = mkForce false;
+      security.sudo.wheelNeedsPassword = lib.mkForce false;
+      users.mutableUsers = lib.mkForce false;
       # Avoid delays on boot of the VM
-      networking.interfaces = mkForce { };
+      networking.interfaces = lib.mkForce { };
       documentation = {
         nixos.enable = false;
       };

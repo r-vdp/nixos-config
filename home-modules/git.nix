@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   inherit (config.home) settings;
 in
@@ -10,14 +8,14 @@ in
   options = {
     home.settings = {
       git = {
-        userName = mkOption {
-          type = types.str;
+        userName = lib.mkOption {
+          type = lib.types.str;
         };
-        userEmail = mkOption {
-          type = types.str;
+        userEmail = lib.mkOption {
+          type = lib.types.str;
         };
-        signerKeys = mkOption {
-          type = with types; listOf str;
+        signerKeys = lib.mkOption {
+          type = with lib.types; listOf str;
         };
       };
     };
@@ -43,7 +41,7 @@ in
         ssh.allowedSignersFile =
           let
             mkLine = pubkey: ''${settings.git.userEmail} ${pubkey}'';
-            signers = concatMapStringsSep "\n" mkLine settings.git.signerKeys;
+            signers = lib.concatMapStringsSep "\n" mkLine settings.git.signerKeys;
           in
           ''${pkgs.writeText "git-allowed-signers" signers}'';
       };

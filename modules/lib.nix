@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 /* We structure this file as one big let expression from which we will then
   inherit all the defined functions.
   The main reason is that let expressions are recursive while attribute sets
@@ -10,18 +8,18 @@ with lib;
 */
 let
   # compose [ f g h ] x == f (g (h x))
-  compose = flip (foldr id);
+  compose = lib.flip (lib.foldr lib.id);
 
-  applyN = n: f: compose (genList (const f) n);
+  applyN = n: f: compose (lib.genList (lib.const f) n);
 
   applyTwice = applyN 2;
 
-  filterEnabled = filterAttrs (_: conf: conf.enable);
+  filterEnabled = lib.filterAttrs (_: conf: conf.enable);
 
   # concatMapAttrsToList :: (String -> v -> [a]) -> AttrSet -> [a]
   concatMapAttrsToList = f: compose [
-    concatLists
-    (mapAttrsToList f)
+    lib.concatLists
+    (lib.mapAttrsToList f)
   ];
 
   /* Find duplicate elements in a list in O(n) time
@@ -41,14 +39,14 @@ let
       */
       update_duplicates_set = el: set:
         let
-          is_duplicate = el: hasAttr (toString el);
+          is_duplicate = el: lib.hasAttr (toString el);
         in
         set // { ${toString el} = is_duplicate el set; };
     in
     compose [
-      attrNames # return the name only
-      (filterAttrs (flip const)) # filter on trueness of the value
-      (foldr update_duplicates_set { }) # fold to create the duplicates set
+      lib.attrNames # return the name only
+      (lib.filterAttrs (lib.flip lib.const)) # filter on trueness of the value
+      (lib.foldr update_duplicates_set { }) # fold to create the duplicates set
     ];
 
   /* Function to find duplicate mappings in a list of attrsets
@@ -62,15 +60,15 @@ let
       update_duplicates_set = el: set: set // { ${toString el} = true; };
     in
     compose [
-      (filterAttrs (_: v: length v >= 2)) # filter on users having 2 or more profiles
-      (mapAttrs (_: attrNames)) # collect just the different profile names
-      (foldAttrs update_duplicates_set { }) # collect the values for the different keys
+      (lib.filterAttrs (_: v: lib.length v >= 2)) # filter on users having 2 or more profiles
+      (lib.mapAttrs (_: lib.attrNames)) # collect just the different profile names
+      (lib.foldAttrs update_duplicates_set { }) # collect the values for the different keys
     ];
 
   # recursiveUpdate merges the two resulting attribute sets recursively
-  recursiveMerge = foldr recursiveUpdate { };
+  recursiveMerge = lib.foldr lib.recursiveUpdate { };
 
-  stringNotEmpty = s: stringLength s != 0;
+  stringNotEmpty = s: lib.stringLength s != 0;
 
   /* A type for host names, host names consist of:
     * a first character which is an upper or lower case ascii character
@@ -78,8 +76,8 @@ let
     * followed by an upper or lower case ascii character or a digit
   */
   host_name_type =
-    types.strMatching "^[[:upper:][:lower:]][-[:upper:][:lower:][:digit:]]*[[:upper:][:lower:][:digit:]]$";
-  empty_str_type = types.strMatching "^$" // {
+    lib.types.strMatching "^[[:upper:][:lower:]][-[:upper:][:lower:][:digit:]]*[[:upper:][:lower:][:digit:]]$";
+  empty_str_type = lib.types.strMatching "^$" // {
     description = "empty string";
   };
   pub_key_type =
@@ -111,19 +109,19 @@ let
           ssh-rsa =
             "^ssh-rsa ${rsa_prefix}${key_data_pattern}{355,}={0,2}$";
         };
-      pub_key_pattern = concatStringsSep "|" (attrValues key_patterns);
+      pub_key_pattern = lib.concatStringsSep "|" (lib.attrValues key_patterns);
       description =
-        ''valid ${concatStringsSep " or " (attrNames key_patterns)} key, '' +
+        ''valid ${lib.concatStringsSep " or " (lib.attrNames key_patterns)} key, '' +
         ''meaning a string matching the pattern ${pub_key_pattern}'';
     in
-    types.strMatching pub_key_pattern // { inherit description; };
+    lib.types.strMatching pub_key_pattern // { inherit description; };
 
-  ifPathExists = path: optional (builtins.pathExists path) path;
+  ifPathExists = path: lib.optional (builtins.pathExists path) path;
 
   traceImportJSON = compose [
-    (filterAttrsRecursive (k: _: k != "_comment"))
-    importJSON
-    (traceValFn (f: "Loading file ${toString f}..."))
+    (lib.filterAttrsRecursive (k: _: k != "_comment"))
+    lib.importJSON
+    (lib.traceValFn (f: "Loading file ${toString f}..."))
   ];
 
   # If the given option exists in the given path, then we return the option,
@@ -133,13 +131,13 @@ let
   #     ${keyIfExists config.foo.bar "baz"} = valueIfBazOptionExists;
   #   };
   keyIfExists = path: option:
-    if hasAttr option path then option else null;
+    if lib.hasAttr option path then option else null;
 
   # Prepend a string with a given number of spaces
   # indentStr :: Int -> String -> String
   indentStr = n: str:
     let
-      spacesN = compose [ concatStrings (genList (const " ")) ];
+      spacesN = compose [ lib.concatStrings (lib.genList (lib.const " ")) ];
     in
     (spacesN n) + str;
 
@@ -148,7 +146,7 @@ let
     , extraOpts ? [ "--system" ]
     }:
     let
-      optsStr = concatStringsSep " " extraOpts;
+      optsStr = lib.concatStringsSep " " extraOpts;
       mkStartCmd = service: "${pkgs.systemd}/bin/systemctl ${optsStr} start ${service}";
     in
     [
@@ -164,12 +162,12 @@ let
     }:
     let
       git = "${pkgs.git}/bin/git";
-      mkOptionsStr = concatStringsSep " ";
+      mkOptionsStr = lib.concatStringsSep " ";
       mkGitCommand = git_options: cmd: "${git} ${mkOptionsStr git_options} ${cmd}";
       mkGitCommandIndented = indent: git_options:
         compose [ (indentStr indent) (mkGitCommand git_options) ];
     in
-    concatMapStringsSep "\n" (mkGitCommandIndented indent git_options) [
+    lib.concatMapStringsSep "\n" (mkGitCommandIndented indent git_options) [
       ''remote set-url origin "${url}"''
       # The following line is only used to avoid the warning emitted by git.
       # We will reset the local repo anyway and remove all local changes.
@@ -192,7 +190,7 @@ let
     let
       repo_url = config.settings.system.org.repo_to_url github_repo;
     in
-    optionalString (config != null) ''
+    lib.optionalString (config != null) ''
       if [ ! -d "${clone_dir}" ] || [ ! -d "${clone_dir}/.git" ]; then
         if [ -d "${clone_dir}" ]; then
           # The directory exists but is not a git clone

@@ -6,21 +6,18 @@
 , lib
 }:
 
-with lib;
-
 let
   safeLast = default: list:
-    if length list > 0 then last list else default;
+    if lib.length list > 0 then lib.last list else default;
   extensionOf = name:
-    safeLast "" (splitString "." (toString name));
+    safeLast "" (lib.splitString "." (toString name));
 
-  notIgnored = path: ! elem (baseNameOf path) ignoreFiles;
+  notIgnored = path: ! lib.elem (baseNameOf path) ignoreFiles;
   isNixFile = path: extensionOf path == "nix";
   validPath = path: type:
     notIgnored path && (isNixFile path || type == "directory");
 in
-attrValues
-  (mapAttrs (name: _type: fromDir + ("/" + name))
-    (filterAttrs validPath
+lib.attrValues
+  (lib.mapAttrs (name: _type: fromDir + ("/" + name))
+    (lib.filterAttrs validPath
       (builtins.readDir fromDir)))
-
