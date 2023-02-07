@@ -166,6 +166,10 @@ vim.keymap.set("n", "<Leader>ft", telescope_builtin.treesitter, silent_opts)
 vim.keymap.set("n", "<Leader>fd", telescope_builtin.diagnostics, silent_opts)
 vim.keymap.set("n", "<Leader>fws", telescope_builtin.lsp_workspace_symbols, silent_opts)
 
+vim.keymap.set("n", "<Leader>fj", telescope_builtin.jumplist, silent_opts)
+vim.keymap.set("n", "<Leader>fl", telescope_builtin.loclist, silent_opts)
+vim.keymap.set("n", "<Leader>fs", telescope_builtin.spell_suggest, silent_opts)
+
 -- Go back to normal mode in a terminal buffer
 vim.keymap.set("t", "<C-Space>", "<C-\\><C-n>", silent_opts)
 vim.keymap.set("n", "<Leader>t", ":vsplit +term<CR>", silent_opts)
