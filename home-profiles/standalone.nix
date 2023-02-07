@@ -12,7 +12,6 @@
     # Add the nix package to the path, to get the one from our nixpkgs
     packages = [
       config.nix.package
-      inputs.home-manager.packages.${pkgs.system}.default
     ];
 
     settings = {
