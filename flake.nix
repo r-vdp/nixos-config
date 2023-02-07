@@ -25,19 +25,33 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         # Avoid a plethora of nixpkgs-stable entries in flake.lock by syncing them.
-        nixpkgs-stable.follows = "devenv/pre-commit-hooks/nixpkgs-stable";
+        #nixpkgs-stable.follows = "devenv/pre-commit-hooks/nixpkgs-stable";
+        nixpkgs-stable.follows = "pre-commit-hooks/nixpkgs-stable";
       };
     };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # FIXME: temporarily add this input to avoid duplicate entries of deps in our
+    # flake.lock file. This will not be needed anymore once
+    #   https://github.com/NixOS/nix/issues/5790
+    # is fixed, then we'll be able to say something like
+    #   pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+        flake-compat.follows = "devenv/flake-compat";
+      };
+    };
     devenv = {
       url = "github:cachix/devenv";
-      inputs.nixpkgs.follows = "nixpkgs";
-      # FIXME: enable this line once the below issue in Nix is fixed
-      # See https://github.com/NixOS/nix/issues/5790
-      #inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        pre-commit-hooks.follows = "pre-commit-hooks";
+      };
     };
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
