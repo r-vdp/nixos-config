@@ -88,6 +88,8 @@ in
         );
     };
 
+    systemd.user.startServices = "sd-switch";
+
     # Make sure that fonts enabled through home-manager
     # are available to the system.
     fonts.fontconfig.enable = true;
