@@ -21,8 +21,10 @@
     enable = true;
     package =
       let
-        version = "1.3.0-rc2";
+        version = "1.3.0";
         hash = "sha256-s69mJfTk1Y1TUV5etXc0A1vcHYH6cn2Nx56KirU1j+s=";
+
+        udevRulesPath = "lib/udev/rules.d/flashrom.rules";
       in
       pkgs.flashrom.overrideAttrs (prevAttrs: {
         inherit version;
@@ -43,16 +45,20 @@
           cmocka
         ]);
 
-        postPatch = ''
-          substituteInPlace util/flashrom_udev.rules --replace "plugdev" "flashrom"
-        '';
+        # The original postPatch phase refers to the udev rules file that was
+        # renamed in a later release.
+        postPatch = "";
 
         mesonFlags = [
           "-Dprogrammer=auto"
         ];
 
         postInstall = ''
-          install -Dm644 $src/util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
+          install -Dm644 $src/util/flashrom_udev.rules $out/${udevRulesPath}
+        '';
+
+        postFixup = ''
+          substituteInPlace $out/${udevRulesPath} --replace "plugdev" "flashrom"
         '';
       });
   };
