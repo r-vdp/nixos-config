@@ -64,7 +64,7 @@
         elmPackages.elm-review
 
         # Lua
-        sumneko-lua-language-server
+        lua-language-server
 
         # Perl
         perlPackages.PLS
