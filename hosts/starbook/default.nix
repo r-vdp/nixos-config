@@ -72,6 +72,7 @@
       decrypted = {
         device = "/dev/disk/by-partuuid/aa63e87a-ca97-42be-8f15-1699e0978bb2";
         allowDiscards = true;
+        bypassWorkqueues = true;
         preLVM = true;
       };
     };
