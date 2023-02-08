@@ -13,22 +13,22 @@
       KbdInteractiveAuthentication = false;
       PasswordAuthentication = false;
       PermitRootLogin = "no";
+      Ciphers = [
+        "aes256-gcm@openssh.com"
+        "chacha20-poly1305@openssh.com"
+      ];
+      Macs = [
+        "hmac-sha2-512-etm@openssh.com"
+        "hmac-sha2-256-etm@openssh.com"
+        "umac-128-etm@openssh.com"
+      ];
+      KexAlgorithms = [
+        "sntrup761x25519-sha512@openssh.com"
+        "curve25519-sha256@libssh.org"
+      ];
+      X11forwarding = false;
     };
-    forwardX11 = false;
     allowSFTP = true;
-    kexAlgorithms = [
-      "sntrup761x25519-sha512@openssh.com"
-      "curve25519-sha256@libssh.org"
-    ];
-    ciphers = [
-      "aes256-gcm@openssh.com"
-      "chacha20-poly1305@openssh.com"
-    ];
-    macs = [
-      "hmac-sha2-512-etm@openssh.com"
-      "hmac-sha2-256-etm@openssh.com"
-      "umac-128-etm@openssh.com"
-    ];
     extraConfig = ''
       StrictModes yes
       AllowAgentForwarding no
