@@ -103,6 +103,7 @@
         direnv-vim
         editorconfig-nvim
         elm-vim
+        git-blame-nvim
         gitsigns-nvim
         haskell-vim
         impatient-nvim
