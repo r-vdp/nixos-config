@@ -55,7 +55,10 @@
         sources =
           mkArray
             (type.tupleOf [ type.string type.string ])
-            [ (mkTuple [ "xkb" "us+intl" ]) ];
+            [
+              (mkTuple [ "xkb" "us+intl" ])
+              (mkTuple [ "xkb" "us+colemak" ])
+            ];
         xkb-options = mkArray type.string [ "terminate:ctrl_alt_bksp" ];
       };
       "org/gnome/desktop/interface" = {
