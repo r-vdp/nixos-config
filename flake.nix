@@ -135,6 +135,7 @@
           listToAttrs (
             map mkHomeConfigEntry [
               { username = "ramses"; hostname = "dev1"; }
+              { username = "ramses"; hostname = "generic"; }
             ]
           );
       };
