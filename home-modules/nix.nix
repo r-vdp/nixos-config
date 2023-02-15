@@ -5,6 +5,12 @@
     enable = lib.mkEnableOption "our custom nix settings.";
   };
 
-  config.shared-nix-settings =
-    { inherit (config.home.settings.nixSettings) enable; };
+  config = {
+    shared-nix-settings =
+      { inherit (config.home.settings.nixSettings) enable; };
+
+    nix.extraOptions = ''
+      !include local.conf
+    '';
+  };
 }

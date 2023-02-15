@@ -1,12 +1,7 @@
 { config, ... }:
 {
   home = {
-    settings = {
-      isHeadless = true;
-      # We have some customer-specific settings in our nix config on dev1
-      nixSettings.enable = false;
-    };
+    settings.isHeadless = true;
     stateVersion = "22.05";
   };
 }
-
