@@ -35,7 +35,7 @@ in
       nerdfonts
       pavucontrol
       #pcloud
-      # https://github.com/NixOS/nixpkgs/pull/216298
+      # https://github.com/NixOS/nixpkgs/pull/216298https://github.com/NixOS/nixpkgs/pull/216298
       (pcloud.overrideAttrs
         (oldAttrs:
           let
