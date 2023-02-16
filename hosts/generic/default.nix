@@ -3,7 +3,7 @@
   home = {
     settings = {
       isHeadless = true;
-      neovim.enableFullDevelopmentEnv = false;
+      neovim.enableFullDevelopEnv = false;
     };
     stateVersion = "22.11";
   };
