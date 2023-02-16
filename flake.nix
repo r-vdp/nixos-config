@@ -1,6 +1,6 @@
 {
   nixConfig = {
-    extra-substituters = [
+    extra-trusted-substituters = [
       "https://devenv.cachix.org"
       "https://nix-community.cachix.org"
     ];
