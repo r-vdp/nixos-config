@@ -7,13 +7,20 @@
 
   environment.systemPackages = with pkgs; [
     coreboot-configurator
+    via
   ];
 
-  services.fwupd = {
-    enable = true;
-    package = pkgs.fwupd.override {
-      enableFlashrom = true;
-      flashrom = config.programs.flashrom.package;
+  services = {
+    udev.packages = with pkgs; [
+      qmk-udev-rules
+    ];
+
+    fwupd = {
+      enable = true;
+      package = pkgs.fwupd.override {
+        enableFlashrom = true;
+        flashrom = config.programs.flashrom.package;
+      };
     };
   };
 
