@@ -10,23 +10,24 @@
 
   config = {
     home = {
-      packages = with pkgs; [
+      packages = with pkgs; ([
+        # Needed for telescope-nvim, modern `find` alternative
+        fd
+        fzf
+        python3
+        # Needed for telescope-nvim, modern grep alternative
+        ripgrep
+        # Allow Neovim to sync the unnamed register with the Wayland clipboard.
+        wl-clipboard
+      ] ++ lib.optionals config.home.settings.neovim.enableFullDevelopEnv [
         (haskellPackages.ghcWithHoogle (hsPkgs: with hsPkgs; [
           stack
         ]))
 
         cargo
 
-        # Needed for telescope-nvim, modern `find` alternative
-        fd
-        fzf
         inputs.devenv.packages.${pkgs.system}.devenv
-        python3
-        # Needed for telescope-nvim, modern grep alternative
-        ripgrep
-        # Allow Neovim to sync the unnamed register with the Wayland clipboard.
-        wl-clipboard
-      ];
+      ]);
     };
 
     programs = {
