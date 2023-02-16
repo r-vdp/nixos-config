@@ -34,30 +34,7 @@ in
       libreoffice-fresh
       nerdfonts
       pavucontrol
-      #pcloud
-      # https://github.com/NixOS/nixpkgs/pull/216298https://github.com/NixOS/nixpkgs/pull/216298
-      (pcloud.overrideAttrs
-        (oldAttrs:
-          let
-            code = "XZwHPTVZ7J1WFU374k8BqSWO2519y4aGFdAV";
-            version = "1.10.1";
-
-            # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
-            src = fetchzip {
-              url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${oldAttrs.pname}-${version}.zip";
-              hash = "sha256-Mum1SL/EZ7iFK9e3o+T0CxkAQ0FkjSBy2FEUDonxtTI=";
-            };
-
-            appimageContents = appimageTools.extractType2 {
-              name = "${oldAttrs.pname}-${version}";
-              src = "${src}/pcloud";
-            };
-          in
-          {
-            inherit version;
-
-            src = appimageContents;
-          }))
+      pcloud
       signal-desktop
       slack
       vlc
