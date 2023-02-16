@@ -29,17 +29,12 @@
     package =
       let
         version = "1.3.0";
-        hash = "sha256-s69mJfTk1Y1TUV5etXc0A1vcHYH6cn2Nx56KirU1j+s=";
-
-        udevRulesPath = "lib/udev/rules.d/flashrom.rules";
+        hash = "sha256-rXwD8kpIrmmGJQu0NHHjIPGTa4+xx+H0FdqwAwo6ePg=";
       in
       pkgs.flashrom.overrideAttrs (prevAttrs: {
         inherit version;
-
-        src = pkgs.fetchFromGitHub {
-          owner = prevAttrs.pname;
-          repo = prevAttrs.pname;
-          rev = "v${version}";
+        src = pkgs.fetchzip {
+          url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
           inherit hash;
         };
 
@@ -60,13 +55,14 @@
           "-Dprogrammer=auto"
         ];
 
-        postInstall = ''
-          install -Dm644 $src/util/flashrom_udev.rules $out/${udevRulesPath}
-        '';
-
-        postFixup = ''
-          substituteInPlace $out/${udevRulesPath} --replace "plugdev" "flashrom"
-        '';
+        postInstall =
+          let
+            udevRulesPath = "lib/udev/rules.d/flashrom.rules";
+          in
+          ''
+            install -Dm644 $src/util/flashrom_udev.rules $out/${udevRulesPath}
+            substituteInPlace $out/${udevRulesPath} --replace "plugdev" "flashrom"
+          '';
       });
   };
 
