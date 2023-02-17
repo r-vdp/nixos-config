@@ -12,7 +12,7 @@
 
   services = {
     udev.packages = with pkgs; [
-      qmk-udev-rules
+      via
     ];
 
     fwupd = {
@@ -61,7 +61,7 @@
           in
           ''
             install -Dm644 $src/util/flashrom_udev.rules $out/${udevRulesPath}
-            substituteInPlace $out/${udevRulesPath} --replace "plugdev" "flashrom"
+            substituteInPlace $out/${udevRulesPath} --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
           '';
       });
   };
