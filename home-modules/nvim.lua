@@ -60,18 +60,18 @@ vim.opt.directory = { xdg_state_home .. "/nvim/swp//" }
 -- See https://rumpelsepp.org/blog/nvim-clipboard-through-ssh/
 if vim.env.TMUX then
   vim.g.clipboard = {
-      name = "tmux",
-      copy = {
-          ["+"] = { "tmux", "load-buffer", "-w", "-" },
-          ["*"] = { "tmux", "load-buffer", "-w", "-" },
-      },
-      paste = {
-          ["+"] = { "bash", "-c",
-              "tmux refresh-client -l && sleep 0.2 && tmux save-buffer -" },
-          ["*"] = { "bash", "-c",
-              "tmux refresh-client -l && sleep 0.2 && tmux save-buffer -" },
-      },
-      cache_enabled = false,
+    name = "tmux",
+    copy = {
+      ["+"] = { "tmux", "load-buffer", "-w", "-" },
+      ["*"] = { "tmux", "load-buffer", "-w", "-" },
+    },
+    paste = {
+      ["+"] = { "bash", "-c",
+        "tmux refresh-client -l && sleep 0.2 && tmux save-buffer -" },
+      ["*"] = { "bash", "-c",
+        "tmux refresh-client -l && sleep 0.2 && tmux save-buffer -" },
+    },
+    cache_enabled = false,
   }
 end
 
@@ -82,31 +82,31 @@ vim.opt.spelllang = "en_gb"
 local term_augroup = "term_augroup"
 vim.api.nvim_create_augroup(term_augroup, { clear = true })
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
-    group = term_augroup,
-    callback = function()
-      vim.wo.spell = false
-      vim.wo.number = false
-      vim.wo.relativenumber = false
-      vim.opt.signcolumn = "no"
-    end
+  group = term_augroup,
+  callback = function()
+    vim.wo.spell = false
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+    vim.opt.signcolumn = "no"
+  end
 })
 -- Restore line numbers if we're not in a term
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    group = term_augroup,
-    callback = function()
-      if vim.o.buftype ~= "terminal" then
-        vim.wo.number = true
-        vim.wo.relativenumber = true
-      end
+  group = term_augroup,
+  callback = function()
+    if vim.o.buftype ~= "terminal" then
+      vim.wo.number = true
+      vim.wo.relativenumber = true
     end
+  end
 })
 
 local general_augroup = "general_augroup"
 vim.api.nvim_create_augroup(general_augroup, { clear = true })
 -- reopen files at the position we were at
 vim.api.nvim_create_autocmd({ "BufReadPost" }, {
-    group = general_augroup,
-    command = [[
+  group = general_augroup,
+  command = [[
     if line("'\"") >= 1 && line("'\"") <= line("$")
       exe "normal! g`\""
     endif
@@ -117,7 +117,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
 local function systemd_patterns()
   local systemd_prefix = "/nix/store/.*/.*%."
   local systemd_exts = {
-      "automount", "mount", "path", "service", "socket", "swap", "target", "timer",
+    "automount", "mount", "path", "service", "socket", "swap", "target", "timer",
   }
   local patterns = {}
   for _, ext in ipairs(systemd_exts) do
@@ -127,7 +127,7 @@ local function systemd_patterns()
 end
 
 vim.filetype.add({
-    pattern = systemd_patterns()
+  pattern = systemd_patterns()
 })
 
 vim.cmd([[colorscheme jellybeans]])
@@ -183,81 +183,81 @@ local function num_of_lines()
 end
 
 require("lualine").setup {
-    options = {
-        icons_enabled = true,
-        theme = "auto",
-        component_separators = { left = "", right = "" },
-        section_separators = { left = "", right = "" },
-        disabled_filetypes = {
-            statusline = {},
-            winbar = {},
-        },
-        ignore_focus = {},
-        always_divide_middle = true,
-        globalstatus = false,
-        refresh = {
-            statusline = 1000,
-            tabline = 1000,
-            winbar = 1000,
-        }
+  options = {
+    icons_enabled = true,
+    theme = "auto",
+    component_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
     },
-    sections = {
-        lualine_a = { { "mode", icon = "", } },
-        lualine_b = { "branch", "diff", "diagnostics" },
-        lualine_c = { { "filename", path = 1 } },
-        lualine_x = { "encoding", "fileformat", "filetype" },
-        lualine_y = { "progress" },
-        lualine_z = { "location", num_of_lines }
-    },
-    inactive_sections = {
-        lualine_a = {},
-        lualine_b = { "branch", "diff", "diagnostics" },
-        lualine_c = { { "filename", path = 1 } },
-        lualine_x = { "encoding", "fileformat", "filetype" },
-        lualine_y = { "progress" },
-        lualine_z = { "location", num_of_lines }
-    },
-    tabline = {
-        lualine_a = { {
-            "buffers",
-            mode = 4,
-        } },
-        lualine_b = {},
-        lualine_c = {},
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = { {
-            "tabs",
-            mode = 3,
-        } }
-    },
-    winbar = {},
-    inactive_winbar = {},
-    extensions = {}
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = { { "mode", icon = "", } },
+    lualine_b = { "branch", "diff", "diagnostics" },
+    lualine_c = { { "filename", path = 1 } },
+    lualine_x = { "encoding", "fileformat", "filetype" },
+    lualine_y = { "progress" },
+    lualine_z = { "location", num_of_lines }
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = { "branch", "diff", "diagnostics" },
+    lualine_c = { { "filename", path = 1 } },
+    lualine_x = { "encoding", "fileformat", "filetype" },
+    lualine_y = { "progress" },
+    lualine_z = { "location", num_of_lines }
+  },
+  tabline = {
+    lualine_a = { {
+      "buffers",
+      mode = 4,
+    } },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = { {
+      "tabs",
+      mode = 3,
+    } }
+  },
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
 }
 
 require("nvim-tree").setup({
-    respect_buf_cwd = true,
+  respect_buf_cwd = true,
 })
 
 local nvim_lsp = require("lspconfig")
 
 local config = {
-    virtual_text = true,
-    -- show signs
-    signs = true,
-    update_in_insert = true,
-    underline = true,
-    severity_sort = true,
-    float = {
-        focus = false,
-        focusable = false,
-        style = "minimal",
-        border = "rounded",
-        source = "always",
-        header = "",
-        prefix = "",
-    },
+  virtual_text = true,
+  -- show signs
+  signs = true,
+  update_in_insert = true,
+  underline = true,
+  severity_sort = true,
+  float = {
+    focus = false,
+    focusable = false,
+    style = "minimal",
+    border = "rounded",
+    source = "always",
+    header = "",
+    prefix = "",
+  },
 }
 vim.diagnostic.config(config)
 
@@ -287,10 +287,10 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = function(_, result, ctx, _
         and diag.tags ~= nil
         and vim.tbl_contains(diag.tags, vim.lsp.protocol.DiagnosticTag.Unnecessary) then
       pcall(vim.api.nvim_buf_set_extmark, bufnr, unnecessary_hints_ns,
-          diag.range.start.line, diag.range.start.character, {
-          end_row = diag.range["end"].line,
-          end_col = diag.range["end"].character,
-          hl_group = "Dim",
+        diag.range.start.line, diag.range.start.character, {
+        end_row = diag.range["end"].line,
+        end_col = diag.range["end"].character,
+        hl_group = "Dim",
       })
     else
       table.insert(real_diags, diag)
@@ -330,23 +330,23 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_create_augroup(lsp_augroup, { clear = false })
   vim.api.nvim_clear_autocmds({ buffer = bufnr, group = lsp_augroup })
   vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-      group = lsp_augroup,
-      buffer = bufnr,
-      callback = function()
-        -- Allow to disable auto-formatting with
-        --   :lua vim.g.no_auto_format = true
-        if vim.g.no_auto_format ~= true then
-          vim.lsp.buf.format()
-        end
+    group = lsp_augroup,
+    buffer = bufnr,
+    callback = function()
+      -- Allow to disable auto-formatting with
+      --   :lua vim.g.no_auto_format = true
+      if vim.g.no_auto_format ~= true then
+        vim.lsp.buf.format()
       end
+    end
   })
   -- Show diagnostic popup on cursor hover
   vim.api.nvim_create_autocmd("CursorHold", {
-      group = lsp_augroup,
-      buffer = bufnr,
-      callback = function()
-        vim.diagnostic.open_float(nil, { focusable = false })
-      end
+    group = lsp_augroup,
+    buffer = bufnr,
+    callback = function()
+      vim.diagnostic.open_float(nil, { focusable = false })
+    end
   })
   -- TODO: are we potentially creating multiple autocommands that will each fire
   --       if multiple clients support code lenses?
@@ -354,12 +354,12 @@ local on_attach = function(client, bufnr)
   if (client.supports_method("textDocument/codeLens") and
       vim.bo.filetype ~= "elm") then
     vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "InsertLeave" }, {
-        group = lsp_augroup,
-        buffer = bufnr,
-        -- automatically refresh codelenses, which can then be run
-        callback = function()
-          vim.lsp.codelens.refresh()
-        end
+      group = lsp_augroup,
+      buffer = bufnr,
+      -- automatically refresh codelenses, which can then be run
+      callback = function()
+        vim.lsp.codelens.refresh()
+      end
     })
   end
 end
@@ -382,235 +382,235 @@ local servers = {
 }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup({
-      on_attach = on_attach,
-      capabilities = capabilities,
-      settings = {
-          elmLS = {
-              elmReviewDiagnostics = "warning",
-              disableElmLSDiagnostics = false
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      elmLS = {
+        elmReviewDiagnostics = "warning",
+        disableElmLSDiagnostics = false
+      },
+      gopls = {
+        experimentalPostfixCompletions = true,
+        analyses = {
+          unusedparams = true,
+          shadow = true,
+        },
+        staticcheck = true,
+      },
+      haskell = {
+        hlintOn = true,
+        formattingProvider = "ormolu"
+      },
+      pls = {
+        cmd = { "pls", },
+        syntax = { enabled = true, },
+      },
+      pylsp = {
+        plugins = {
+          black = {
+            enable = true
           },
-          gopls = {
-              experimentalPostfixCompletions = true,
-              analyses = {
-                  unusedparams = true,
-                  shadow = true,
-              },
-              staticcheck = true,
+          pylsp_mypy = {
+            enable = true
           },
-          haskell = {
-              hlintOn = true,
-              formattingProvider = "ormolu"
+          pycodestyle = {
+            -- W503: deprecated in favour of W504
+            ignore = { "W503" },
+            maxLineLength = 100
+          }
+        }
+      },
+      ["nil"] = {
+        formatting = {
+          command = { "nixpkgs-fmt" },
+        },
+      },
+      ["rust-analyzer"] = {
+        imports = {
+          granularity = {
+            group = "module",
           },
-          pls = {
-              cmd = { "pls", },
-              syntax = { enabled = true, },
+          prefix = "self",
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
           },
-          pylsp = {
-              plugins = {
-                  black = {
-                      enable = true
-                  },
-                  pylsp_mypy = {
-                      enable = true
-                  },
-                  pycodestyle = {
-                      -- W503: deprecated in favour of W504
-                      ignore = { "W503" },
-                      maxLineLength = 100
-                  }
-              }
+        },
+        procMacro = {
+          enable = true,
+        },
+      },
+      Lua = {
+        diagnostics = {
+          globals = { "vim" },
+        },
+        format = {
+          defaultConfig = {
+            quote_style = "double",
           },
-          ["nil"] = {
-              formatting = {
-                  command = { "nixpkgs-fmt" },
-              },
-          },
-          ["rust-analyzer"] = {
-              imports = {
-                  granularity = {
-                      group = "module",
-                  },
-                  prefix = "self",
-              },
-              cargo = {
-                  buildScripts = {
-                      enable = true,
-                  },
-              },
-              procMacro = {
-                  enable = true,
-              },
-          },
-          Lua = {
-              diagnostics = {
-                  globals = { "vim" },
-              },
-              format = {
-                  defaultConfig = {
-                      quote_style = "double",
-                  },
-              },
-              telemetry = {
-                  enable = false,
-              },
-          },
-          yaml = {
-              format = {
-                  enable = true,
-                  printWidth = 100,
-                  bracketSpacing = true,
-                  proseWrap = "always"
-              },
-              validate = true,
-              completion = true
-          },
-      }
+        },
+        telemetry = {
+          enable = false,
+        },
+      },
+      yaml = {
+        format = {
+          enable = true,
+          printWidth = 100,
+          bracketSpacing = true,
+          proseWrap = "always"
+        },
+        validate = true,
+        completion = true
+      },
+    }
   })
 end
 
 local null_ls = require("null-ls")
 null_ls.setup({
-    on_attach = on_attach,
-    -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md
-    sources = {
-        null_ls.builtins.completion.luasnip,
+  on_attach = on_attach,
+  -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTIN_CONFIG.md
+  sources = {
+    null_ls.builtins.completion.luasnip,
 
-        null_ls.builtins.diagnostics.shellcheck,
-        null_ls.builtins.code_actions.shellcheck,
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.code_actions.shellcheck,
 
-        --null_ls.builtins.diagnostics.deadnix.with({
-        --  extra_args = { "--no-lambda-pattern-names", },
-        --}),
-        --null_ls.builtins.diagnostics.statix,
-        --null_ls.builtins.code_actions.statix,
+    --null_ls.builtins.diagnostics.deadnix.with({
+    --  extra_args = { "--no-lambda-pattern-names", },
+    --}),
+    --null_ls.builtins.diagnostics.statix,
+    --null_ls.builtins.code_actions.statix,
 
-        null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.code_actions.gitsigns,
 
-        null_ls.builtins.diagnostics.editorconfig_checker.with({
-            command = "editorconfig-checker",
-        }),
+    null_ls.builtins.diagnostics.editorconfig_checker.with({
+      command = "editorconfig-checker",
+    }),
 
-        null_ls.builtins.diagnostics.todo_comments.with({
-            diagnostic_config = {
-                -- see :help vim.diagnostic.config()
-                underline = true,
-                virtual_text = false,
-                signs = true,
-                update_in_insert = true,
-                severity_sort = true,
-            },
-        }),
-        null_ls.builtins.formatting.trim_whitespace,
-    },
+    null_ls.builtins.diagnostics.todo_comments.with({
+      diagnostic_config = {
+        -- see :help vim.diagnostic.config()
+        underline = true,
+        virtual_text = false,
+        signs = true,
+        update_in_insert = true,
+        severity_sort = true,
+      },
+    }),
+    null_ls.builtins.formatting.trim_whitespace,
+  },
 })
 
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 local select_opts = { behavior = cmp.SelectBehavior.Select }
 cmp.setup({
-    preselect = cmp.PreselectMode.None,
-    snippet = {
-        -- REQUIRED - you must specify a snippet engine
-        expand = function(args)
-          luasnip.lsp_expand(args.body)
-        end,
-    },
-    completion = {
-        completeopt = "menu,menuone,noselect,noinsert",
-    },
-    window = {
-        -- completion = cmp.config.window.bordered(),
-        -- documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert({
-        -- Navigate through completion menu
-        ["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
-        ["<C-n>"] = cmp.mapping.select_next_item(select_opts),
+  preselect = cmp.PreselectMode.None,
+  snippet = {
+    -- REQUIRED - you must specify a snippet engine
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  completion = {
+    completeopt = "menu,menuone,noselect,noinsert",
+  },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    -- Navigate through completion menu
+    ["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
+    ["<C-n>"] = cmp.mapping.select_next_item(select_opts),
 
-        -- If a completion menu is open, then Tab selects the next item.
-        -- If we are in a luasnip snippet and can jump to a following placeholder,
-        --   then Tab does so.
-        -- Otherwise Tab triggers completion.
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item(select_opts)
-          elseif luasnip.jumpable(1) then
-            luasnip.jump(1)
-          else
-            cmp.complete()
-          end
-        end),
-        -- If a completion menu is open, then Shift-Tab selects the previous item.
-        -- If we are in a luasnip snippet and can jump to a previous placeholder,
-        --   then Shift-Tab does so.
-        -- Otherwise we fall back to the default keybind.
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_prev_item(select_opts)
-          elseif luasnip.jumpable( -1) then
-            luasnip.jump( -1)
-          else
-            fallback()
-          end
-        end),
+    -- If a completion menu is open, then Tab selects the next item.
+    -- If we are in a luasnip snippet and can jump to a following placeholder,
+    --   then Tab does so.
+    -- Otherwise Tab triggers completion.
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item(select_opts)
+      elseif luasnip.jumpable(1) then
+        luasnip.jump(1)
+      else
+        cmp.complete()
+      end
+    end),
+    -- If a completion menu is open, then Shift-Tab selects the previous item.
+    -- If we are in a luasnip snippet and can jump to a previous placeholder,
+    --   then Shift-Tab does so.
+    -- Otherwise we fall back to the default keybind.
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item(select_opts)
+      elseif luasnip.jumpable( -1) then
+        luasnip.jump( -1)
+      else
+        fallback()
+      end
+    end),
 
-        -- Scroll docs
-        ["<C-b>"] = cmp.mapping.scroll_docs( -5),
-        ["<C-f>"] = cmp.mapping.scroll_docs(5),
+    -- Scroll docs
+    ["<C-b>"] = cmp.mapping.scroll_docs( -5),
+    ["<C-f>"] = cmp.mapping.scroll_docs(5),
 
-        -- Abort completion
-        ["<C-e>"] = cmp.mapping.close(),
+    -- Abort completion
+    ["<C-e>"] = cmp.mapping.close(),
 
-        -- Accept completion
-        ["<C-Space>"] = cmp.mapping.complete(),
-        ["<CR>"] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Insert,
-            -- Set `select` to `false` to only confirm explicitly selected items.
-            select = false
-        }),
+    -- Accept completion
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<CR>"] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      -- Set `select` to `false` to only confirm explicitly selected items.
+      select = false
     }),
-    sources = cmp.config.sources({
-        { name = "nvim_lsp" },
-        { name = "luasnip" },
-        { name = "path" },
-        { name = "buffer" },
-        { name = "latex_symbols",
-            option = {
-                strategy = 2,
-            },
-        },
-    }),
-    --formatting = {
-    --  format = lspkind.cmp_format {
-    --    with_text = true,
-    --    menu = {
-    --      buffer   = "[buf]",
-    --      nvim_lsp = "[LSP]",
-    --      path     = "[path]",
-    --    },
-    --  },
-    --},
-    experimental = {
-        ghost_text = true
-    }
+  }),
+  sources = cmp.config.sources({
+    { name = "nvim_lsp" },
+    { name = "luasnip" },
+    { name = "path" },
+    { name = "buffer" },
+    { name = "latex_symbols",
+      option = {
+        strategy = 2,
+      },
+    },
+  }),
+  --formatting = {
+  --  format = lspkind.cmp_format {
+  --    with_text = true,
+  --    menu = {
+  --      buffer   = "[buf]",
+  --      nvim_lsp = "[LSP]",
+  --      path     = "[path]",
+  --    },
+  --  },
+  --},
+  experimental = {
+    ghost_text = true
+  }
 })
 
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline({ "/", "?" }, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-        { name = "buffer" }
-    }
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = "buffer" }
+  }
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(":", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-        { name = "path" }
-    }, {
-        { name = "cmdline" }
-    })
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = "path" }
+  }, {
+    { name = "cmdline" }
+  })
 })
 
 -- TreeSitter crashes on big files like pkgs/top-level/all-packages.nix in nixpkgs...
