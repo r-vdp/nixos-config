@@ -28,13 +28,11 @@
     enable = true;
     package =
       let
-        version = "1.3.0";
         hash = "sha256-rXwD8kpIrmmGJQu0NHHjIPGTa4+xx+H0FdqwAwo6ePg=";
       in
       pkgs.flashrom.overrideAttrs (prevAttrs: {
-        inherit version;
         src = pkgs.fetchzip {
-          url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
+          url = "https://download.flashrom.org/releases/flashrom-v${prevAttrs.version}.tar.bz2";
           inherit hash;
         };
 
