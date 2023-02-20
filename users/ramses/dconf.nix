@@ -56,8 +56,9 @@
           mkArray
             (type.tupleOf [ type.string type.string ])
             [
-              (mkTuple [ "xkb" "us+intl" ])
+              (mkTuple [ "xkb" "us" ])
               (mkTuple [ "xkb" "us+colemak" ])
+              (mkTuple [ "xkb" "us+intl" ])
             ];
         xkb-options = mkArray type.string [ "terminate:ctrl_alt_bksp" ];
       };
