@@ -168,6 +168,7 @@ vim.keymap.set("n", "<Leader>ft", telescope_builtin.treesitter, silent_opts)
 vim.keymap.set("n", "<Leader>fd", telescope_builtin.diagnostics, silent_opts)
 vim.keymap.set("n", "<Leader>fws", telescope_builtin.lsp_workspace_symbols, silent_opts)
 vim.keymap.set("n", "<Leader>fb", telescope_builtin.current_buffer_fuzzy_find, silent_opts)
+vim.keymap.set("n", "<Leader>fr", telescope_builtin.resume, silent_opts)
 
 vim.keymap.set("n", "<Leader>fj", telescope_builtin.jumplist, silent_opts)
 vim.keymap.set("n", "<Leader>fl", telescope_builtin.loclist, silent_opts)
