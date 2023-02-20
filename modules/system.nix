@@ -166,7 +166,28 @@ in
       # Disable the root user
       users.root.hashedPassword = "!";
     };
-    environment.shells = [ pkgs.zsh ];
+
+    environment = {
+      systemPackages = with pkgs; [
+        ntfs3g
+      ];
+
+      shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
+
+      gnome.excludePackages =
+        (with pkgs; [
+          gnome-text-editor
+          gnome-tour
+          gnome-user-docs
+        ]) ++ (with pkgs.gnome; [
+          evince
+          geary
+          gnome-contacts
+          gnome-maps
+          gnome-music
+          totem
+        ]);
+    };
 
     zramSwap = {
       enable = true;
@@ -248,20 +269,6 @@ in
       };
       subpixel.lcdfilter = "default";
     };
-
-    environment.gnome.excludePackages =
-      (with pkgs; [
-        gnome-text-editor
-        gnome-tour
-        gnome-user-docs
-      ]) ++ (with pkgs.gnome; [
-        evince
-        geary
-        gnome-contacts
-        gnome-maps
-        gnome-music
-        totem
-      ]);
 
     # Enable sound with pipewire.
     sound.enable = false;
