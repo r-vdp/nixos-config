@@ -8,9 +8,9 @@
     la = "${pkgs.exa}/bin/exa --long --group --all --all --git --icons";
     lt = "${pkgs.exa}/bin/exa --tree --long --group --git --icons";
 
-    nix-env = ''printf "The nix-env command has been disabled." 2> /dev/null'';
     # Have bash resolve aliases with sudo
     # https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
+    # Seems no longer needed with fish.
     #sudo = "sudo ";
     whereami = "curl ipinfo.io";
   };
