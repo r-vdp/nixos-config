@@ -45,10 +45,6 @@
           cmocka
         ]);
 
-        # The original postPatch phase refers to the udev rules file that was
-        # renamed in a later release.
-        postPatch = "";
-
         mesonFlags = [
           "-Dprogrammer=auto"
         ];
@@ -58,6 +54,10 @@
             udevRulesPath = "lib/udev/rules.d/flashrom.rules";
           in
           ''
+            # After the meson build, the udev rules file is no longer present
+            # in the build dir, so we need to get it from $src and patch it
+            # again.
+            # There might be a better way to do this...
             install -Dm644 $src/util/flashrom_udev.rules $out/${udevRulesPath}
             substituteInPlace $out/${udevRulesPath} --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
           '';
