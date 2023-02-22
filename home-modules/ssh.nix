@@ -9,19 +9,25 @@ in
     compression = true;
     serverAliveInterval = 5;
     serverAliveCountMax = 3;
-    extraConfig = ''
-      Port 22
-      PreferredAuthentications publickey,keyboard-interactive,password
-      HostKeyAlgorithms -ssh-rsa
-      ForwardX11 no
-      StrictHostKeyChecking accept-new
-      UpdateHostKeys yes
-      GSSAPIAuthentication no
-      User = ${config.home.username}
-      IdentityFile ${config.home.settings.keys.privateKeyFiles.current}
-      AddKeysToAgent = no
-      Ciphers = aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
-    '';
+    extraConfig =
+      let
+        commaSep = lib.concatStringsSep ",";
+      in
+      ''
+        Port 22
+        PreferredAuthentications publickey,keyboard-interactive,password
+        HostKeyAlgorithms -ssh-rsa
+        KexAlgorithms ${commaSep config.settings.shared.ssh.KexAlgorithms}
+        Macs ${commaSep config.settings.shared.ssh.Macs}
+        ForwardX11 no
+        StrictHostKeyChecking accept-new
+        UpdateHostKeys yes
+        GSSAPIAuthentication no
+        User = ${config.home.username}
+        IdentityFile ${config.home.settings.keys.privateKeyFiles.current}
+        AddKeysToAgent = no
+        Ciphers = aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
+      '';
     includes = [
       "config.d/*"
     ];
