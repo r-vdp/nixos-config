@@ -152,7 +152,7 @@ in
 
     sops = {
       defaultSopsFile =
-        ../secrets + "/${config.networking.hostName}-secrets.yaml";
+        lib.path.append ../secrets "${config.networking.hostName}-secrets.yaml";
       age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
       secrets = {
         nixos-config-deploy-key = {

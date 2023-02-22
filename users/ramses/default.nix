@@ -120,7 +120,7 @@ in
 
   sops.secrets =
     let
-      sopsFile = ../../secrets + "/${username}-secrets.yaml";
+      sopsFile = lib.path.append ../../secrets "${username}-secrets.yaml";
       owner = user_cfg.${username}.name;
       inherit (user_cfg.${username}) group;
       mode = "0600";
