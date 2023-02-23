@@ -5,10 +5,75 @@
     ./hardware-configuration.nix
   ];
 
-  environment.systemPackages = with pkgs; [
-    coreboot-configurator
-    via
-  ];
+  environment.systemPackages =
+    let
+      # https://github.com/NixOS/nixpkgs/pull/217842
+      coreboot-configurator =
+        let
+          pkgFun =
+            { lib
+            , stdenv
+            , fetchFromGitHub
+            , inkscape
+            , meson
+            , mkDerivation
+            , ninja
+            , pkg-config
+            , yaml-cpp
+            , nvramtool
+            , systemd
+            , qtbase
+            , qtsvg
+            , wrapQtAppsHook
+            }:
+
+            mkDerivation {
+              pname = "coreboot-configurator";
+              version = "unstable-2023-01-17";
+
+              src = fetchFromGitHub {
+                owner = "StarLabsLtd";
+                repo = "coreboot-configurator";
+                rev = "944b575dc873c78627c352f9c1a1493981431a58";
+                sha256 = "sha256-ReWQNzeoyTF66hVnevf6Kkrnt0/PqRHd3oyyPYtx+0M=";
+              };
+
+              nativeBuildInputs = [ inkscape meson ninja pkg-config wrapQtAppsHook ];
+              buildInputs = [ yaml-cpp qtbase qtsvg ];
+
+              postPatch = ''
+                substituteInPlace src/application/*.cpp \
+                  --replace '/usr/bin/pkexec' '/run/wrappers/bin/pkexec' \
+                  --replace '/usr/bin/systemctl' '${systemd}/bin/systemctl' \
+                  --replace '/usr/sbin/nvramtool' '${nvramtool}/bin/nvramtool'
+
+                substituteInPlace src/resources/org.coreboot.nvramtool.policy \
+                  --replace '/usr/sbin/nvramtool' '${nvramtool}/bin/nvramtool'
+
+                substituteInPlace src/resources/org.coreboot.reboot.policy \
+                  --replace '/usr/sbin/reboot' '${systemd}/bin/systemctl reboot'
+              '';
+
+              postFixup = ''
+                substituteInPlace $out/share/applications/coreboot-configurator.desktop \
+                  --replace '/usr/bin/coreboot-configurator' 'coreboot-configurator'
+              '';
+
+              meta = with lib; {
+                description = "A simple GUI to change settings in Coreboot's CBFS";
+                homepage = "https://support.starlabs.systems/kb/guides/coreboot-configurator";
+                license = licenses.gpl2Only;
+                platforms = platforms.linux;
+                maintainers = with maintainers; [ danth ];
+              };
+            };
+        in
+        pkgs.libsForQt5.callPackage pkgFun { };
+    in
+    with pkgs; [
+      coreboot-configurator
+      via
+    ];
 
   services = {
     udev.packages = with pkgs; [
