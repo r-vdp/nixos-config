@@ -33,7 +33,7 @@
             style = "Bold Italic";
           };
 
-          size = 11;
+          size = 9;
         };
 
       draw_bold_text_with_bright_colors = true;
