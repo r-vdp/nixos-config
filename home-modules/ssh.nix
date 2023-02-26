@@ -39,15 +39,6 @@ in
         with_tmux = name: ''${name} ${name}-tmux'';
       in
       {
-        nixer = needs_tmux {
-          host = with_tmux "nixer";
-          hostname = "sshv6.engyandramses.xyz";
-          port = 2443;
-        };
-        nixer-local = needs_tmux {
-          host = with_tmux "nixer-local";
-          hostname = "nixer.local";
-        };
         sshrelay2 = needs_tmux {
           host = with_tmux "sshrelay2";
           hostname = "sshrelay2.ocb.msf.org";

@@ -89,7 +89,6 @@
             };
         in
         flip genAttrs mkStandardHost [
-          "nixer"
           "nuke"
           "starbook"
         ];
