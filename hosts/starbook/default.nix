@@ -18,6 +18,7 @@
             , meson
             , mkDerivation
             , ninja
+            , pkexecPath ? "pkexec"
             , pkg-config
             , yaml-cpp
             , nvramtool
@@ -43,15 +44,15 @@
 
               postPatch = ''
                 substituteInPlace src/application/*.cpp \
-                  --replace '/usr/bin/pkexec' '/run/wrappers/bin/pkexec' \
-                  --replace '/usr/bin/systemctl' '${systemd}/bin/systemctl' \
-                  --replace '/usr/sbin/nvramtool' '${nvramtool}/bin/nvramtool'
+                  --replace '/usr/bin/pkexec' '${pkexecPath}' \
+                  --replace '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl' \
+                  --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
 
                 substituteInPlace src/resources/org.coreboot.nvramtool.policy \
-                  --replace '/usr/sbin/nvramtool' '${nvramtool}/bin/nvramtool'
+                  --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
 
                 substituteInPlace src/resources/org.coreboot.reboot.policy \
-                  --replace '/usr/sbin/reboot' '${systemd}/bin/systemctl reboot'
+                  --replace '/usr/sbin/reboot' '${lib.getBin systemd}/systemctl reboot'
               '';
 
               postFixup = ''
