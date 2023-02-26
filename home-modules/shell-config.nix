@@ -3,10 +3,10 @@
 {
   home.shellAliases = {
     # Use --all twice to also show . and ..
-    ls = "${pkgs.exa}/bin/exa";
-    ll = "${pkgs.exa}/bin/exa --long --group --git --icons";
-    la = "${pkgs.exa}/bin/exa --long --group --all --all --git --icons";
-    lt = "${pkgs.exa}/bin/exa --tree --long --group --git --icons";
+    ls = "${lib.getExe pkgs.exa}";
+    ll = "${lib.getExe pkgs.exa} --long --group --git --icons";
+    la = "${lib.getExe pkgs.exa} --long --group --all --all --git --icons";
+    lt = "${lib.getExe pkgs.exa} --tree --long --group --git --icons";
 
     # Have bash resolve aliases with sudo
     # https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo

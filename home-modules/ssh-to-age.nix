@@ -19,9 +19,9 @@
 
             clean = ''
               if [[ -L "${age_dir}" ]]; then
-                ${pkgs.coreutils}/bin/unlink "${age_dir}"
+                ${lib.getBin pkgs.coreutils}/unlink "${age_dir}"
               else
-                ${pkgs.coreutils}/bin/rm --force --recursive "${age_dir}"
+                ${lib.getBin pkgs.coreutils}/rm --force --recursive "${age_dir}"
               fi
             '';
           in
@@ -41,14 +41,14 @@
                   if [[ -f "${private_key_file}" ]]; then
                     real_dir="''${XDG_RUNTIME_DIR}/age"
                     real_file="''${real_dir}/keys.txt"
-                    ${pkgs.coreutils}/bin/mkdir --parents "${sops_dir}"
-                    ${pkgs.coreutils}/bin/mkdir --parents "''${real_dir}"
-                    ${pkgs.ssh-to-age}/bin/ssh-to-age \
+                    ${lib.getBin pkgs.coreutils}/mkdir --parents "${sops_dir}"
+                    ${lib.getBin pkgs.coreutils}/mkdir --parents "''${real_dir}"
+                    ${lib.getExe pkgs.ssh-to-age} \
                       -private-key \
                       -i ${private_key_file} \
                       -o ''${real_file}
-                    ${pkgs.coreutils}/bin/ln --symbolic "''${real_dir}" "${age_dir}"
-                    ${pkgs.coreutils}/bin/chmod --recursive u=rwX,g=,o= "${sops_dir}"
+                    ${lib.getBin pkgs.coreutils}/ln --symbolic "''${real_dir}" "${age_dir}"
+                    ${lib.getBin pkgs.coreutils}/chmod --recursive u=rwX,g=,o= "${sops_dir}"
                   fi
                 '';
 

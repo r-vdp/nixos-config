@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   # The HM activate script runs with "set -u", and so errors on unbound variables.
@@ -6,7 +6,7 @@
   home.activation.diff = ''
     if [[ -v "oldGenPath" && -v "newGenPath" ]]; then
       echo "Home manager closure diff:"
-      $DRY_RUN_CMD ${pkgs.nix}/bin/nix store diff-closures "$oldGenPath" "$newGenPath"
+      $DRY_RUN_CMD ${lib.getExe pkgs.nix} store diff-closures "$oldGenPath" "$newGenPath"
     fi
   '';
 }
