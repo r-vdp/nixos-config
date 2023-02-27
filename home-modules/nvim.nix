@@ -74,6 +74,9 @@
 
           editorconfig-checker
         ] ++ lib.optionals config.home.settings.neovim.enableFullDevelopEnv [
+          # C++
+          clang-tools
+
           # Haskell
           haskell-language-server
 
@@ -101,7 +104,7 @@
           gopls
         ]);
         plugins = with pkgs.vimPlugins; [
-          #(nvim-treesitter.withPlugins (const pkgs.tree-sitter.allGrammars))
+          #(nvim-treesitter.withPlugins (lib.const pkgs.tree-sitter.allGrammars))
           cmp-buffer
           cmp-cmdline
           cmp-latex-symbols
