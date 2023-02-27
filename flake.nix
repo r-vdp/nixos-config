@@ -95,18 +95,57 @@
     }
     //
     flake-utils.lib.eachDefaultSystem (system: {
-      packages = {
-        # Build with "nix build '.#rescue-iso'
-        rescue-iso = nixos-generators.nixosGenerate {
-          inherit system;
-          specialArgs = { inherit inputs; };
-          modules = [
-            self.nixosModules.default
-            ./hosts/rescue-iso
-          ];
-          format = "iso";
+      packages =
+        let
+          pkgs = inputs.nixpkgs.legacyPackages.${system};
+        in
+        {
+          coreboot-configurator = pkgs.libsForQt5.callPackage ./pkgs/coreboot-configurator.nix { };
+
+          flashrom = pkgs.flashrom.overrideAttrs (prevAttrs: {
+            src = pkgs.fetchzip {
+              url = "https://download.flashrom.org/releases/flashrom-v${prevAttrs.version}.tar.bz2";
+              hash = "sha256-rXwD8kpIrmmGJQu0NHHjIPGTa4+xx+H0FdqwAwo6ePg=";
+            };
+
+            nativeBuildInputs = prevAttrs.nativeBuildInputs ++ (with pkgs; [
+              meson
+              ninja
+            ]);
+
+            buildInputs = prevAttrs.buildInputs ++ (with pkgs; [
+              cmocka
+            ]);
+
+            mesonFlags = [
+              "-Dprogrammer=auto"
+            ];
+
+            postInstall =
+              let
+                udevRulesPath = "lib/udev/rules.d/flashrom.rules";
+              in
+              ''
+                # After the meson build, the udev rules file is no longer present
+                # in the build dir, so we need to get it from $src and patch it
+                # again.
+                # There might be a better way to do this...
+                install -Dm644 $src/util/flashrom_udev.rules $out/${udevRulesPath}
+                substituteInPlace $out/${udevRulesPath} --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
+              '';
+          });
+
+          # Build with "nix build '.#rescue-iso'
+          rescue-iso = nixos-generators.nixosGenerate {
+            inherit system;
+            specialArgs = { inherit inputs; };
+            modules = [
+              self.nixosModules.default
+              ./hosts/rescue-iso
+            ];
+            format = "iso";
+          };
         };
-      };
 
       legacyPackages = {
         # As a temporary workaround, we put the home configurations under
