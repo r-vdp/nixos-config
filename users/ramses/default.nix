@@ -136,6 +136,9 @@ in
         inherit sopsFile;
         neededForUsers = true;
       };
+      "${username}-atuin-encryption-key" = {
+        inherit sopsFile owner group mode;
+      };
       "${username}-keepass-keyfile" = {
         inherit sopsFile owner group mode;
       };

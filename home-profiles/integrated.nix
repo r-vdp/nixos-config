@@ -16,6 +16,8 @@ in
 
       profile = config.home.settings.profileValues.integrated;
 
+      atuin.keyPath = secrets."${config.home.username}-atuin-encryption-key".path;
+
       keys = {
         privateKeyFiles = {
           id_ec = secrets."${config.home.username}-ssh-priv-key".path;
