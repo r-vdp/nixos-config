@@ -1,18 +1,40 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
   ];
 
+  environment.systemPackages = with pkgs; [
+    via
+  ];
+
+  services = {
+    udev.packages = with pkgs; [
+      via
+    ];
+    fwupd = {
+      enable = true;
+      package = pkgs.fwupd.override {
+        enableFlashrom = true;
+        flashrom = config.programs.flashrom.package;
+      };
+    };
+  };
+
+  programs.flashrom = {
+    enable = true;
+    package = inputs.self.packages.${pkgs.system}.flashrom;
+  };
+
   time.timeZone = "Europe/Brussels";
 
   settings.system.isHeadless = false;
 
   boot = {
-    extraModprobeConfig = ''
-      options snd-hda-intel power_save=1
-    '';
+    #extraModprobeConfig = ''
+    #  options snd-hda-intel power_save=1
+    #'';
     initrd.luks.devices = {
       decrypted = {
         device = "/dev/disk/by-partuuid/4cd65b64-7917-4e11-8b8c-e178ef8c53bf";
