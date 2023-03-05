@@ -132,8 +132,8 @@ in
                  [ "$action" = "dhcp6-change" ] || \
                  [ "$action" = "connectivity-change" ]; then
                 echo "networkmanager-dispatcher-reset-dns: configuring resolved for interface $1"
-                ${lib.getBin pkgs.systemd}/resolvectl revert "$interface"
-                ${lib.getBin pkgs.systemd}/resolvectl mdns "$interface" on
+                ${lib.getBin pkgs.systemd}/bin/resolvectl revert "$interface"
+                ${lib.getBin pkgs.systemd}/bin/resolvectl mdns "$interface" on
               fi
             '';
             type = "basic";
@@ -353,7 +353,7 @@ in
       (lib.mkIf config.system.autoUpgrade.enable {
         services.nixos-upgrade.environment.GIT_SSH_COMMAND =
           lib.concatStringsSep " " [
-            "${lib.getBin pkgs.openssh}/ssh"
+            "${lib.getBin pkgs.openssh}/bin/ssh"
             "-F /etc/ssh/ssh_config"
             "-i ${config.sops.secrets.nixos-config-deploy-key.path}"
             "-o IdentitiesOnly=yes"
