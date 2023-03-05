@@ -5,6 +5,12 @@
     ./hardware-configuration.nix
   ];
 
+  settings = {
+    system.isHeadless = false;
+    fwupd.flashrom.enable = true;
+    intelGraphics.enable = true;
+  };
+
   environment.systemPackages = with pkgs; [
     via
   ];
@@ -13,23 +19,9 @@
     udev.packages = with pkgs; [
       via
     ];
-    fwupd = {
-      enable = true;
-      package = pkgs.fwupd.override {
-        enableFlashrom = true;
-        flashrom = config.programs.flashrom.package;
-      };
-    };
-  };
-
-  programs.flashrom = {
-    enable = true;
-    package = inputs.self.packages.${pkgs.system}.flashrom;
   };
 
   time.timeZone = "Europe/Brussels";
-
-  settings.system.isHeadless = false;
 
   boot = {
     #extraModprobeConfig = ''
@@ -54,42 +46,37 @@
 
   fileSystems =
     let
-      # We do not enable discard here, it is taken care of by an fstrim timer,
+      # We disable discard here, it is taken care of by an fstrim timer,
       # as recommended by the btrfs manpage.
       # ACL is enabled by default.
-      btrfsCommonOpts = [ "defaults" "noatime" "compress=zstd" "autodefrag" ];
+      btrfsCommonOpts = [ "defaults" "noatime" "compress=zstd" "autodefrag" "nodiscard" ];
     in
     {
-      "/" =
-        {
-          device = "/dev/volgroup/nixos";
-          fsType = "btrfs";
-          options = btrfsCommonOpts ++ [ "subvol=root" ];
-        };
-      "/home" =
-        {
-          device = "/dev/volgroup/nixos";
-          fsType = "btrfs";
-          options = btrfsCommonOpts ++ [ "subvol=home" ];
-        };
-      "/nix" =
-        {
-          device = "/dev/volgroup/nixos";
-          fsType = "btrfs";
-          options = btrfsCommonOpts ++ [ "subvol=nix" ];
-        };
-      "/snapshots" =
-        {
-          device = "/dev/volgroup/nixos";
-          fsType = "btrfs";
-          options = btrfsCommonOpts ++ [ "subvol=snapshots" ];
-        };
-      "/boot" =
-        {
-          device = "/dev/disk/by-label/ESP";
-          fsType = "vfat";
-          options = [ "defaults" "relatime" ];
-        };
+      "/" = {
+        device = "/dev/volgroup/nixos";
+        fsType = "btrfs";
+        options = btrfsCommonOpts ++ [ "subvol=root" ];
+      };
+      "/home" = {
+        device = "/dev/volgroup/nixos";
+        fsType = "btrfs";
+        options = btrfsCommonOpts ++ [ "subvol=home" ];
+      };
+      "/nix" = {
+        device = "/dev/volgroup/nixos";
+        fsType = "btrfs";
+        options = btrfsCommonOpts ++ [ "subvol=nix" ];
+      };
+      "/snapshots" = {
+        device = "/dev/volgroup/nixos";
+        fsType = "btrfs";
+        options = btrfsCommonOpts ++ [ "subvol=snapshots" ];
+      };
+      "/boot" = {
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+        options = [ "defaults" "relatime" ];
+      };
     };
 
   services.btrfs.autoScrub = {
@@ -106,23 +93,6 @@
     hostName = "nuke";
     networkmanager.enable = true;
   };
-
-  nixpkgs.config = {
-    packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    };
-  };
-
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-  };
-  environment.variables.VDPAU_DRIVER =
-    lib.mkIf config.hardware.opengl.enable "va_gl";
 
   # On CPUs using the intel_pstate scaling driver, there is no schedutil governor.
   # Only powersave and performance are available.

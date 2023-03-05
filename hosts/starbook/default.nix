@@ -5,6 +5,12 @@
     ./hardware-configuration.nix
   ];
 
+  settings = {
+    system.isHeadless = false;
+    fwupd.flashrom.enable = true;
+    intelGraphics.enable = true;
+  };
+
   environment.systemPackages = with pkgs; [
     # https://github.com/NixOS/nixpkgs/pull/217842
     inputs.self.packages.${pkgs.system}.coreboot-configurator
@@ -15,24 +21,9 @@
     udev.packages = with pkgs; [
       via
     ];
-
-    fwupd = {
-      enable = true;
-      package = pkgs.fwupd.override {
-        enableFlashrom = true;
-        flashrom = config.programs.flashrom.package;
-      };
-    };
-  };
-
-  programs.flashrom = {
-    enable = true;
-    package = inputs.self.packages.${pkgs.system}.flashrom;
   };
 
   time.timeZone = "Europe/Brussels";
-
-  settings.system.isHeadless = false;
 
   boot = {
     initrd.luks.devices = {
@@ -47,42 +38,37 @@
 
   fileSystems =
     let
-      # We do not enable discard here, it is taken care of by an fstrim timer,
+      # We disable discard here, it is taken care of by an fstrim timer,
       # as recommended by the btrfs manpage.
       # ACL is enabled by default.
-      btrfsCommonOpts = [ "defaults" "noatime" "compress=zstd" "autodefrag" ];
+      btrfsCommonOpts = [ "defaults" "noatime" "compress=zstd" "autodefrag" "nodiscard" ];
     in
     {
-      "/" =
-        {
-          device = "/dev/volgroup/nixos";
-          fsType = "btrfs";
-          options = btrfsCommonOpts ++ [ "subvol=root" ];
-        };
-      "/home" =
-        {
-          device = "/dev/volgroup/nixos";
-          fsType = "btrfs";
-          options = btrfsCommonOpts ++ [ "subvol=home" ];
-        };
-      "/nix" =
-        {
-          device = "/dev/volgroup/nixos";
-          fsType = "btrfs";
-          options = btrfsCommonOpts ++ [ "subvol=nix" ];
-        };
-      "/snapshots" =
-        {
-          device = "/dev/volgroup/nixos";
-          fsType = "btrfs";
-          options = btrfsCommonOpts ++ [ "subvol=snapshots" ];
-        };
-      "/boot" =
-        {
-          device = "/dev/disk/by-label/ESP";
-          fsType = "vfat";
-          options = [ "defaults" "relatime" ];
-        };
+      "/" = {
+        device = "/dev/volgroup/nixos";
+        fsType = "btrfs";
+        options = btrfsCommonOpts ++ [ "subvol=root" ];
+      };
+      "/home" = {
+        device = "/dev/volgroup/nixos";
+        fsType = "btrfs";
+        options = btrfsCommonOpts ++ [ "subvol=home" ];
+      };
+      "/nix" = {
+        device = "/dev/volgroup/nixos";
+        fsType = "btrfs";
+        options = btrfsCommonOpts ++ [ "subvol=nix" ];
+      };
+      "/snapshots" = {
+        device = "/dev/volgroup/nixos";
+        fsType = "btrfs";
+        options = btrfsCommonOpts ++ [ "subvol=snapshots" ];
+      };
+      "/boot" = {
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+        options = [ "defaults" "relatime" ];
+      };
     };
 
   services.btrfs.autoScrub = {
@@ -102,20 +88,5 @@
       # I hate captive portals
       41.128.153.50 ezxcess.antlabs.com
     '';
-  };
-
-  nixpkgs.config = {
-    packageOverrides = pkgs: {
-      vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-    };
-  };
-
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
   };
 }
