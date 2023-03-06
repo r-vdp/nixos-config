@@ -199,7 +199,8 @@ in
       fwupd.enable = true;
       fstrim.enable = true;
       gvfs.enable = ! cfg.isHeadless;
-      thermald.enable = true;
+      # Thermald is only supported on x86 platforms
+      thermald.enable = pkgs.stdenv.hostPlatform.isx86;
 
       # for dconf in home-manager
       dbus.packages = with pkgs; lib.optionals (! cfg.isHeadless) [
