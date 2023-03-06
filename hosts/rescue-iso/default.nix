@@ -6,8 +6,6 @@
     wireless.enable = lib.mkOverride 10 false;
   };
 
-  nixpkgs.hostPlatform = inputs.flake-utils.lib.system.x86_64-linux;
-
   system = {
     extraDependencies = lib.mkOverride 10 [ ];
     stateVersion = "22.05"; # Did you read the comment?
@@ -53,7 +51,7 @@
           custom_name
           config.isoImage.isoBaseName
           config.system.nixos.label
-          pkgs.stdenv.hostPlatform.system
+          pkgs.system
         ]) + ".iso"
       );
       appendToMenuLabel = " ${custom_name}";
