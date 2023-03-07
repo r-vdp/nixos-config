@@ -87,6 +87,7 @@
           dialect = "uk";
           search_mode = "fuzzy";
           filter_mode = "directory";
+          filter_mode_shell_up_key_binding = "directory";
           key_path =
             let
               inherit (config.home.settings.atuin) keyPath;
