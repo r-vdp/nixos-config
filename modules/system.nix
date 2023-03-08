@@ -176,6 +176,7 @@ in
 
       gnome.excludePackages =
         (with pkgs; [
+          gnome-photos
           gnome-text-editor
           gnome-tour
           gnome-user-docs
