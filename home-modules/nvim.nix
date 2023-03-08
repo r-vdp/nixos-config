@@ -25,6 +25,7 @@
         ]))
 
         cargo
+        cargo-watch
 
         inputs.devenv.packages.${pkgs.system}.devenv
       ]);
