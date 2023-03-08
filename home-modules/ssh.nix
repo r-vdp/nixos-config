@@ -26,7 +26,7 @@ in
         User = ${config.home.username}
         IdentityFile ${config.home.settings.keys.privateKeyFiles.current}
         AddKeysToAgent = no
-        Ciphers = aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
+        Ciphers = ${commaSep config.settings.shared.ssh.Ciphers}
       '';
     includes = [
       "config.d/*"
