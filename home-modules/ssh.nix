@@ -52,13 +52,6 @@ in
           port = 443;
           identityFile = id_ec;
         };
-        nixer-relayed = needs_tmux {
-          host = with_tmux "nixer-relayed";
-          hostname = "localhost";
-          port = 6012;
-          proxyJump = "ssh-relay-proxy";
-          identityFile = id_ec;
-        };
         rescue-iso = needs_tmux {
           host = with_tmux "rescue-iso";
           hostname = "localhost";
