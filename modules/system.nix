@@ -179,6 +179,7 @@ in
           gnome-text-editor
           gnome-tour
           gnome-user-docs
+          yelp
         ]) ++ (with pkgs.gnome; [
           evince
           geary
