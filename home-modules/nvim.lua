@@ -289,10 +289,10 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = function(_, result, ctx, _
         and vim.tbl_contains(diag.tags, vim.lsp.protocol.DiagnosticTag.Unnecessary) then
       pcall(vim.api.nvim_buf_set_extmark, bufnr, unnecessary_hints_ns,
         diag.range.start.line, diag.range.start.character, {
-        end_row = diag.range["end"].line,
-        end_col = diag.range["end"].character,
-        hl_group = "Dim",
-      })
+          end_row = diag.range["end"].line,
+          end_col = diag.range["end"].character,
+          hl_group = "Dim",
+        })
     else
       table.insert(real_diags, diag)
     end
@@ -428,6 +428,9 @@ for _, lsp in ipairs(servers) do
         },
       },
       ["rust-analyzer"] = {
+        checkOnSave = {
+          command = "clippy",
+        },
         imports = {
           granularity = {
             group = "module",
@@ -549,8 +552,8 @@ cmp.setup({
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item(select_opts)
-      elseif luasnip.jumpable( -1) then
-        luasnip.jump( -1)
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
       else
         fallback()
       end
@@ -576,7 +579,8 @@ cmp.setup({
     { name = "luasnip" },
     { name = "path" },
     { name = "buffer" },
-    { name = "latex_symbols",
+    {
+      name = "latex_symbols",
       option = {
         strategy = 2,
       },
