@@ -176,15 +176,19 @@ in
 
       gnome.excludePackages =
         (with pkgs; [
+          epiphany
           gnome-photos
           gnome-text-editor
           gnome-tour
           gnome-user-docs
+          orca
+          simple-scan
           yelp
         ]) ++ (with pkgs.gnome; [
           evince
           geary
           gnome-contacts
+          gnome-logs
           gnome-maps
           gnome-music
           totem
