@@ -8,7 +8,6 @@
 
   system = {
     extraDependencies = lib.mkOverride 10 [ ];
-    stateVersion = "22.05"; # Did you read the comment?
   };
 
   security.sudo.wheelNeedsPassword = lib.mkForce false;
@@ -20,9 +19,19 @@
 
   fileSystems = lib.mkForce config.lib.isoFileSystems;
 
+  users.users.ramses = {
+    hashedPassword = lib.mkForce null;
+    passwordFile = lib.mkForce null;
+    # Empty password for auto login
+    password = "";
+  };
+
   systemd.services.sshd.wantedBy = lib.mkOverride 10 [ "multi-user.target" ];
 
-  services.getty.helpLine = lib.mkForce "";
+  services.getty = {
+    autologinUser = "ramses";
+    helpLine = lib.mkForce "";
+  };
 
   documentation = {
     enable = lib.mkOverride 10 false;
