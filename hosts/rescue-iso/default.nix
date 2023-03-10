@@ -1,6 +1,13 @@
 { inputs, config, pkgs, lib, modulesPath, ... }:
 
 {
+  boot = {
+    kernelParams = [
+      # Allow flashrom to work
+      "iomem=relaxed"
+    ];
+  };
+
   networking = {
     hostName = "rescue-iso";
     wireless.enable = lib.mkOverride 10 false;
@@ -12,9 +19,13 @@
 
   security.sudo.wheelNeedsPassword = lib.mkForce false;
 
-  settings.system = {
-    isHeadless = true;
-    isISO = true;
+  settings = {
+    system =
+      {
+        isHeadless = true;
+        isISO = true;
+      };
+    fwupd.flashrom.enable = true;
   };
 
   fileSystems = lib.mkForce config.lib.isoFileSystems;
