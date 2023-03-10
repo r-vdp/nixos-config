@@ -12,11 +12,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1678365343,
-        "narHash": "sha256-J1g7YosjbEWCo0z+i9/dn5xcYYDrRj7wJMDKYh9Q6Oc=",
+        "lastModified": 1678433945,
+        "narHash": "sha256-hb6ftcauPXLK2pg/SUWGKk/a0LnFc6WdCsGC9dSHP7M=",
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "be184a4104405aaa0864f898e26a30d6dac052e9",
+        "rev": "acac54b2775647597b1432856aa3a24dea43e3fd",
         "type": "github"
       },
       "original": {
