@@ -29,7 +29,7 @@
   boot = {
     initrd.luks.devices = {
       decrypted = {
-        device = "/dev/disk/by-partuuid/aa63e87a-ca97-42be-8f15-1699e0978bb2";
+        device = "/dev/disk/by-partuuid/b4875b74-21ae-4789-8f21-03c6e5074914";
         allowDiscards = true;
         bypassWorkqueues = true;
         preLVM = true;
