@@ -31,4 +31,22 @@ in
       };
     };
   };
+
+  #systemd.user.mounts = {
+  #  "home-${config.home.username}-.cache" = {
+  #    Unit = {
+  #      Description = "Bind mount ~/.cache/";
+  #      Before = [ "default.target" ];
+  #    };
+
+  #    Mount = {
+  #      What = "/vol/volatile/cache/${config.home.username}/cache";
+  #      Where = "/home/${config.home.username}/.cache";
+  #      Type = "none";
+  #      Options = "bind";
+  #    };
+
+  #    Install.WantedBy = [ "basic.target" ];
+  #  };
+  #};
 }

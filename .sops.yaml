@@ -1,7 +1,7 @@
 # When changing the keys here, run the following command to update the SOPS files:
-#   for secret_file in secrets/*.yaml; do
-#     sops updatekeys "${secret_file}
-#   done
+#   for secret_file in secrets/*.yaml;
+#     sops updatekeys "$secret_file"
+#   end
 #
 # Age keys are obtained from SSH keys by running
 #   nix run nixpkgs#ssh-to-age -- -i <pub_key>
@@ -11,7 +11,7 @@ keys:
   # users
   - &ramses age1wm7aec0vd5trqqvk6n97kh8r3x0jpue9gne9enr92kdjk63f5e8s9gjy0x
   # servers
-  - &starbook age144q0q3ws7mxtuxrc6sm95e7skfx9cw5sypr46ku86hqaq3ha6vdqzduy0u
+  - &starbook age17q0t4n47nswcsnxz5n5kuzd544af7ev3rhvhwrawl5suvv67jpjs7r485e
   - &nuke     age1ztmgmhauuaxca9vjl4csr80lt26m47tqh8nk252vytxjtc3pze5s6s56m5
 creation_rules:
   - path_regex: 'secrets/github-secrets\.yaml$'
