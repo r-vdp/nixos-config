@@ -98,7 +98,11 @@
         switch-applications-backward = mkEmptyArray type.string;
         switch-windows = mkArray type.string [ "<Alt>Tab" ];
         switch-windows-backward = mkArray type.string [ "<Shift><Alt>Tab" ];
-
+        screenshot = mkArray type.string [ ];
+        screenshot-window = mkArray type.string [ ];
+        show-screenshot-ui = mkArray type.string [ ];
+      };
+      "org/gnome/shell/keybindings" = {
         # Disable screenshot keybinds because of annoying print key placement on starbook
         screenshot = mkArray type.string [ ];
         screenshot-window = mkArray type.string [ ];
