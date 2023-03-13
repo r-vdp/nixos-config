@@ -99,6 +99,10 @@ in
             RemoteCommand = "exec tmux attach";
           };
         };
+        nuke_local = needs_tmux {
+          host = with_tmux "nuke.local";
+          hostname = "nuke.local";
+        };
         # Separate entry without dynamic forwards to be used as a jump host.
         dev1-jumphost = {
           hostname = "dev1.numtide.com";
