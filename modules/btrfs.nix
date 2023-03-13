@@ -34,10 +34,20 @@ in
           fsType = "btrfs";
           options = btrfsCommonOpts ++ [ "subvol=nix" ];
         };
-        "/snapshots" = {
+        "/vol/snapshots" = {
           device = "/dev/volgroup/nixos";
           fsType = "btrfs";
           options = btrfsCommonOpts ++ [ "subvol=snapshots" ];
+        };
+        "/vol/volatile" = {
+          device = "/dev/volgroup/nixos";
+          fsType = "btrfs";
+          options = btrfsCommonOpts ++ [ "subvol=volatile" ];
+        };
+        "/vol/persisted" = {
+          device = "/dev/volgroup/nixos";
+          fsType = "btrfs";
+          options = btrfsCommonOpts ++ [ "subvol=persisted" ];
         };
         "/boot" = {
           device = "/dev/disk/by-label/ESP";
@@ -84,7 +94,7 @@ in
               };
               script =
                 let
-                  destDir = "/snapshots/${volume}/${frequency}";
+                  destDir = "/vol/snapshots/${volume}/${frequency}";
                 in
                 ''
                   mkdir --parent "${destDir}"
