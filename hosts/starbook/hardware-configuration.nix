@@ -19,8 +19,8 @@
       "i915.enable_fbc=1"
       "i915.enable_psr=2"
       # Issues with NVME drive stalling
-      "pcie_aspm=off"
-      "nvme_core.default_ps_max_latency_us=0"
+      #"pcie_aspm=off"
+      #"nvme_core.default_ps_max_latency_us=0"
     ];
     extraModulePackages = [ ];
   };
