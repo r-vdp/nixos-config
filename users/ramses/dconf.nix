@@ -160,23 +160,28 @@
         cpu-show-text = false;
         cpu-individual-cores = false;
         cpu-refresh-time = 2000;
+        cpu-graph-width = 80;
 
         freq-display = true;
         freq-freq-color = "#c061cbff";
         freq-refresh-time = 2000;
+        freq-graph-width = 80;
         freq-show-menu = true;
         freq-show-text = false;
 
         memory-display = true;
         memory-refresh-time = 5000;
+        memory-graph-width = 80;
         memory-show-text = false;
 
         disk-display = true;
         disk-refresh-time = 2000;
+        disk-graph-width = 80;
         disk-show-text = false;
 
         net-display = true;
         net-refresh-time = 2000;
+        net-graph-width = 80;
         net-show-text = false;
 
         swap-display = false;
