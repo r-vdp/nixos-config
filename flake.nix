@@ -37,7 +37,7 @@
     # flake.lock file. This will not be needed anymore once
     #   https://github.com/NixOS/nix/issues/5790
     # is fixed, then we'll be able to say something like
-    #   pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
+    #   devenv.inputs.pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs = {
