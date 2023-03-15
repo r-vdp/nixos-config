@@ -314,7 +314,7 @@ in
     };
 
     # Configure console keymap
-    console.keyMap = "us-acentos";
+    console.keyMap = "us";
 
     system.autoUpgrade = {
       enable = cfg.isHeadless;
