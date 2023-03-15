@@ -406,6 +406,13 @@ in
       enableAllFirmware = true;
     };
 
+    # Include a second bootloader entry with the LTS kernel.
+    specialisation = {
+      linux-lts.configuration = {
+        boot.kernelPackages = lib.mkForce pkgs.linuxPackages;
+      };
+    };
+
     # Adapt some settings in case we are building the config as a QEMU VM
     virtualisation.vmVariant = { lib, ... }: {
       settings.system = {
