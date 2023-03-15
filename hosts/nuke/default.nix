@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -12,8 +12,12 @@
     intelGraphics.enable = true;
   };
 
-  environment.systemPackages = with pkgs; [
-    via
+  home-manager.sharedModules = [
+    {
+      home.packages = [
+        pkgs.via
+      ];
+    }
   ];
 
   services = {

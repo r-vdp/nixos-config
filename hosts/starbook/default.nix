@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -12,10 +12,14 @@
     intelGraphics.enable = true;
   };
 
-  environment.systemPackages = with pkgs; [
-    # https://github.com/NixOS/nixpkgs/pull/217842
-    inputs.self.packages.${pkgs.system}.coreboot-configurator
-    via
+  home-manager.sharedModules = [
+    {
+      home.packages = [
+        # https://github.com/NixOS/nixpkgs/pull/217842
+        #inputs.self.packages.${pkgs.system}.coreboot-configurator
+        pkgs.via
+      ];
+    }
   ];
 
   services = {
