@@ -167,6 +167,7 @@ vim.keymap.set("n", "<Leader>fm", telescope_builtin.man_pages, silent_opts)
 vim.keymap.set("n", "<Leader>ft", telescope_builtin.treesitter, silent_opts)
 vim.keymap.set("n", "<Leader>fd", telescope_builtin.diagnostics, silent_opts)
 vim.keymap.set("n", "<Leader>fws", telescope_builtin.lsp_workspace_symbols, silent_opts)
+vim.keymap.set("n", "<Leader>fds", telescope_builtin.lsp_document_symbols, silent_opts)
 vim.keymap.set("n", "<Leader>fb", telescope_builtin.current_buffer_fuzzy_find, silent_opts)
 vim.keymap.set("n", "<Leader>fr", telescope_builtin.resume, silent_opts)
 
@@ -531,7 +532,6 @@ cmp.setup({
     -- Navigate through completion menu
     ["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
     ["<C-n>"] = cmp.mapping.select_next_item(select_opts),
-
     -- If a completion menu is open, then Tab selects the next item.
     -- If we are in a luasnip snippet and can jump to a following placeholder,
     --   then Tab does so.
@@ -558,14 +558,11 @@ cmp.setup({
         fallback()
       end
     end),
-
     -- Scroll docs
-    ["<C-b>"] = cmp.mapping.scroll_docs( -5),
+    ["<C-b>"] = cmp.mapping.scroll_docs(-5),
     ["<C-f>"] = cmp.mapping.scroll_docs(5),
-
     -- Abort completion
     ["<C-e>"] = cmp.mapping.close(),
-
     -- Accept completion
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<CR>"] = cmp.mapping.confirm({
