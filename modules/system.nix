@@ -53,6 +53,7 @@ in
       dev.enable = ! (cfg.isISO || cfg.isVM);
       info.enable = false;
       doc.enable = false;
+      nixos.enable = ! cfg.isVM;
     };
 
     # We don't want a nix channel for root.
@@ -423,9 +424,6 @@ in
       users.mutableUsers = lib.mkForce false;
       # Avoid delays on boot of the VM
       networking.interfaces = lib.mkForce { };
-      documentation = {
-        nixos.enable = false;
-      };
     };
   };
 }
