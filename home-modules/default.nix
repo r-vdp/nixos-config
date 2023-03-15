@@ -95,6 +95,7 @@ in
     fonts.fontconfig.enable = true;
 
     xdg.enable = true;
+
     programs = {
       home-manager.enable = true;
       htop.enable = true;

@@ -32,6 +32,14 @@
           # Disable the welcome message
           set -U fish_greeting
 
+          # Env vars defined with home.sessionVariables somehow get overriden.
+          # Not clear yet why or where.
+          # We set them again here to avoid e.g. being dropped in nano.
+          set -e __HM_SESS_VARS_SOURCED
+          # Load the fenv function
+          set --prepend fish_function_path /nix/store/qmb5lag18ilc29hnijkki7389bv8gwcr-fishplugin-foreign-env-unstable-2020-02-09/share/fish/vendor_functions.d
+          fenv source /etc/profiles/per-user/ramses/etc/profile.d/hm-session-vars.sh >/dev/null
+
           set --universal fish_color_autosuggestion 4D5566 # ayu:common.ui        autosuggestions
           set --universal fish_color_command        39BAE6 # ayu:syntax.tag       commands
           set --universal fish_color_comment        626A73 # ayu:syntax.comment   code comments
