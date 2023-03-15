@@ -86,11 +86,25 @@ in
 
     boot = {
       loader = lib.mkIf (! (cfg.isISO || cfg.isVM)) {
-        systemd-boot = {
-          enable = true;
-          editor = false;
-          configurationLimit = 100;
-        };
+        systemd-boot =
+          let
+            memtestFileName = "efi/memtest86plus/BOOTX64.efi";
+          in
+          {
+            enable = true;
+            editor = false;
+            configurationLimit = 100;
+
+            extraFiles = {
+              ${memtestFileName} = "${pkgs.memtest86plus}/memtest.efi";
+            };
+            extraEntries = {
+              "z_memtest.conf" = ''
+                title Memtest86+
+                efi ${memtestFileName}
+              '';
+            };
+          };
         efi = {
           canTouchEfiVariables = true;
           efiSysMountPoint = config.fileSystems."/boot".mountPoint;
