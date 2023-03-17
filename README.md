@@ -1,3 +1,7 @@
+# Archival notice
+This repo now lives on Sourcehut: https://git.sr.ht/~r-vdp/nixos-config
+
+
 # My personal NixOS and home-manager configuration
 
 ## Installation
